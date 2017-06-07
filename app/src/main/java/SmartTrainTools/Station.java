@@ -6,7 +6,6 @@
 package SmartTrainTools;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import jpro.smarttrains.Globals;
 
@@ -25,7 +24,7 @@ public class Station implements Serializable {
         @Override
         public int hashCode() {
             int hash = 7;
-            hash = 83 * hash + Objects.hashCode(this.code);
+            hash = 83 * hash + this.code.hashCode();
             return hash;
         }
 
@@ -38,10 +37,17 @@ public class Station implements Serializable {
                 return false;
             }
             final Station other = (Station) obj;
-            if (!Objects.equals(this.code, other.code)) {
+            // logic updated to support lower apis
+            if (this.code == null || other.code == null) {
                 return false;
             }
-            if (!Objects.equals(this.name, other.name)) {
+            if (!this.code.equals(other.code)) {
+                return false;
+            }
+            if (this.name == null || other.name == null) {
+                return false;
+            }
+            if (!this.name.equals(other.name)) {
                 return false;
             }
             return true;
@@ -65,5 +71,9 @@ public class Station implements Serializable {
         public String getCode() {
             return code;
         }
+
+    public boolean isJunction() {
+        return Globals.indiaMap.wgraph.edgesOf(this.code).size() != 1;
+    }
 
     }

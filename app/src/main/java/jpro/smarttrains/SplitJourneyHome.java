@@ -5,9 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -35,9 +35,9 @@ import java.util.Calendar;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Path;
 import SmartTrainTools.RailwayCodes;
+import SmartTrainTools.SmartTools;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
-import SmartTrainTools.SmartTools;
 import SmartTrainTools.TravelClass;
 
 public class SplitJourneyHome extends AppCompatActivity {
@@ -307,7 +307,7 @@ public class SplitJourneyHome extends AppCompatActivity {
                     trains.size();
                     InputStream is=getResources().openRawResource(R.raw.obj2);
                     path= SmartTools.split_route(fromStn,toStn,is);
-
+                    path.removeAllNonJunctions();
                     directTrains=true;
                     //path=null;
                 } catch(NullPointerException Ex) {
