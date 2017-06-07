@@ -5,14 +5,6 @@
  */
 package SmartTrainTools;
 
-import Exceptions.AvailabilityFailure;
-import jpro.smarttrains.Globals;
-
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,6 +12,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import Exceptions.AvailabilityFailure;
+import jpro.smarttrains.Globals;
 
 /**
  *
@@ -56,7 +57,7 @@ public class Journey implements Comparable<Journey>{
         try {
             int day = SmartUtils.getDayNumber(this.date)-1;
             if(this.getTrain().getRunsOn()[day]!=1){
-               // System.out.println("XXXXXXXXX Running set false");
+                // System.out.println("XXXXXXXXX Running set false");
                 this.runningToday=false;
             }
         } catch(java.text.ParseException E){
@@ -106,7 +107,7 @@ public class Journey implements Comparable<Journey>{
         this.desc="6-Working...";
         this.checkDateValidity();
         this.destDate=new MyDate(date.getD(),date.getM(),date.getY());
-        this.destDate.increment(this.train.getDayNumberOf(this.dest)-this.train.getDayNumberOf(this.src));
+
     }
 
     public String getStatus() {
@@ -191,6 +192,9 @@ public class Journey implements Comparable<Journey>{
         /*if(!this.train.getClasses().contains(new TravelClass(this.Tclass)));{
             this.desc="CLASS NOT AVAILABLE";
         }*/
+
+        // Increment Destination Date (Arrival Day for Destination- Departure Day for Source)
+        this.destDate.increment(this.train.getDayNumberOf(this.dest) - this.train.getDayNumberOf(this.src));
         String co=SmartTools.generateAvailabilityHash(this.train.getNo(),date,this.src,this.dest,"GN",this.Tclass);
         if(Globals.cachedAvailabilityStatus.containsKey(co)){
             System.out.println("Status found: "+co);
@@ -206,7 +210,7 @@ public class Journey implements Comparable<Journey>{
             this.desc="0-Available Directly from Source!";
             return;
         } else if(status.startsWith("TRAIN")){
-          this.desc="4-Train Departed";
+            this.desc = "4-Train Departed";
         } else if(status.startsWith("CURR")){
             this.desc="3-CURR_AVAILABLE. Check on IRCTC";
         } else {
@@ -237,6 +241,7 @@ public class Journey implements Comparable<Journey>{
                     this.date.decrement();
                     this.dateChanged=true;
                 }
+                co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, src, this.dest, "GN", this.Tclass);
                 if(Globals.cachedAvailabilityStatus.containsKey(co)){
                     System.out.println("Status found: "+co);
                     this.status=Globals.cachedAvailabilityStatus.get(co);
@@ -275,18 +280,18 @@ public class Journey implements Comparable<Journey>{
                 int lastAv=-1;
                 int st=0,mid=0;
 
-                while(true){                   
-                    if(end>mid && mid>st){   
-                    }
-                    else 
+                while (true) {
+                    if (end > mid && mid > st) {
+                    } else
                     if(end-mid==1 || (mid==0&&end==0&&st==0))
-                     break;
-                    mid=(st+end)/2;                                     
+                        break;
+                    mid = (st + end) / 2;
                     if(route_.get(mid).getDay()<route_.get(end).getDay()){
                         this.date.decrement();
                         this.dateChanged=true;
                     }
                     this.src=route[mid];
+                    co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, this.src, this.dest, "GN", this.Tclass);
                     if(Globals.cachedAvailabilityStatus.containsKey(co)){
                         System.out.println("Status found: "+co);
                         this.status=Globals.cachedAvailabilityStatus.get(co);
@@ -296,7 +301,7 @@ public class Journey implements Comparable<Journey>{
                     if(status.contains("RAC"))
 
                         this.partialStatus=status;
-                    if(status.startsWith("AVAI")){                       
+                    if (status.startsWith("AVAI")) {
                         lastAv=mid;
                         System.out.println("LAST AV UPDATED:"+lastAv+":"+route[lastAv]);
                         st=mid;
@@ -312,6 +317,7 @@ public class Journey implements Comparable<Journey>{
                 if(lastAv>0){
                     this.desc="1-Available from Different Source";
                     this.src=route[lastAv];
+                    co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, this.src, this.dest, "GN", this.Tclass);
                     if(Globals.cachedAvailabilityStatus.containsKey(co)){
                         System.out.println("Status found: "+co);
                         this.status=Globals.cachedAvailabilityStatus.get(co);
@@ -338,8 +344,8 @@ public class Journey implements Comparable<Journey>{
 
                 }
             }
-            
-            
+
+
         }
     }
 
@@ -460,7 +466,7 @@ public class Journey implements Comparable<Journey>{
         params.put("trainNo", String.valueOf(train.getNo()).length()<5?"0"+String.valueOf(train.getNo()):String.valueOf(train.getNo()));
         params.put("dateOfJourney", date);
         params.put("coachCode", this.Tclass);
-       System.out.println("sending:"+params);
+        System.out.println("sending:" + params);
         Document resp=Jsoup.connect(purl).data(params).ignoreContentType(true).timeout(10000).post();
         JSONParser parser=new JSONParser();
         try {
@@ -475,10 +481,8 @@ public class Journey implements Comparable<Journey>{
             allCKStatus=new AvailabilityStatus[6];
             if(s1.get("seatStatus").toString().startsWith("AVAILABLE")){
                 this.status= "AVAILABLE "+s1.get("seatCount");
-            }
-
-            else 
-               this.status= s1.get("seatStatus").toString();
+            } else
+                this.status = s1.get("seatStatus").toString();
 
             MyDate temp=new MyDate(this.date);
             try {
@@ -524,30 +528,10 @@ public class Journey implements Comparable<Journey>{
 
         } catch(ParseException PEx){
             throw new AvailabilityFailure("Parse Failure at Availability Check");
-        } 
-    }
-
-    public void incrementDate(){
-        if(dateIndex==allGNStatus.length)
-            return;
-        dateIndex++;
-        MyDate x=new MyDate(allGNStatus[dateIndex].getDate());
-        this.date=x;
-        this.status=allGNStatus[dateIndex].status;
-
-        if(status.startsWith("AVA")){
-            this.desc="0-Available Directly from Source!";
-            return;
-        } else if(status.startsWith("TRAIN")){
-            this.desc="4-Train Departed";
-        } else if(status.startsWith("CURR")){
-            this.desc="3-CURR_AVAILABLE. Check on IRCTC";
         }
-
     }
 
-
-
+  
     public Station getInitStn() {
         return initStn;
     }
