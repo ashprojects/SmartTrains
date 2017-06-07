@@ -73,7 +73,7 @@ public class Station implements Serializable {
         }
 
     public boolean isJunction() {
-        return Globals.indiaMap.wgraph.edgesOf(this.code).size() != 1;
+        return Globals.indiaMap.wgraph.edgesOf(this.code).size() != 2;
     }
 
     }
