@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.SimpleDateFormat;
@@ -93,7 +92,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Inserting Row
         db.insert(RECENTS_TABLE_NAME, null, values);
         db.close(); // Closing database connectiRecenon
-        System.out.println("DB_ADDED:"+T.getName());
+        //System.out.println("DB_ADDED:"+T.getName());
     }
 
 
@@ -170,12 +169,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public Train getTrainOffline(TrainBean T){
         ArrayList<RouteListItem> routeListItems=new ArrayList<>();
-        String query="SELECT * FROM "+TRAIN_ROUTE_TABLE_NAME+" WHERE "+TRAIN_ROUTE_TRNUMBER+" = "+T.getTrno() +" ORDER BY "+TRAIN_ROUTE_COUNT;
+        String query = "SELECT * FROM " + TRAIN_ROUTE_TABLE_NAME + " WHERE " + TRAIN_ROUTE_TRNUMBER + " = '" + T.getTrno() + "' ORDER BY " + TRAIN_ROUTE_COUNT;
+        //System.out.println("DB_QUERY:"+query);
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery(query,null);
-        System.out.println("DB:"+T.getTrno());
+        //System.out.println("DB:"+T.getTrno());
         Train train=new Train(T.getTrno(),T.getTrname(),null);
-        System.out.println("DB: TOTAL ENTRIES FOR "+T.getTrname()+cursor.getCount());
+        //System.out.println("DB: TOTAL ENTRIES FOR "+T.getTrname()+cursor.getCount());
         if(cursor.moveToFirst()){
             do{
                 Station S=new Station(cursor.getString(2));
@@ -188,7 +188,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         train.setRoute(routeListItems);
-        System.out.println("DB: FETCH SAVED ROUTE FOR: "+train.getName());
+        //System.out.println("DB: FETCH SAVED ROUTE FOR: "+train.getName());
         return train;
     }
 
@@ -214,7 +214,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 trainBeanArrayList.add(trainBean);
             } while (cursor.moveToNext());
         }
-        System.out.println("RETURNING "+trainBeanArrayList.size()+" BEANS");
+        //System.out.println("RETURNING "+trainBeanArrayList.size()+" BEANS");
         return trainBeanArrayList;
     }
 
