@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_smAvail"
+            android:icon="@drawable/ic_train"
+
+            android:title="Smart Availability" />
+        <item
+            android:id="@+id/nav_smSplit"
+            android:icon="@drawable/ic_split"
+            android:title="Split Journey" />
+        <item
+            android:id="@+id/nav_trByNo"
+            android:icon="@drawable/ic_dialpad_black_24dp"
+            android:title="Trains by Name/No" />
+
+        <item
+            android:id="@+id/nav_Seat"
+            android:icon="@drawable/ic_seat"
+            android:title="Seat Availability" />
+
+        <item
+            android:id="@+id/nav_trainBwStns"
+            android:icon="@drawable/ic_btw"
+            android:title="Train Between Stations" />
+        <item
+            android:id="@+id/nav_savedOfflineRoutes"
+            android:icon="@drawable/ic_download"
+            android:title="Saved Routes" />
+
+    </group>
+
+
+
+</menu>

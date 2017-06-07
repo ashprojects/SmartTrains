@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_trains_between_station_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="jpro.smarttrains.TrainsBetweenStationActivityHome">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_tr"
+
+
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/description"
+            android:text="Find trains between stations"
+            android:textAlignment="center"
+
+            />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <AutoCompleteTextView
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ENTER SOURCE"
+                style="@style/description"
+                android:id="@+id/srcStn_Autocomplete"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+       <android.support.design.widget.TextInputLayout
+           android:layout_width="match_parent"
+           android:layout_marginTop="7dp"
+           android:layout_marginBottom="5dp"
+           android:layout_height="wrap_content">
+           <AutoCompleteTextView
+               android:layout_marginTop="5dp"
+               style="@style/description"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:hint="ENTER DESTINATION"
+               android:id="@+id/destStn_Autocomplete"
+               />
+       </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="SHOW TRAINS"
+            android:textColor="#FFFF"
+            android:textStyle="bold"
+            android:id="@+id/showTrains"
+            android:background="@color/colorPrimary"
+            />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

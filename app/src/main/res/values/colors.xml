@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#d61421</color>
+    <color name="colorPrimaryDark">#a90003</color>
+    <color name="colorAccent">#da090c</color>
+    <color name="colorBg">#da090c</color>
+    <color name="darkyellow">#e67c0b</color>
+    <color name="bg1">#17FF0512</color>
+    <color name="trStart">#301961f1</color>
+    <color name="trEnd">#392bf119</color>
+    <color name="darkGreen">#22630e</color>
+    <color name="grey">#fafafa</color>
+    <color name="c">#14000000</color>
+    <color name="darkYellow">#a3ae08</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="black_overlay">#66000000</color>
+</resources>

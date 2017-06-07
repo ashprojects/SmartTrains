@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/all_train_status_activity"
+
+
+    >
+    <LinearLayout
+        android:id="@+id/allTrainsFirstLL"
+        android:background="@color/colorBg"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:paddingTop="5dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+
+                android:id="@+id/mstn1"
+                android:textSize="21dp"
+                android:paddingTop="5dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:text="STN1"
+                android:textColor="#FFFFFF"
+                android:textAlignment="textEnd" />
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="35dp"
+                android:layout_weight="0.2"
+                android:src="@drawable/arrow1"
+                android:id="@+id/arrow_1"
+                />
+            <TextView
+
+                android:paddingTop="5dp"
+                android:id="@+id/mstn2"
+                android:textSize="21dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:text="STN2"
+                android:textColor="#FFFFFF"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:divider="#ffffff"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/change_date_back_btn"
+                android:src="@drawable/ic_back_arrow"
+                android:background="@color/transparent"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="DATE:"
+                android:id="@+id/mdate"
+                android:textAlignment="textEnd"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:paddingRight="5dp"
+                />
+
+
+            <TextView
+                android:id="@+id/day_ats"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Friday"
+                android:textStyle="bold"
+                android:paddingLeft="3dp"
+                android:textColor="#ffffff"
+
+                />
+
+            >
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+
+            android:layout_height="wrap_content">
+            <!-- <TextView
+                 android:background="#22f50004"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:text="@string/trinfo"
+                 android:textSize="15dp"
+                 android:textStyle="bold"
+                 android:textAlignment="center"
+                 android:paddingTop="5dp"
+                 android:padding="8dp"
+                 android:layout_weight="9"
+                 />-->
+            <ProgressBar
+                android:indeterminate="true"
+                android:visibility="visible"
+                android:id="@+id/listMain"
+                android:layout_weight="1"
+                android:progressBackgroundTint="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+
+                />
+
+        </RelativeLayout>
+        <TextView
+            android:layout_below="@+id/listMain"
+
+            android:id="@+id/allCompletedTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp"
+            android:text="@string/completed_text"
+            />
+    </LinearLayout>
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ListView
+        android:background="@color/bg1"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
+        android:id="@+id/statusListView"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5.0sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+        <TextView
+            android:id="@+id/nA_oth"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:text="@string/nA_time_info"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="12dp"
+            android:visibility="gone"
+            android:background="#ffffff"
+            android:textColor="#000000"
+            />
+   <ImageButton
+       android:id="@+id/dateforward"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentRight="true"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/ic_forward_arrow"
+       android:background="@drawable/oval_accent_dark"
+       android:padding="15dp"
+
+       android:translationY="-20dp"
+       android:layout_marginBottom="20dp"
+       />
+    <ImageButton
+        android:id="@+id/datebackward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_backward_arrow"
+        android:background="@drawable/oval_accent_dark"
+        android:padding="15dp"
+        android:translationY="-20dp"
+        android:layout_marginBottom="20dp"
+        />
+</RelativeLayout>
+</LinearLayout>

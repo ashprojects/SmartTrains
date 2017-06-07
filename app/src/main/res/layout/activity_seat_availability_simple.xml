@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/activity_seat_availability_simple"
+    >
+
+
+
+
+<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="jpro.smarttrains.SeatAvailabilitySimple">
+
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        style="@style/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fill the following details to get Availability Status"
+        android:textAlignment="center"
+        />
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        style="@style/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:id="@+id/stn1"
+                android:hint="FROM"
+                android:textSize="14dp"
+                android:textAlignment="center"
+
+                android:layout_height="match_parent" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/arrow1"
+            android:layout_marginTop="2dp"
+            android:background="#00ffffff"
+            android:layout_alignTop="@+id/textView"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal" />
+<android.support.design.widget.TextInputLayout
+    android:layout_weight="0.3"
+    android:layout_width="0dp"
+    android:layout_gravity="center_vertical"
+    android:layout_height="wrap_content">
+    <AutoCompleteTextView
+       android:layout_width="match_parent"
+        android:id="@+id/stn2"
+        android:hint="TO"
+        android:layout_gravity="center_vertical"
+        android:textSize="14dp"
+        android:textAlignment="center"
+        android:layout_height="match_parent" />
+
+</android.support.design.widget.TextInputLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:focusable="true"
+            android:id="@+id/dateSelBtnSimpleAvai"
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:text="SELECT DATE"
+            android:textColor="#ffffff"
+            android:background="@color/colorPrimary"
+            android:layout_height="35dp"
+
+            />
+        <TextView
+            android:id="@+id/date"
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            style="@style/description"
+            android:layout_height="wrap_content"
+            android:text="DATE"
+            android:layout_gravity="left|center_vertical"
+            />
+
+    </LinearLayout>
+
+        <ProgressBar
+            android:visibility="gone"
+            android:padding="0dp"
+            android:id="@+id/loadTrainspbar"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+
+            />
+
+
+    <LinearLayout
+        android:id="@+id/train_list_all_layout"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        style="@style/description"
+        >
+
+            <TextView
+                android:layout_weight="0.5"
+                android:textSize="13dp"
+                android:textStyle="bold"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="Select:"
+                android:layout_gravity="center_vertical"
+                android:textAlignment="center"
+                />
+
+
+        <jpro.smarttrains.DelayedAutoCompleteTextView
+            android:layout_weight="0.7"
+            android:layout_width="match_parent"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:id="@+id/trNo"
+            android:hint="@string/train_name_or_number"
+            android:textSize="14dp"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/train_spinner_layout"
+        android:layout_marginTop="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/description"
+        >
+        <LinearLayout
+            android:background="@color/c"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+
+            android:layout_height="match_parent">
+        <TextView
+            android:padding="3dp"
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Select:"
+            android:textStyle="bold"
+            android:textAlignment="center"
+
+            />
+            <ImageButton
+                android:src="@drawable/ic_close"
+                android:id="@+id/closeSelBtn"
+                android:layout_gravity="top"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@color/transparent"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+
+        <Spinner
+            android:layout_marginTop="6dp"
+            android:layout_weight="0.9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:id="@+id/trNoSpinner"
+            android:hint="@string/train_name_or_number"
+            android:textSize="16dp"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        style="@style/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textAlignment="center"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:text="Select Class"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:focusable="true"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:id="@+id/classSpinner"
+                android:layout_height="wrap_content"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_weight="0.5"
+                android:textAlignment="center"
+                android:text="Select Quota"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent" />
+            <Spinner
+                android:focusable="true"
+                android:layout_gravity="center"
+
+                android:layout_weight="0.5"
+                android:layout_width="match_parent"
+                android:id="@+id/quotaSpinner"
+                android:layout_height="wrap_content"></Spinner>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:text="GET AVAILABILITY"
+        android:textColor="#ffffff"
+        android:id="@+id/gtsAvai"
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="35dp"
+        />
+
+</LinearLayout>
+    <TableLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/av_table"
+        android:layout_width="fill_parent"
+        android:stretchColumns="0,1,2"
+        android:layout_height="wrap_content">
+
+    </TableLayout>
+</LinearLayout>
+</ScrollView>
