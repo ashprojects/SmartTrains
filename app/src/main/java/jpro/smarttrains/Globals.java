@@ -1,17 +1,23 @@
 package jpro.smarttrains;
 
-import java.util.ArrayList;
+import android.app.Application;
+import android.content.Context;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 
+import SmartTrainTools.ConnectivityGraph;
 import SmartTrainTools.RailwayCodes;
-import SmartTrainTools.RouteListItem;
 import SmartTrainTools.Train;
 
 /**
  * Created by ashish on 16/3/17.
  */
 
-public class Globals {
+public class Globals extends Application {
+    private static Context mContext;
     public static String etV="2.10.1";
     public static String tQ="GN";
     public static String rq_desc="Hi!";
@@ -25,5 +31,33 @@ public class Globals {
     public static HashMap<String, Train> CachedTrainInfo=new HashMap<>();
     public static HashMap<String, String> cachedAvailabilityStatus=new HashMap<>();
     public static HashMap<String,String> cachedQuotaStation=new HashMap<>();
+    public static ConnectivityGraph indiaMap;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this;
+
+
+        InputStream inputStream = getResources().openRawResource(R.raw.obj2);
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(inputStream);
+            indiaMap = (ConnectivityGraph) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (objectInputStream != null) {
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
 }
