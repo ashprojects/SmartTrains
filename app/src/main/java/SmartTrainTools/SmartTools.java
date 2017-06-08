@@ -5,37 +5,25 @@
  */
 package SmartTrainTools;
 
-import Exceptions.AvailabilityFailure;
-import SmartTrainTools.MyDate;
-import SmartTrainTools.RouteListItem;
-import SmartTrainTools.Station;
-import SmartTrainTools.Train;
-import SmartTrainTools.TravelClass;
-import jpro.smarttrains.Globals;
-import java.io.File;
+import org.jgrapht.alg.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.DijkstraShortestPath;
-import org.jgrapht.alg.KShortestPaths;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import jpro.smarttrains.Globals;
 
 
 /**
@@ -50,10 +38,8 @@ public class SmartTools {
     public static void fixEtvVer(){
         try {
             String link="http://etrain.info/in";
-            System.out.println("LINK: "+link);
-
             Document resp=Jsoup.connect(link).get();
-            System.out.println(resp.toString().indexOf("js_v = \'"));
+            // System.out.println(resp.toString().indexOf("js_v = \'"));
             String x=resp.toString().substring(resp.toString().indexOf("js_v = \'")+"js_v = \'".length(),resp.toString().length()-1);
             String v=x.substring(0,x.indexOf("\'"));
             Globals.etV=v;
@@ -82,7 +68,6 @@ public class SmartTools {
 
     public static ArrayList<Train> findTrains(String src, String dest, String date) throws IOException{
         String link="http://etrain.info/ajax.php?q=trains&v="+ Globals.etV;
-        System.out.println("LINK: "+link);
         HashMap<String, String> params=new HashMap<>();
         params.put("stn1",src);
         params.put("stn2",dest);
@@ -90,7 +75,6 @@ public class SmartTools {
             params.put("date",date);
         params.put("quota","GN");
         ArrayList<Train> trainss=new ArrayList<>();
-        System.out.println("PARAMS: "+params);
         Document resp=Jsoup.connect(link).data(params).ignoreContentType(true).timeout(10000).post();
         JSONParser parser=new JSONParser();
         ArrayList<String> trains=new ArrayList<>();
@@ -98,7 +82,6 @@ public class SmartTools {
         try {
             JSONObject obj=(JSONObject)parser.parse(resp.text());
             String data=(String) obj.get("data");
-            System.out.println("RESP:"+data);
             String[] tr=data.toString().split(";");
             for(String t:tr){
                 String[] exploded=t.split(",");
@@ -125,7 +108,8 @@ public class SmartTools {
                 trn.setQueryDestStn(new Station(exploded[5]));
                 trn.setRunsOn(rq);
                 trn.setClassAvail(cl);
-
+                trn.setQuerySrcTime(exploded[4].toString());
+                trn.setQueryDestTime(exploded[6].toString());
                 trn.setName(exploded[2]);
                 trainss.add(trn);
             }
@@ -173,11 +157,12 @@ public class SmartTools {
             }
             return new Path(stations,len);
         } catch (FileNotFoundException ex) {
-            System.out.println("FNF EXCEPTION");
+            //System.out.println("FNF EXCEPTION");
         } catch (IOException ex) {
-            System.out.println("IO EXCEPTION");
+            //ex.printStackTrace();
+            //System.out.println("IO EXCEPTION");
         } catch (ClassNotFoundException ex) {
-            System.out.println("CNF Ex");
+            //System.out.println("CNF Ex");
         }
         return null;
     }

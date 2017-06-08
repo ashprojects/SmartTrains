@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -76,7 +75,7 @@ public class TrainsViewListAdapter extends BaseAdapter {
             holder.tr[6]=(TextView)view.findViewById(R.id.trS);
             holder.timeSrc=(TextView)view.findViewById(R.id.defdt_n_day1);
             holder.timeDest=(TextView)view.findViewById(R.id.defdt_n_day2);
-            holder.clss=(TextView)view.findViewById(R.id.classAvlSpan);
+            holder.classLayout = (LinearLayout) view.findViewById(R.id.classesLL);
             holder.ttm=(TextView)view.findViewById(R.id.travelTime);
             //holder.runsOn=(TextView)view.findViewById(R.id.runsOn);
 
@@ -121,7 +120,7 @@ public class TrainsViewListAdapter extends BaseAdapter {
         for(TravelClass A: TravelClass.getTravelClassesFrom(trains.get(i).getClassAvail())){
             tmp+=A.getClassCode()+" ";
         }
-        holder.clss.setText(tmp);
+        //holder.clss.setText(tmp);
         holder.ttm.setText(trains.get(i).getQueryTravelTime().split(":")[0]+" hrs "+trains.get(i).getQueryTravelTime().split(":")[1]+" mins");
             //holder.runsOn.setText(a);
         if((i==trains.size()-1)&&(i!=lastAnimatedPos)) {
@@ -146,10 +145,12 @@ public class TrainsViewListAdapter extends BaseAdapter {
                     '}';
         }
 
+        LinearLayout classLayout;
         TextView stn1,stn2,timeSrc,timeDest,runsOn,trNo,trName,totTrNo,pos,tr[],clss,ttm;
     }
 
     private ArrayList<Train> trains;
     private LayoutInflater mInflater;
     private Station src,dest,temp;
+
 }

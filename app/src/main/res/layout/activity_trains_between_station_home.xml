@@ -34,7 +34,7 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="0dp"
             android:layout_height="wrap_content">
             <AutoCompleteTextView
                 android:layout_marginTop="20dp"
@@ -48,7 +48,7 @@
 
        <android.support.design.widget.TextInputLayout
            android:layout_width="match_parent"
-           android:layout_marginTop="7dp"
+           android:layout_marginTop="2dp"
            android:layout_marginBottom="5dp"
            android:layout_height="wrap_content">
            <AutoCompleteTextView
@@ -61,11 +61,38 @@
                />
        </android.support.design.widget.TextInputLayout>
 
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:focusable="true"
+                android:id="@+id/dateSelBtnTrainBetweenStations"
+                android:layout_weight="0.4"
+                android:layout_width="0dp"
+                android:text="SELECT DATE"
+                android:textColor="#ffffff"
+                android:background="@color/colorPrimary"
+                android:layout_height="match_parent"
+
+                />
+
+            <TextView
+                android:id="@+id/dateInfoTextView"
+                android:layout_weight="0.6"
+                android:layout_width="0dp"
+                style="@style/description"
+                android:layout_height="wrap_content"
+                android:text="DATE (OPTIONAL)"
+                android:layout_gravity="left|center_vertical" />
+
+        </LinearLayout>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:text="SHOW TRAINS"
             android:textColor="#FFFF"
             android:textStyle="bold"

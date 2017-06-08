@@ -3,9 +3,9 @@ package jpro.smarttrains;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,10 +15,10 @@ import java.util.ArrayList;
 
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Path;
+import SmartTrainTools.SmartTools;
 import SmartTrainTools.SplitJourney;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
-import SmartTrainTools.SmartTools;
 
 public class SplitStations extends AppCompatActivity {
 
@@ -110,18 +110,14 @@ public class SplitStations extends AppCompatActivity {
 
                     if(i==stations.size()-1)
                         break;
-                    System.out.println("FOR: "+stations.get(i));
                     ArrayList<Train> trainsDest= SmartTools.findTrains(stations.get(i).getCode(),dest.getCode(),sdate);
                     int size=trainsDest.size();
+                    if (size == 0)
+                        continue;
                     if(sizeStart<size) {
-                        System.out.println("Adding For  station: "+stations.get(i).getName()+" tot trains:"+size+" start:"+sizeStart);
                         ArrayList<Train> trainsMid = SmartTools.findTrains(src.getCode(), stations.get(i).getCode(), sdate);
-                        try{
-                            trainsMid.size();
-
-                        } catch (NullPointerException E){
+                        if (trainsMid.size() == 0)
                             break;
-                        }
                         SplitJourney x = new SplitJourney(src, stations.get(i), dest, date, null, trainsMid, trainsDest);
 
                         count++;

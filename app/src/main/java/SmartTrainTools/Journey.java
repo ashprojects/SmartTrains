@@ -16,7 +16,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import Exceptions.AvailabilityFailure;
@@ -57,7 +56,7 @@ public class Journey implements Comparable<Journey>{
         try {
             int day = SmartUtils.getDayNumber(this.date)-1;
             if(this.getTrain().getRunsOn()[day]!=1){
-                // System.out.println("XXXXXXXXX Running set false");
+                // //System.out.println("XXXXXXXXX Running set false");
                 this.runningToday=false;
             }
         } catch(java.text.ParseException E){
@@ -136,7 +135,7 @@ public class Journey implements Comparable<Journey>{
             resp=Jsoup.connect(url).data(params).post();
             JSONParser jsp=new JSONParser();
             JSONObject obj=(JSONObject)jsp.parse(resp.text());
-            System.out.println("________________FROM FETCH CACHE FUNCTION: "+resp.text());
+            //System.out.println("________________FROM FETCH CACHE FUNCTION: "+resp.text());
             if(obj.get("found").toString().equals("Y")){
                 return new Station(obj.get("stnCode").toString());
             } else {
@@ -161,22 +160,22 @@ public class Journey implements Comparable<Journey>{
         try {
             resp=Jsoup.connect(url).data(params).post();
             JSONParser jsp=new JSONParser();
-            System.out.println("res: "+resp.text());
+            //System.out.println("res: "+resp.text());
             JSONObject obj=(JSONObject)jsp.parse(resp.text());
-            System.out.println(obj.toJSONString());
+            //System.out.println(obj.toJSONString());
             if(obj.get("status").toString().equals("Y")||obj.get("status").toString().equals("E")){
-                System.out.println(obj.get("status").toString());
+                //System.out.println(obj.get("status").toString());
                 return true;
             } else {
-                System.out.println("Server Internal Failure");
+                //System.out.println("Server Internal Failure");
                 return false;
             }
         } catch (IOException E){
-            System.out.println("Server Connection Failure");
+            //System.out.println("Server Connection Failure");
             return false;
         } catch (Exception E){
 
-            System.out.println("Server Connection Failure: ");
+            //System.out.println("Server Connection Failure: ");
             E.printStackTrace();
             return false;
         }
@@ -197,7 +196,7 @@ public class Journey implements Comparable<Journey>{
         this.destDate.increment(this.train.getDayNumberOf(this.dest) - this.train.getDayNumberOf(this.src));
         String co=SmartTools.generateAvailabilityHash(this.train.getNo(),date,this.src,this.dest,"GN",this.Tclass);
         if(Globals.cachedAvailabilityStatus.containsKey(co)){
-            System.out.println("Status found: "+co);
+            //System.out.println("Status found: "+co);
             this.status=Globals.cachedAvailabilityStatus.get(co);
         } else {
             fetchAvailability();
@@ -220,11 +219,11 @@ public class Journey implements Comparable<Journey>{
             } else {
                 X = fetchCachedQuotaStation();
             }
-            System.out.println(" ============= fetch from srv complete: "+X);
+            //System.out.println(" ============= fetch from srv complete: "+X);
             if(X!=null){
                 src=X;
                 Globals.cachedQuotaStation.put(this.train.getNo(),X.getCode());
-                System.out.println("------***** I FOUND QUOTA FROM SERVER: "+src.getName()+" for train: "+this.train.getName());
+                //System.out.println("------***** I FOUND QUOTA FROM SERVER: "+src.getName()+" for train: "+this.train.getName());
                 int a=-1,b=-1;
                 for(int i=0;i<route_.size();++i){
                     RouteListItem Y=route_.get(i);
@@ -233,17 +232,17 @@ public class Journey implements Comparable<Journey>{
                     if(Y.getStation().getCode().equals(initStn.getCode()))
                         b=i;
                 }
-                System.out.println("ROUE: "+route_);
-                System.out.println("a:"+a+" b:"+b);
-                System.out.println("b:"+route_.get(b).getDay()+" a:"+route_.get(a).getDay());
+                //System.out.println("ROUE: "+route_);
+                //System.out.println("a:"+a+" b:"+b);
+                //System.out.println("b:"+route_.get(b).getDay()+" a:"+route_.get(a).getDay());
                 if(route_.get(b).getDay()>route_.get(a).getDay()){
-                    System.out.println("Date decremented , even from server");
+                    //System.out.println("Date decremented , even from server");
                     this.date.decrement();
                     this.dateChanged=true;
                 }
                 co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, src, this.dest, "GN", this.Tclass);
                 if(Globals.cachedAvailabilityStatus.containsKey(co)){
-                    System.out.println("Status found: "+co);
+                    //System.out.println("Status found: "+co);
                     this.status=Globals.cachedAvailabilityStatus.get(co);
                 } else {
                     fetchAvailability();
@@ -262,7 +261,7 @@ public class Journey implements Comparable<Journey>{
                 }
             }
             int mainSrcLoc=0;
-            System.out.println(this.train.getName());
+            //System.out.println(this.train.getName());
 
             Station[] route=new Station[route_.size()];
             for(int i=0;i<route_.size();++i){
@@ -271,11 +270,11 @@ public class Journey implements Comparable<Journey>{
                     mainSrcLoc=i;
             }
             if(route[0].getCode().equals(this.src.getCode())){
-                System.out.println("FROM SOURCE, UNAVAILABLE");
+                //System.out.println("FROM SOURCE, UNAVAILABLE");
                 this.desc="7-FROM SOURCE, UNAVAILABLE";
                 completed=true;
             } else {
-                System.out.println(route[0].getCode()+route[mainSrcLoc]);
+                //System.out.println(route[0].getCode()+route[mainSrcLoc]);
                 int end=mainSrcLoc;
                 int lastAv=-1;
                 int st=0,mid=0;
@@ -293,7 +292,7 @@ public class Journey implements Comparable<Journey>{
                     this.src=route[mid];
                     co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, this.src, this.dest, "GN", this.Tclass);
                     if(Globals.cachedAvailabilityStatus.containsKey(co)){
-                        System.out.println("Status found: "+co);
+                        //System.out.println("Status found: "+co);
                         this.status=Globals.cachedAvailabilityStatus.get(co);
                     } else {
                         fetchAvailability();
@@ -303,14 +302,14 @@ public class Journey implements Comparable<Journey>{
                         this.partialStatus=status;
                     if (status.startsWith("AVAI")) {
                         lastAv=mid;
-                        System.out.println("LAST AV UPDATED:"+lastAv+":"+route[lastAv]);
+                        //System.out.println("LAST AV UPDATED:"+lastAv+":"+route[lastAv]);
                         st=mid;
                         mid=(st+end)/2;
                     } else {
                         end=mid;
                         mid=(st+end)/2;
                     }
-                    System.out.println("Checked: "+route[mid]+" with status: "+status+" start: "+st+" end"+end+" mid"+mid);
+                    //System.out.println("Checked: "+route[mid]+" with status: "+status+" start: "+st+" end"+end+" mid"+mid);
                 }
 
                 completed=true;
@@ -319,7 +318,7 @@ public class Journey implements Comparable<Journey>{
                     this.src=route[lastAv];
                     co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, this.src, this.dest, "GN", this.Tclass);
                     if(Globals.cachedAvailabilityStatus.containsKey(co)){
-                        System.out.println("Status found: "+co);
+                        //System.out.println("Status found: "+co);
                         this.status=Globals.cachedAvailabilityStatus.get(co);
                     } else {
                         fetchAvailability();
@@ -327,12 +326,12 @@ public class Journey implements Comparable<Journey>{
                     this.fetchFare();
                     this.fare=Integer.parseInt(getFare());
                     this.finalAvDate=new MyDate(this.date.getD(),this.date.getM(),this.date.getY());
-                    System.out.println("Fare: "+this.fare);
+                    //System.out.println("Fare: "+this.fare);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             boolean s=storeQoutaStationToServer();
-                            System.out.println("----- ****** Stored station "+src.getName()+" to server: "+s);
+                            //System.out.println("----- ****** Stored station "+src.getName()+" to server: "+s);
                         }
                     }).run();
 
@@ -407,18 +406,17 @@ public class Journey implements Comparable<Journey>{
         params.put("jdate", date2);
         params.put("age", "30");
         params.put("jquota", this.quota);
-        System.out.println(params);
         Document resp=null;
         try {
             resp = Jsoup.connect(furl).data(params).post();
         } catch (Exception E){
             this.fare=0;
             E.printStackTrace();
-            System.out.println("FARE UNAVAILABLE");
+            //System.out.println("FARE UNAVAILABLE");
             return;
         }
         Elements el=resp.getElementsByTag("tr");
-        System.out.println(el.size());
+        //System.out.println(el.size());
         int i=0;
         for(Element e: el){
             if(i==0){
@@ -431,7 +429,7 @@ public class Journey implements Comparable<Journey>{
                 this.fare=Integer.parseInt(e.getElementsByTag("td").get(4).text());
             }
         }
-        System.out.println("FARE FOR "+this.train.getName()+" = "+this.getFare());
+        //System.out.println("FARE FOR "+this.train.getName()+" = "+this.getFare());
     }
 
     public void setStatus(String status) {
@@ -456,7 +454,7 @@ public class Journey implements Comparable<Journey>{
         }*/
         String date=this.date.getDateUnParsed();
         String d[]=date.split("/");
-        System.out.println("date:"+date);
+        //System.out.println("date:"+date);
         date=d[1]+"/"+d[0]+"/"+d[2];
         String purl="http://railways.makemytrip.com/railways//json/avail";
         HashMap<String,String> params=new HashMap<>();
@@ -466,12 +464,12 @@ public class Journey implements Comparable<Journey>{
         params.put("trainNo", String.valueOf(train.getNo()).length()<5?"0"+String.valueOf(train.getNo()):String.valueOf(train.getNo()));
         params.put("dateOfJourney", date);
         params.put("coachCode", this.Tclass);
-        System.out.println("sending:" + params);
+        //System.out.println("sending:" + params);
         Document resp=Jsoup.connect(purl).data(params).ignoreContentType(true).timeout(10000).post();
         JSONParser parser=new JSONParser();
         try {
             JSONObject ar=(JSONObject)parser.parse(resp.text());
-            System.out.println("RESP: "+resp.text());
+            //System.out.println("RESP: "+resp.text());
             JSONObject status1=(JSONObject)ar.get(date);
             JSONObject s1=(JSONObject)status1.get(this.Tclass);
             if(s1==null)
@@ -490,7 +488,7 @@ public class Journey implements Comparable<Journey>{
                 for (int i = 0; i < 6; ++i) {
                     String[] t = temp.getDateUnParsed().split("/");
                     String stemp = t[1] + "/" + t[0] + "/" + t[2];
-                    System.out.println("FOR:" + stemp);
+                    //System.out.println("FOR:" + stemp);
                     JSONObject status2 = (JSONObject) ar.get(stemp);
                     JSONObject s2 = (JSONObject) status2.get(this.Tclass);
                     AvailabilityStatus ew;
@@ -522,8 +520,8 @@ public class Journey implements Comparable<Journey>{
             } catch (NullPointerException E){
 
             }
-            System.out.println("AV_ARRAY_GN:"+Arrays.asList(allGNStatus));
-            System.out.println("AV_ARRAY_CK:"+Arrays.asList(allCKStatus));
+            //System.out.println("AV_ARRAY_GN:"+Arrays.asList(allGNStatus));
+            //System.out.println("AV_ARRAY_CK:"+Arrays.asList(allCKStatus));
 
 
         } catch(ParseException PEx){

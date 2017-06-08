@@ -57,6 +57,7 @@ public class SplitStationsListAdapter extends BaseAdapter {
             holder.mid2=(TextView)view.findViewById(R.id.stnMid_2);
             holder.dis=(TextView)view.findViewById(R.id.splitDis);
             holder.title=(TextView)view.findViewById(R.id.viaStn);;
+            view.setTag(holder);
         } else {
             holder = (SplitStationsListAdapter.ViewHolder) view.getTag();
         }
