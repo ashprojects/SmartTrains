@@ -1,14 +1,11 @@
 package jpro.smarttrains;
 
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -17,7 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import SmartTrainTools.RouteListItem;
-import SmartTrainTools.Station;
+import SmartTrainTools.SmartTools;
 import SmartTrainTools.Train;
 import SmartTrainsSQL.DatabaseHandler;
 
@@ -45,7 +42,7 @@ public class TrainRoute extends AppCompatActivity {
         no=(TextView)findViewById(R.id.srn);
 
         download=(Button)findViewById(R.id.downloadRouteBtn);
-        code=(TextView)findViewById(R.id.stnCode);
+
         stn=(TextView)findViewById(R.id.stnName);
         arr=(TextView)findViewById(R.id.arrTime);
         dep=(TextView)findViewById(R.id.deptTime);
@@ -74,7 +71,7 @@ public class TrainRoute extends AppCompatActivity {
             TableRow row=new TableRow(this);
             TableLayout.LayoutParams p= new TableLayout.LayoutParams();
             p.height=TableLayout.LayoutParams.WRAP_CONTENT;
-            p.width=TableLayout.LayoutParams.FILL_PARENT;
+            p.width = TableLayout.LayoutParams.MATCH_PARENT;
             row.setLayoutParams(p);
             String arr="",dept="";
 
@@ -83,11 +80,13 @@ public class TrainRoute extends AppCompatActivity {
             String sname=item.getStation().getName();
             try {
                 if (sname.length() > 10) {
-                    sname = sname.substring(0, 9) + "..";
+                    //sname = sname.substring(0, 9) + "..";
                 }
             } catch (NullPointerException E){}
             int day=item.getDay();
             int dis=item.getDistanceFromSource();
+
+
             if(sr==1){
                arr="-";
             } else {
@@ -98,7 +97,7 @@ public class TrainRoute extends AppCompatActivity {
             } else {
                 dept=item.getDepartureTime().toString();
             }
-            String array[]=new String[]{String.valueOf(sr),code,sname,arr,dept,""+dis+" kms",""+day};
+            String array[] = new String[]{String.valueOf(sr), sname + "\r\n(" + code + ")", arr, dept, SmartTools.timeDifferenceInMinutes(item.getArrivalTime(), item.getDepartureTime()), "" + dis + " kms", "" + day};
             if(sr==1){
                 row.setBackgroundResource(R.drawable.table_border_bg_trstart);
                 //row.setBackgroundColor(getResources().getColor(R.color.trStart));
@@ -106,12 +105,16 @@ public class TrainRoute extends AppCompatActivity {
                 row.setBackgroundResource(R.drawable.table_border_bg_trend);
                 //row.setBackgroundColor(getResources().getColor(R.color.trEnd));
             }
+            float[] arr_we = new float[]{(float) 0.1, (float) 0.5, (float) 0.4, (float) 0.4, (float) 0.2, (float) 0.4, (float) 0.12};
             for(int i=0;i<7;++i){
                 tx[i]=new TextView(this);
                 TableRow.LayoutParams x=new TableRow.LayoutParams(i);
                 x.setMargins((int)(2*scale+0.5f),(int)(2*scale+0.5f),(int)(2*scale+0.5f),(int)(2*scale+0.5f));
+                x.weight = arr_we[i];
                 tx[i].setLayoutParams(x);
                 tx[i].setText(""+array[i]);
+                if (i > 2)
+                    tx[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 tx[i].setTextColor(Color.BLACK);
                 tx[i].setPadding((int)(1*scale+0.5f),0,0,0);
                 tx[i].setTextSize(12);
@@ -120,7 +123,8 @@ public class TrainRoute extends AppCompatActivity {
 
             }
             sr++;
-        mainTable.addView(row);
+
+            mainTable.addView(row);
 
         }
 
