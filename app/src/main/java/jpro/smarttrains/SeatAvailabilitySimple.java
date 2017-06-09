@@ -10,9 +10,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +42,9 @@ import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.RailwayCodes;
 import SmartTrainTools.RouteListItem;
+import SmartTrainTools.SmartTools;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
-import SmartTrainTools.SmartTools;
 import SmartTrainTools.TravelClass;
 
 public class SeatAvailabilitySimple extends AppCompatActivity {
@@ -358,24 +358,25 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             TableRow.LayoutParams x=new TableRow.LayoutParams(0);
             TableLayout.LayoutParams tblp=new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             Srow.setLayoutParams(tblp);
-
+            x.weight = (float) 0.3;
 
             TextView date=new TextView(this);
+
             date.setLayoutParams(x);
             date.setText("DATE");
-            date.setTextSize(getResources().getDimension(R.dimen.textsize));
+
             date.setTextColor(Color.WHITE);
             if(Build.VERSION.SDK_INT>16)
                 date.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             date.setTypeface(null,Typeface.BOLD);
             date.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
-            date.setTextSize((int)(5*scale+0.5f));
+            //date.setTextSize((int)(5*scale+0.5f));
             Srow.addView(date);
 
             TextView c1=new TextView(this);
             c1.setLayoutParams(x);
-            c1.setTextSize(getResources().getDimension(R.dimen.textsize));
+            //c1.setTextSize(getResources().getDimension(R.dimen.textsize));
             c1.setText(selectedClass);
             c1.setTextColor(Color.WHITE);
             if(Build.VERSION.SDK_INT>16)
@@ -383,20 +384,20 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             c1.setTypeface(null,Typeface.BOLD);
             c1.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
-            c1.setTextSize((int)(5*scale+0.5f));
+
             Srow.addView(c1);
 
             TextView c2=new TextView(this);
             c2.setLayoutParams(x);
             c2.setText(extraClass);
-            c2.setTextSize(getResources().getDimension(R.dimen.textsize));
+            //c2.setTextSize(getResources().getDimension(R.dimen.textsize));
             c2.setTextColor(Color.WHITE);
             if(Build.VERSION.SDK_INT>16)
                 c2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             c2.setTypeface(null,Typeface.BOLD);
             c2.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
-            c2.setTextSize((int)(5*scale+0.5f));
+
             Srow.addView(c2);
             MyDate tblDate=new MyDate(this.dateG);
             avTableRoot.addView(Srow);
@@ -406,6 +407,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                     tblp=new TableLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
                     row.setLayoutParams(tblp);
                     TextView date2=new TextView(this);
+                x.weight = (float) 0.3;
                     date2.setLayoutParams(x);
                     date2.setText(tblDate.getBeautifiedDate());
                     date2.setTextColor(Color.BLACK);
@@ -413,10 +415,11 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                         date2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     date2.setTypeface(null,Typeface.BOLD);
                     //date.setPadding((int)(0.5*scale+0.5f),0,0,0);
-                    date2.setTextSize((int)(5*scale+0.5f));
+                //date2.setTextSize((int)(5*scale+0.5f));
                     row.addView(date2);
                     tblDate.increment(1);
                     TableRow.LayoutParams y=new TableRow.LayoutParams(1);
+                y.weight = (float) 0.3;
                     boolean e=true;
                     TextView av1=new TextView(this);
                     av1.setLayoutParams(y);
@@ -441,13 +444,14 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                         av1.setTextColor(Color.GRAY);
 
                     }
-                    av1.setTextSize((int)(5*scale+0.5f));
+                //av1.setTextSize((int)(5*scale+0.5f));
                     row.addView(av1);
 
 
 
                     e=true;
                     TableRow.LayoutParams z = new TableRow.LayoutParams(2);
+                z.weight = (float) 0.3;
                     TextView av2 = new TextView(this);
                     av2.setLayoutParams(z);
                     av2.setTypeface(null, Typeface.BOLD);
@@ -471,7 +475,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                         av2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     //av2.setPadding((int) (0.5 * scale + 0.5f), 0, 0, 0);
 
-                    av2.setTextSize((int)(5*scale+0.5f));
+                //av2.setTextSize((int)(5*scale+0.5f));
                     row.addView(av2);
 
                 row.setBackgroundResource(R.drawable.table_border_bg_white);

@@ -1,5 +1,6 @@
 package jpro.smarttrains;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,6 +27,8 @@ public class About extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
     }
 
     public void onBackPressed() {
@@ -38,5 +41,7 @@ public class About extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
+    ProgressDialog pd;
 
 }

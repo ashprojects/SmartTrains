@@ -1,8 +1,8 @@
 package jpro.smarttrains;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import Downloader.DownloadAndInstallAPKFile;
 
 public class MainHome extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -102,7 +104,7 @@ public class MainHome extends AppCompatActivity
         verDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(verDesc.getText().toString().contains("Update")){
+                if (verDesc.getText().toString().contains("Click")) {
                     new AlertDialog.Builder(MainHome.this).setTitle("Update Available")
                             .setMessage("Smart Trains has just got better. Update to the newest version? It won't take much.\nChangeLog: "+Globals.changelog)
                             .setCancelable(false)
@@ -111,10 +113,14 @@ public class MainHome extends AppCompatActivity
                                     System.out.println("----------------------- switch --------------------");
                                     switch(id){
                                         case DialogInterface.BUTTON_POSITIVE:
-                                            Intent i = new Intent(Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse(Globals.update_Link));
-                                            startActivity(i);
-                                            break;
+                                            ProgressDialog pd = new ProgressDialog(MainHome.this);
+                                            pd.setMessage("This may take a while\nOnce the file is downloaded, you'll be asked to Install the app.");
+                                            pd.setTitle("Dowloading Update");
+                                            pd.setCancelable(false);
+                                            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                            DownloadAndInstallAPKFile downloadAndInstallAPKFile = new DownloadAndInstallAPKFile();
+                                            downloadAndInstallAPKFile.setContext(getApplicationContext(), pd);
+                                            downloadAndInstallAPKFile.execute(Globals.update_Link);
                                     }
                                 }
                             }).setNegativeButton("No",null).show();
