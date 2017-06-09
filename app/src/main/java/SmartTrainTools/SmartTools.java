@@ -19,7 +19,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,6 +67,27 @@ public class SmartTools {
 
 
      */
+
+    public static String timeDifferenceInMinutes(Time A, Time B) {
+        String time1 = A.toString();
+        String time2 = B.toString();
+        if (time1.contains("-") || time2.contains("-"))
+            return "-";
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
+        try {
+            Date d1 = formatter.parse(time1);
+            Date d2 = formatter.parse(time2);
+            long d = d2.getTime() - d1.getTime();
+            long timeInSeconds = d / 1000;
+            long hours, minutes, seconds;
+            hours = timeInSeconds / 3600;
+            timeInSeconds = timeInSeconds - (hours * 3600);
+            minutes = timeInSeconds / 60;
+            return hours * 60 + minutes + " m";
+        } catch (java.text.ParseException E) {
+            return "-";
+        }
+    }
 
     public static ArrayList<Train> findTrains(String src, String dest, String date) throws IOException{
         String link="http://etrain.info/ajax.php?q=trains&v="+ Globals.etV;
