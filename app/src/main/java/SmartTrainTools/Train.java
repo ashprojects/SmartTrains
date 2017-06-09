@@ -5,24 +5,18 @@
  */
 package SmartTrainTools;
 
-import Exceptions.ApiFailureException;
-import jpro.smarttrains.Globals;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import jpro.smarttrains.Globals;
 
 /**
  *
@@ -37,6 +31,7 @@ public class Train implements Serializable,Comparable<Train> {
     private int[] classAvail;
     private int[] runsOn;
     private Station querySrcStn,queryDestStn;
+    private Time querySrcTime, queryDestTime;
 
     public String getQueryTravelTime() {
         return queryTravelTime;
@@ -122,7 +117,21 @@ public class Train implements Serializable,Comparable<Train> {
         return name;
     }
 
+    public Time getQueryDestTime() {
+        return queryDestTime;
+    }
 
+    public void setQueryDestTime(String queryDestTime) {
+        this.queryDestTime = new Time(queryDestTime.split(":")[0], queryDestTime.split(":")[1]);
+    }
+
+    public Time getQuerySrcTime() {
+        return querySrcTime;
+    }
+
+    public void setQuerySrcTime(String querySrcTime) {
+        this.querySrcTime = new Time(querySrcTime.split(":")[0], querySrcTime.split(":")[1]);
+    }
 
     public void setRunsOn(int[] x){
         //System.out.println("&&&& SETTiNG RUNONS");

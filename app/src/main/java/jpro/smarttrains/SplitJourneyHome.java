@@ -315,12 +315,13 @@ public class SplitJourneyHome extends AppCompatActivity {
                     directTrains=false;
                     trains=null;
                     path= SmartTools.split_route(fromStn,toStn,is);
+                    path.removeAllNonJunctions();
                 } catch (IOException E){
                     directTrains=false;
                     trains=null;
                     path=null;
                 }
-
+            System.out.println("Optimised Path: " + path.getStations());
             return null;
         }
 

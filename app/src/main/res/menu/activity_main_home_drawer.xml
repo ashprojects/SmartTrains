@@ -29,6 +29,10 @@
             android:id="@+id/nav_savedOfflineRoutes"
             android:icon="@drawable/ic_download"
             android:title="Saved Routes" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_btw"
+            android:title="About" />
 
     </group>
 

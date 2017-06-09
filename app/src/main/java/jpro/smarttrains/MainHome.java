@@ -4,26 +4,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -241,6 +237,9 @@ public class MainHome extends AppCompatActivity
             case R.id.nav_trainBwStns: in=new Intent(MainHome.this,TrainsBetweenStationActivityHome.class);
                 break;
             case R.id.nav_savedOfflineRoutes:   in=new Intent(MainHome.this,OfflineRoutesActivity.class);
+                break;
+            case R.id.nav_about:
+                in = new Intent(MainHome.this, About.class);
         }
         startActivity(in);
         return true;
