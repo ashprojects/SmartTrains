@@ -29,7 +29,7 @@ public class PNRStatus {
                 .data("pnr_post", "2332480054")
                 .post();
         JSONParser parser = new JSONParser();
-        JSONObject pnrStatus = (JSONObject) parser.parse(document.body().html());
+        JSONObject pnrStatus = (JSONObject) parser.parse(document.body().text());
 
         this.chartPrepared = !(pnrStatus.get("chart_prepared") == "N");
         this.travelClass = new TravelClass(pnrStatus.get("class1").toString());
