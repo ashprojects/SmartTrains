@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
@@ -115,5 +114,12 @@ public class MyDate implements Serializable{
     SimpleDateFormat smf;
     Date dateObj;
     Calendar calendar;
+
+    public static MyDate parseMyDate(String date, String format) throws ParseException {
+        SimpleDateFormat smf = new SimpleDateFormat(format);
+        Date formatedDate = smf.parse(date);
+        return new MyDate(formatedDate.getDay(), formatedDate.getMonth(), formatedDate.getYear());
+
+    }
 
 }
