@@ -97,6 +97,34 @@ public class PNRStatus {
         return passengers;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PNRStatus pnrStatus = (PNRStatus) o;
+
+        return PNR != null ? PNR.equals(pnrStatus.PNR) : pnrStatus.PNR == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return PNR != null ? PNR.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "PNRStatus{" +
+                "PNR='" + PNR + '\'' +
+                ", travelClass=" + travelClass +
+                ", dateOfJourney=" + dateOfJourney +
+                ", from=" + from +
+                ", to=" + to +
+                ", trainNo='" + trainNo + '\'' +
+                '}';
+    }
+
     private Station parseStation(JSONObject station) {
         return new Station(station.get("code").toString(), station.get("name").toString());
     }
