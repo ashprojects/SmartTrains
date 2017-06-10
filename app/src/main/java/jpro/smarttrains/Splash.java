@@ -25,6 +25,7 @@ import org.jsoup.nodes.Document;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import Downloader.DownloadAndInstallAPKFile;
 import SmartTrainTools.SmartTools;
 
 public class Splash extends AppCompatActivity {
@@ -74,7 +75,7 @@ public class Splash extends AppCompatActivity {
                     changelog=jRootObj.get("AppChangeLog").toString();
                     Globals.update_Link=link;
                     Globals.changelog=changelog;
-                    Globals.verDesc="Version: "+currVersion+" (Update Available: "+jRootObj.get("AppVersion").toString()+")";
+                    Globals.verDesc = "Version: " + currVersion + " (v" + jRootObj.get("AppVersion").toString() + ", Click here)";
                 } else {
 
                 }
@@ -91,14 +92,16 @@ public class Splash extends AppCompatActivity {
                 new AlertDialog.Builder(Splash.this).setTitle("Update Available")
                         .setMessage("Smart Trains has just got better. Update to the newest version? It won't take much.\nChangeLog: "+changelog)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("UPDATE NOW", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 System.out.println("----------------------- switch --------------------");
                                 switch(id){
                                     case DialogInterface.BUTTON_POSITIVE:
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        /*Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(link));
                                         startActivity(i);
+                                        */
+                                        UpdateNow(link);
                                         break;
                                     case DialogInterface.BUTTON_NEGATIVE:
                                         Intent in = new Intent(Splash.this, MainHome.class);
@@ -108,7 +111,7 @@ public class Splash extends AppCompatActivity {
                                 }
                                                             }
                         })
-                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                        .setNegativeButton("LATER", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 System.out.println("----------------------- switch --------------------");
                                 switch(id){
@@ -134,6 +137,17 @@ public class Splash extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void UpdateNow(String link) {
+        ProgressDialog pd = new ProgressDialog(Splash.this);
+        pd.setMessage("This may take a while\nOnce the file is downloaded, you'll be asked to Install the app.");
+        pd.setTitle("Dowloading Update");
+        pd.setCancelable(false);
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        DownloadAndInstallAPKFile downloadAndInstallAPKFile = new DownloadAndInstallAPKFile();
+        downloadAndInstallAPKFile.setContext(getApplicationContext(), pd);
+        downloadAndInstallAPKFile.execute(link);
     }
 
     public void onAttachedToWindow() {

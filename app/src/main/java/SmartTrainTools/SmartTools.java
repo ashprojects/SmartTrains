@@ -19,9 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,22 +69,23 @@ public class SmartTools {
     public static String timeDifferenceInMinutes(Time A, Time B) {
         String time1 = A.toString();
         String time2 = B.toString();
-        if (time1.contains("-") || time2.contains("-"))
-            return "-";
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
-        try {
-            Date d1 = formatter.parse(time1);
-            Date d2 = formatter.parse(time2);
-            long d = d2.getTime() - d1.getTime();
-            long timeInSeconds = d / 1000;
-            long hours, minutes, seconds;
-            hours = timeInSeconds / 3600;
-            timeInSeconds = timeInSeconds - (hours * 3600);
-            minutes = timeInSeconds / 60;
-            return hours * 60 + minutes + " m";
-        } catch (java.text.ParseException E) {
-            return "-";
+
+        int h1, h2, m1, m2;
+        h1 = Integer.parseInt(A.toString().split(":")[0]);
+        h2 = Integer.parseInt(B.toString().split(":")[0]);
+        m1 = Integer.parseInt(A.toString().split(":")[1].split(" ")[0]);
+        m2 = Integer.parseInt(B.toString().split(":")[1].split(" ")[0]);
+        if (h1 == h2)
+            return (m2 - m1) + " m";
+        int diff_m, diff_h;
+        if (m2 < m1) {
+            diff_h = (h2 - h1 - 1) * 60;
+            diff_m = (60 - m1 + m2);
+        } else {
+            diff_h = (h2 - h1) * 60;
+            diff_m = m2 - m1;
         }
+        return String.valueOf(diff_h + diff_m) + " m";
     }
 
     public static ArrayList<Train> findTrains(String src, String dest, String date) throws IOException{

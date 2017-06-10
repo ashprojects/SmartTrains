@@ -3,6 +3,7 @@ package jpro.smarttrains;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -85,19 +86,21 @@ public class TrainRoute extends AppCompatActivity {
             } catch (NullPointerException E){}
             int day=item.getDay();
             int dis=item.getDistanceFromSource();
-
-
+            String diff = null;
+            diff = SmartTools.timeDifferenceInMinutes(item.getArrivalTime(), item.getDepartureTime());
             if(sr==1){
                arr="-";
+                diff = "-";
             } else {
                 arr=item.getArrivalTime().toString();
             }
             if(sr==routeListItems.size()){
                 dept="-";
+                diff = "-";
             } else {
                 dept=item.getDepartureTime().toString();
             }
-            String array[] = new String[]{String.valueOf(sr), sname + "\r\n(" + code + ")", arr, dept, SmartTools.timeDifferenceInMinutes(item.getArrivalTime(), item.getDepartureTime()), "" + dis + " kms", "" + day};
+            String array[] = new String[]{String.valueOf(sr), sname + "\r\n(" + code + ")", arr, dept, diff, "" + dis + "\r\n kms", "" + day};
             if(sr==1){
                 row.setBackgroundResource(R.drawable.table_border_bg_trstart);
                 //row.setBackgroundColor(getResources().getColor(R.color.trStart));
@@ -105,16 +108,19 @@ public class TrainRoute extends AppCompatActivity {
                 row.setBackgroundResource(R.drawable.table_border_bg_trend);
                 //row.setBackgroundColor(getResources().getColor(R.color.trEnd));
             }
-            float[] arr_we = new float[]{(float) 0.1, (float) 0.5, (float) 0.4, (float) 0.4, (float) 0.2, (float) 0.4, (float) 0.12};
+            float[] arr_we = new float[]{(float) 0.15, (float) 0.5, (float) 0.3, (float) 0.3, (float) 0.2, (float) 0.2, (float) 0.12};
             for(int i=0;i<7;++i){
                 tx[i]=new TextView(this);
                 TableRow.LayoutParams x=new TableRow.LayoutParams(i);
                 x.setMargins((int)(2*scale+0.5f),(int)(2*scale+0.5f),(int)(2*scale+0.5f),(int)(2*scale+0.5f));
                 x.weight = arr_we[i];
+                x.height = TableLayout.LayoutParams.MATCH_PARENT;
+                x.width = 0;
                 tx[i].setLayoutParams(x);
                 tx[i].setText(""+array[i]);
-                if (i > 2)
-                    tx[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                if (i > 1) {
+                    tx[i].setGravity(Gravity.CENTER_HORIZONTAL);
+                }
                 tx[i].setTextColor(Color.BLACK);
                 tx[i].setPadding((int)(1*scale+0.5f),0,0,0);
                 tx[i].setTextSize(12);
@@ -123,7 +129,6 @@ public class TrainRoute extends AppCompatActivity {
 
             }
             sr++;
-
             mainTable.addView(row);
 
         }

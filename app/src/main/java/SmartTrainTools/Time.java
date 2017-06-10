@@ -28,7 +28,7 @@ public class Time implements Serializable {
     public static Time returnTimeInstanceFromString(String T){
         String a=T.split(" ")[1];
         String hh=a.equals("AM")?(T.split(":")[0]):(Integer.parseInt(T.split(":")[0])+12+"");
-        if(hh.equals(12) && a.equals("AM"))
+        if (hh.equals("12") && a.equals("AM"))
             hh="00";
         return new Time(hh,T.split(":")[1].split(" ")[0]);
     }
