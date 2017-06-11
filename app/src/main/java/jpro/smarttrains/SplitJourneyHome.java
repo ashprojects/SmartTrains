@@ -310,7 +310,6 @@ public class SplitJourneyHome extends AppCompatActivity {
                     directTrains=true;
                     //path=null;
                 } catch(NullPointerException Ex) {
-                    InputStream is = null;
                     directTrains=false;
                     path = SmartTools.split_route(fromStn, toStn);
                     path.removeAllNonJunctions();
