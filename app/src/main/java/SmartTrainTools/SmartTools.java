@@ -62,25 +62,10 @@ public class SmartTools {
      */
 
     public static String timeDifferenceInMinutes(Time A, Time B) {
-        String time1 = A.toString();
-        String time2 = B.toString();
-
-        int h1, h2, m1, m2;
-        h1 = Integer.parseInt(A.toString().split(":")[0]);
-        h2 = Integer.parseInt(B.toString().split(":")[0]);
-        m1 = Integer.parseInt(A.toString().split(":")[1].split(" ")[0]);
-        m2 = Integer.parseInt(B.toString().split(":")[1].split(" ")[0]);
-        if (h1 == h2)
-            return (m2 - m1) + " m";
-        int diff_m, diff_h;
-        if (m2 < m1) {
-            diff_h = (h2 - h1 - 1) * 60;
-            diff_m = (60 - m1 + m2);
-        } else {
-            diff_h = (h2 - h1) * 60;
-            diff_m = m2 - m1;
-        }
-        return String.valueOf(diff_h + diff_m) + " m";
+        int minuteA = Integer.parseInt(A.getHh()) * 60 + Integer.parseInt(A.getMm());
+        int minuteB = Integer.parseInt(B.getHh()) * 60 + Integer.parseInt(B.getMm());
+        int diff = minuteB - minuteA;
+        return (diff < 0 ? diff + 24 * 60 : diff) + " m";
     }
 
     public static ArrayList<Train> findTrains(String src, String dest, String date) throws IOException{
