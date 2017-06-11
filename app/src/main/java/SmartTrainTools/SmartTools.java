@@ -6,7 +6,6 @@
 package SmartTrainTools;
 
 import org.jgrapht.alg.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,11 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +94,6 @@ public class SmartTools {
         ArrayList<Train> trainss=new ArrayList<>();
         Document resp=Jsoup.connect(link).data(params).ignoreContentType(true).timeout(10000).post();
         JSONParser parser=new JSONParser();
-        ArrayList<String> trains=new ArrayList<>();
 
         try {
             JSONObject obj=(JSONObject)parser.parse(resp.text());
@@ -110,14 +104,11 @@ public class SmartTools {
                 String rn="-";
                 int rq[]=new int[7];
                 int cl[]=new int[9];
-                //System.out.println("FROM_T_F"+exploded[2]+":");
                 for(int j=8;j<15;++j){
                     if(exploded[j].charAt(0)=='1')
                         rq[j-8]=1;
                     else
                         rq[j-8]=0;
-                    //System.out.print(" "+rq[j-8]);
-                    //rn+=exploded[j]+" ";
                 }
 
                 for(int i=15;i<=23;++i){
@@ -146,57 +137,36 @@ public class SmartTools {
     }
 
 
-    public static Path split_route(Station A, Station B, InputStream In){
-        FileInputStream fin;
-        try {
-            //fin=new FileInputStream(In);
-            ObjectInputStream oin=new ObjectInputStream(In);
-            ConnectivityGraph udg=(ConnectivityGraph)oin.readObject();
-            double len=0;
-            //System.out.println(udg.graph);
-            DijkstraShortestPath<String,DefaultEdge> dij;
-            //=new DijkstraShortestPath<String,DefaultEdge>(udg.getGraph(), "SDL", "APR");
-            String src=A.getCode(),des=B.getCode();
+    public static Path split_route(Station A, Station B) {
+        ConnectivityGraph udg = Globals.indiaMap;
+        double len = 0;
+        String src = A.getCode(), des = B.getCode();
 
-            DijkstraShortestPath dj=new DijkstraShortestPath(udg.getGraph(), src, des);
-            List lst=dj.getPathEdgeList();
-            len=dj.getPathLength();
-            ArrayList<Station> stations=new ArrayList<Station>();
-            stations.add(new Station(src));
-            String last=src;
-            for(int i=0;i<lst.size();++i){
-                String stn=((DefaultWeightedEdge)lst.get(i)).toString();
-                stn=stn.substring(1, stn.indexOf(")"));
-                Station a=new Station(stn.split(":")[0].trim());
-                Station b=new Station(stn.split(":")[1].trim());
-                if(!stations.contains(a)){
-                    stations.add(a);
-                }
-                if(!stations.contains(b)){
-
-                    stations.add(b);
-                }
+        DijkstraShortestPath<String, DefaultWeightedEdge> dj = new DijkstraShortestPath<>(udg.getGraph(), src, des);
+        List<DefaultWeightedEdge> lst = dj.getPathEdgeList();
+        len = dj.getPathLength();
+        ArrayList<Station> stations = new ArrayList<Station>();
+        stations.add(new Station(src));
+        for (int i = 0; i < lst.size(); ++i) {
+            String stn = (lst.get(i)).toString();
+            stn = stn.substring(1, stn.indexOf(")"));
+            Station a = new Station(stn.split(":")[0].trim());
+            Station b = new Station(stn.split(":")[1].trim());
+            if (!stations.contains(a)) {
+                stations.add(a);
             }
-            return new Path(stations,len);
-        } catch (FileNotFoundException ex) {
-            //System.out.println("FNF EXCEPTION");
-        } catch (IOException ex) {
-            //ex.printStackTrace();
-            //System.out.println("IO EXCEPTION");
-        } catch (ClassNotFoundException ex) {
-            //System.out.println("CNF Ex");
+            if (!stations.contains(b)) {
+
+                stations.add(b);
+            }
         }
-        return null;
+        return new Path(stations, len);
     }
 
     public static String generateAvailabilityHash(String trno, MyDate date, Station from, Station to, String tcode, String tclass){
         String code="AV";
         code+=trno+"_"+date.getD()+"-"+date.getM()+"-"+date.getY()+"_"+from.getCode()+"-"+to.getCode()+"_"+tclass+"_"+tcode;
-        //System.out.println("Code:"+code);
         return code;
     }
-
-   // public static ArrayList<Stations>
-
 
 }
