@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'config'
-            keyPassword 'config'
-            storeFile file('config')
-            storePassword 'config'
+            keyAlias 'key0'
+            keyPassword 'ashish123456'
+            storeFile file('../key.jks')
+            storePassword 'ashish123456'
         }
     }
     compileSdkVersion 25
@@ -16,15 +16,20 @@ android {
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
-        versionName "2.62"
+        versionName "2.621"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             signingConfig signingConfigs.config
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets {
@@ -32,6 +37,8 @@ android {
             java.srcDirs = ['src/main/java', 'src/main/java/AshTools', 'src/main/java/smartseatavailability']
             assets.srcDirs = ['src/main/assets', 'src/main/assets/']
         }
+    }
+    productFlavors {
     }
 }
 

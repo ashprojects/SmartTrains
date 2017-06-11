@@ -305,16 +305,14 @@ public class SplitJourneyHome extends AppCompatActivity {
                     // Date Not Considered
                     trains= SmartTools.findTrains(fromStn.getCode(),toStn.getCode(),null);
                     trains.size();
-                    InputStream is=getResources().openRawResource(R.raw.obj2);
-                    path= SmartTools.split_route(fromStn,toStn,is);
+                    path = SmartTools.split_route(fromStn, toStn);
                     path.removeAllNonJunctions();
                     directTrains=true;
                     //path=null;
                 } catch(NullPointerException Ex) {
-                    InputStream is=getResources().openRawResource(R.raw.obj2);
+                    InputStream is = null;
                     directTrains=false;
-                    trains=null;
-                    path= SmartTools.split_route(fromStn,toStn,is);
+                    path = SmartTools.split_route(fromStn, toStn);
                     path.removeAllNonJunctions();
                 } catch (IOException E){
                     directTrains=false;

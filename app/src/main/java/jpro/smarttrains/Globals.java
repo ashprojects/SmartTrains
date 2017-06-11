@@ -3,9 +3,7 @@ package jpro.smarttrains;
 import android.app.Application;
 import android.content.Context;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.HashMap;
 
 import SmartTrainTools.ConnectivityGraph;
@@ -39,22 +37,8 @@ public class Globals extends Application {
         mContext = this;
 
 
-        InputStream inputStream = getResources().openRawResource(R.raw.obj2);
-        ObjectInputStream objectInputStream = null;
-        try {
-            objectInputStream = new ObjectInputStream(inputStream);
-            indiaMap = (ConnectivityGraph) objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (objectInputStream != null) {
-                try {
-                    objectInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        InputStream inputStream = getResources().openRawResource(R.raw.obj);
+        indiaMap = ConnectivityGraph.readGraph(inputStream);
     }
 
     public static Context getContext() {
