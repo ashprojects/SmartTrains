@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Exceptions.AvailabilityFailure;
-import jpro.smarttrains.Globals;
+import commons.Config;
 
 /**
  *
@@ -125,7 +125,7 @@ public class Journey implements Comparable<Journey>{
     // FUNCTION to fetch cached Source Quota station
     // Assumption: Only one quota station exists
     private Station fetchCachedQuotaStation(){
-        String url= Globals.qCacheUrl;
+        String url = Config.qCacheUrl;
         HashMap<String,String> params=new HashMap<>();
         params.put("reqType","get");
         params.put("t",""+this.getTrain().getNo());
@@ -150,7 +150,7 @@ public class Journey implements Comparable<Journey>{
     }
 
     private boolean storeQoutaStationToServer(){
-        String url=Globals.qCacheUrl;
+        String url = Config.qCacheUrl;
         HashMap<String,String> params=new HashMap<>();
         params.put("reqType","put");
         params.put("t",""+this.getTrain().getNo());
@@ -195,9 +195,9 @@ public class Journey implements Comparable<Journey>{
         // Increment Destination Date (Arrival Day for Destination- Departure Day for Source)
         this.destDate.increment(this.train.getDayNumberOf(this.dest) - this.train.getDayNumberOf(this.src));
         String co=SmartTools.generateAvailabilityHash(this.train.getNo(),date,this.src,this.dest,"GN",this.Tclass);
-        if(Globals.cachedAvailabilityStatus.containsKey(co)){
+        if (Config.cachedAvailabilityStatus.containsKey(co)) {
             //System.out.println("Status found: "+co);
-            this.status=Globals.cachedAvailabilityStatus.get(co);
+            this.status = Config.cachedAvailabilityStatus.get(co);
         } else {
             fetchAvailability();
         }
@@ -214,15 +214,15 @@ public class Journey implements Comparable<Journey>{
             this.desc="3-CURR_AVAILABLE. Check on IRCTC";
         } else {
             Station X=null;
-            if(Globals.cachedQuotaStation.containsKey(this.train.getNo())){
-                X=new Station(Globals.cachedQuotaStation.get(this.train.getNo()));
+            if (Config.cachedQuotaStation.containsKey(this.train.getNo())) {
+                X = new Station(Config.cachedQuotaStation.get(this.train.getNo()));
             } else {
                 X = fetchCachedQuotaStation();
             }
             //System.out.println(" ============= fetch from srv complete: "+X);
             if(X!=null){
                 src=X;
-                Globals.cachedQuotaStation.put(this.train.getNo(),X.getCode());
+                Config.cachedQuotaStation.put(this.train.getNo(), X.getCode());
                 //System.out.println("------***** I FOUND QUOTA FROM SERVER: "+src.getName()+" for train: "+this.train.getName());
                 int a=-1,b=-1;
                 for(int i=0;i<route_.size();++i){
@@ -241,9 +241,9 @@ public class Journey implements Comparable<Journey>{
                     this.dateChanged=true;
                 }
                 co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, src, this.dest, "GN", this.Tclass);
-                if(Globals.cachedAvailabilityStatus.containsKey(co)){
+                if (Config.cachedAvailabilityStatus.containsKey(co)) {
                     //System.out.println("Status found: "+co);
-                    this.status=Globals.cachedAvailabilityStatus.get(co);
+                    this.status = Config.cachedAvailabilityStatus.get(co);
                 } else {
                     fetchAvailability();
                 }
@@ -291,9 +291,9 @@ public class Journey implements Comparable<Journey>{
                     }
                     this.src=route[mid];
                     co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, this.src, this.dest, "GN", this.Tclass);
-                    if(Globals.cachedAvailabilityStatus.containsKey(co)){
+                    if (Config.cachedAvailabilityStatus.containsKey(co)) {
                         //System.out.println("Status found: "+co);
-                        this.status=Globals.cachedAvailabilityStatus.get(co);
+                        this.status = Config.cachedAvailabilityStatus.get(co);
                     } else {
                         fetchAvailability();
                     }
@@ -317,9 +317,9 @@ public class Journey implements Comparable<Journey>{
                     this.desc="1-Available from Different Source";
                     this.src=route[lastAv];
                     co = SmartTools.generateAvailabilityHash(this.train.getNo(), date, this.src, this.dest, "GN", this.Tclass);
-                    if(Globals.cachedAvailabilityStatus.containsKey(co)){
+                    if (Config.cachedAvailabilityStatus.containsKey(co)) {
                         //System.out.println("Status found: "+co);
-                        this.status=Globals.cachedAvailabilityStatus.get(co);
+                        this.status = Config.cachedAvailabilityStatus.get(co);
                     } else {
                         fetchAvailability();
                     }
@@ -448,8 +448,8 @@ public class Journey implements Comparable<Journey>{
         if(!validOnThisDate())
             return;
         /*String cd=SmartTools.generateAvailabilityHash(this.train.getNo(),this.date,this.src,this.dest,"GN",this.Tclass);
-        if(Globals.cachedAvailabilityStatus.containsKey(cd)){
-            this.status=Globals.cachedAvailabilityStatus.get(cd);
+        if(Config.cachedAvailabilityStatus.containsKey(cd)){
+            this.status=Config.cachedAvailabilityStatus.get(cd);
             return;
         }*/
         String date=this.date.getDateUnParsed();
@@ -498,9 +498,9 @@ public class Journey implements Comparable<Journey>{
                     if (s2.get("seatStatus").toString().startsWith("AVAILABLE")) {
                         //String c=SmartTools.generateAvailabilityHash(this.train.getNo(),temp,this.src,this.dest,this.quota,this.Tclass);
                         ew = new AvailabilityStatus("AVAILABLE " + s2.get("seatCount"), new MyDate(temp));
-                        Globals.cachedAvailabilityStatus.put(c,"AVAILABLE "+s2.get("seatCount"));
+                        Config.cachedAvailabilityStatus.put(c, "AVAILABLE " + s2.get("seatCount"));
                     } else {
-                        Globals.cachedAvailabilityStatus.put(c,s2.get("seatStatus").toString());
+                        Config.cachedAvailabilityStatus.put(c, s2.get("seatStatus").toString());
                         ew = new AvailabilityStatus("" + s2.get("seatStatus"), new MyDate(temp));
                     }
                     ew.setTrainNo(this.train.getNoAsString());

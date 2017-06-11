@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".Globals"
+        android:name="commons.Config"
         android:allowBackup="true"
         android:icon="@drawable/tt"
         android:label="@string/app_name"
@@ -23,7 +23,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <activity android:name=".Splash">
+
+        <activity android:name=".activities.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SmartAvailActivity"
+            android:name=".activities.SmartAvailActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AllTrainsStatus"
+            android:name=".activities.AllTrainsStatus"
             android:label="@string/title_activity_all_trains_status">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainHome"
+            android:name=".activities.MainHome"
             android:label="@string/title_activity_main_home"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -57,32 +58,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SplitJourneyHome"
+            android:name=".activities.SplitJourneyHome"
             android:label="Split Journey"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".SplitStations"
+            android:name=".activities.SplitStations"
             android:label="Split Your Journey as" />
         <activity
-            android:name=".SplitJourneyTabbed"
+            android:name=".activities.SplitJourneyTabbed"
             android:label="@string/title_activity_split_jouney_tabbed"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TrainsInfo" />
-        <activity android:name=".TrainsByNo" />
-        <activity android:name=".TrainRoute" />
+        <activity android:name=".activities.TrainsInfo" />
+        <activity android:name=".activities.TrainsByNo" />
+        <activity android:name=".activities.TrainRoute" />
         <activity
-            android:name=".SeatAvailabilitySimple"
+            android:name=".activities.SeatAvailabilitySimple"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".PnrStatusHomeActivity"
+            android:name=".activities.PnrStatusHomeActivity"
             android:label="@string/title_activity_pnr_status_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SmartSpecificTrainAvail" />
-        <activity android:name=".TrainsBetweenStationActivityHome" />
-        <activity android:name=".OfflineRoutesActivity" />
-        <activity android:name=".TrainBetweenStations" />
+        <activity android:name=".activities.SmartSpecificTrainAvail" />
+        <activity android:name=".activities.TrainsBetweenStationActivityHome" />
+        <activity android:name=".activities.OfflineRoutesActivity" />
+        <activity android:name=".activities.TrainBetweenStations" />
         <activity
-            android:name=".About"
+            android:name=".activities.About"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

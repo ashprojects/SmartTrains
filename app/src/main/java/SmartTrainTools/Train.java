@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import jpro.smarttrains.Globals;
+import commons.Config;
 
 /**
  *
@@ -268,9 +268,9 @@ public class Train implements Serializable,Comparable<Train> {
     // FROM ETrain.info
     public void fetchInfo_ETrain() throws IOException {
         int i;
-        if(Globals.CachedTrainInfo.containsKey(this.no)){
+        if (Config.CachedTrainInfo.containsKey(this.no)) {
 
-            Train X=Globals.CachedTrainInfo.get(this.no);
+            Train X = Config.CachedTrainInfo.get(this.no);
             this.name=X.getName();
             this.setRoute(X.getRoute());
             this.setRunsOn(X.getRunsOn());
@@ -282,7 +282,7 @@ public class Train implements Serializable,Comparable<Train> {
 
             //String train_number = "" + (no>10000?no:"0"+no);
             String train_number = no;
-            String link = "http://etrain.info/ajax.php?q=schedule&v=" + Globals.etV;
+            String link = "http://etrain.info/ajax.php?q=schedule&v=" + Config.etV;
             HashMap<String, String> params = new HashMap<>();
             params.put("train", train_number);
             Document resp = Jsoup.connect(link).data(params).ignoreContentType(true).timeout(10000).post();
@@ -359,7 +359,7 @@ public class Train implements Serializable,Comparable<Train> {
 
                 }
 
-                Globals.CachedTrainInfo.put(this.no, this);
+                Config.CachedTrainInfo.put(this.no, this);
 
             } catch (ParseException ex) {
                 ex.printStackTrace();

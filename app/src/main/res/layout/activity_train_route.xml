@@ -14,7 +14,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="jpro.smarttrains.TrainRoute">
+    tools:context="jpro.smarttrains.activities.TrainRoute">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
