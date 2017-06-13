@@ -9,7 +9,6 @@ import java.util.HashMap;
 import SmartTrainTools.ConnectivityGraph;
 import SmartTrainTools.RailwayCodes;
 import SmartTrainTools.Train;
-import SmartTrainsDB.modals.TestTable;
 import jpro.smarttrains.R;
 
 /**
@@ -41,7 +40,6 @@ public class Config extends Application {
 
         InputStream inputStream = getResources().openRawResource(R.raw.obj);
         indiaMap = ConnectivityGraph.readGraph(inputStream);
-        TestTable.test();
     }
 
     public static Context getContext() {

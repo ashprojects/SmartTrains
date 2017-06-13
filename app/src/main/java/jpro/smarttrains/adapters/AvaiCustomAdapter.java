@@ -125,7 +125,7 @@ public class AvaiCustomAdapter extends BaseAdapter {
             holder.listSpan.setBackgroundResource(R.drawable.redborder);
             //System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$ SETTING DATE :");
             //System.out.println("DATE: "+journeys.get(position).getDate()+" destdate: "+journeys.get(position).getDestDate());
-            //holder.dtnday1.setText(SmartUtils.getDayName(journeys.getCursor(position).getInitDate())+" "+ journeys.get(position).getInitDate().getD()+" "+SmartUtils.getParsedDate(journeys.get(position).getInitDate(),"MMM"));
+            //holder.dtnday1.setText(SmartUtils.getDayName(journeys.get(position).getInitDate())+" "+ journeys.get(position).getInitDate().getD()+" "+SmartUtils.getParsedDate(journeys.get(position).getInitDate(),"MMM"));
             holder.trStatus.setTextColor(Color.RED);
             holder.dtnday1.setText(getTime(journeys.get(position).getTrain().getDepartureTimeof(journeys.get(position).getInitStn()))+", "+SmartUtils.getDayName(journeys.get(position).getInitDate())+" "+journeys.get(position).getInitDate().getD()+" "+ SmartUtils.getParsedDate(journeys.get(position).getInitDate(),"MMM"));
             img.setVisibility(View.INVISIBLE);
