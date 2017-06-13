@@ -127,7 +127,7 @@ public class Journey implements Comparable<Journey>{
     private Station fetchCachedQuotaStation(){
         String url = Config.qCacheUrl;
         HashMap<String,String> params=new HashMap<>();
-        params.put("reqType", "getCursor");
+        params.put("reqType", "get");
         params.put("t",""+this.getTrain().getNo());
         params.put("i","smartize.admin");
         Document resp;
@@ -164,7 +164,7 @@ public class Journey implements Comparable<Journey>{
             JSONObject obj=(JSONObject)jsp.parse(resp.text());
             //System.out.println(obj.toJSONString());
             if(obj.get("status").toString().equals("Y")||obj.get("status").toString().equals("E")){
-                //System.out.println(obj.getCursor("status").toString());
+                //System.out.println(obj.get("status").toString());
                 return true;
             } else {
                 //System.out.println("Server Internal Failure");
@@ -234,7 +234,7 @@ public class Journey implements Comparable<Journey>{
                 }
                 //System.out.println("ROUE: "+route_);
                 //System.out.println("a:"+a+" b:"+b);
-                //System.out.println("b:"+route_.getCursor(b).getDay()+" a:"+route_.getCursor(a).getDay());
+                //System.out.println("b:"+route_.get(b).getDay()+" a:"+route_.get(a).getDay());
                 if(route_.get(b).getDay()>route_.get(a).getDay()){
                     //System.out.println("Date decremented , even from server");
                     this.date.decrement();
@@ -449,7 +449,7 @@ public class Journey implements Comparable<Journey>{
             return;
         /*String cd=SmartTools.generateAvailabilityHash(this.train.getNo(),this.date,this.src,this.dest,"GN",this.Tclass);
         if(Config.cachedAvailabilityStatus.containsKey(cd)){
-            this.status=Config.cachedAvailabilityStatus.getCursor(cd);
+            this.status=Config.cachedAvailabilityStatus.get(cd);
             return;
         }*/
         String date=this.date.getDateUnParsed();
