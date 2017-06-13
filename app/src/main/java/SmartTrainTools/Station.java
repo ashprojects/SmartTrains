@@ -7,7 +7,7 @@ package SmartTrainTools;
 
 import java.io.Serializable;
 
-import jpro.smarttrains.Globals;
+import commons.Config;
 
 /**
  *
@@ -65,7 +65,7 @@ public class Station implements Serializable {
         
         public Station(String code){
             this.code=code;
-            this.name= Globals.rc.getStationName(code);
+            this.name = Config.rc.getStationName(code);
         }
 
         public String getCode() {
@@ -73,7 +73,7 @@ public class Station implements Serializable {
         }
 
     public boolean isJunction() {
-        return Globals.indiaMap.wgraph.edgesOf(this.code).size() != 2;
+        return Config.indiaMap.wgraph.edgesOf(this.code).size() != 2;
     }
 
     }

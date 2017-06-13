@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import jpro.smarttrains.Globals;
+import commons.Config;
 
 
 /**
@@ -37,7 +37,7 @@ public class SmartTools {
             // System.out.println(resp.toString().indexOf("js_v = \'"));
             String x=resp.toString().substring(resp.toString().indexOf("js_v = \'")+"js_v = \'".length(),resp.toString().length()-1);
             String v=x.substring(0,x.indexOf("\'"));
-            Globals.etV=v;
+            Config.etV = v;
         } catch (IOException E){
 
         }
@@ -69,7 +69,7 @@ public class SmartTools {
     }
 
     public static ArrayList<Train> findTrains(String src, String dest, String date) throws IOException{
-        String link="http://etrain.info/ajax.php?q=trains&v="+ Globals.etV;
+        String link = "http://etrain.info/ajax.php?q=trains&v=" + Config.etV;
         HashMap<String, String> params=new HashMap<>();
         params.put("stn1",src);
         params.put("stn2",dest);
@@ -123,7 +123,7 @@ public class SmartTools {
 
 
     public static Path split_route(Station A, Station B) {
-        ConnectivityGraph udg = Globals.indiaMap;
+        ConnectivityGraph udg = Config.indiaMap;
         double len = 0;
         String src = A.getCode(), des = B.getCode();
 

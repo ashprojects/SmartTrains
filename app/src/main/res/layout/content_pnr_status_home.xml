@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="jpro.smarttrains.PnrStatusHomeActivity"
+    tools:context="jpro.smarttrains.activities.PnrStatusHomeActivity"
     tools:showIn="@layout/activity_pnr_status_home">
 
     <LinearLayout
