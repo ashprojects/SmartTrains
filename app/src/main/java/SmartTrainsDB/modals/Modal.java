@@ -97,7 +97,7 @@ public abstract class Modal {
         return true;
     }
 
-    public Object getCursor(String fieldName) {
+    public Object get(String fieldName) {
         return values.get(fieldName);
     }
 
