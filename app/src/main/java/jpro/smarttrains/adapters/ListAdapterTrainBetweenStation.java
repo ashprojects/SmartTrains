@@ -87,7 +87,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
         } else {
             holder = (ListAdapterTrainBetweenStation.ViewHolder) view.getTag();
         }
-        //System.out.println("FOR TRAINS: ^^^^^^: " + trains.get(i).getNo());
+        //System.out.println("FOR TRAINS: ^^^^^^: " + trains.getCursor(i).getNo());
         try {
             //holder.pos.setText(""+i);
             //System.out.println(holder);
