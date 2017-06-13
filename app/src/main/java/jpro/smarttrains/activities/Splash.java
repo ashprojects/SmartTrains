@@ -61,9 +61,9 @@ public class Splash extends AppCompatActivity {
                 for(int i=0;i<tiparray.size();++i){
                     tips.add(tiparray.get(i).toString());
                 }
-                //System.out.println("****************** ETV: "+o.getCursor("etV"));
-               /* if(!Config.etV.equals(o.getCursor("etV")))
-                    Config.etV=o.getCursor("etV").toString();
+                //System.out.println("****************** ETV: "+o.get("etV"));
+               /* if(!Config.etV.equals(o.get("etV")))
+                    Config.etV=o.get("etV").toString();
                */
                 if (!Config.qCacheUrl.equals(jRootObj.get("AppCacheSrvLink")))
                     Config.qCacheUrl = jRootObj.get("AppCacheSrvLink").toString();

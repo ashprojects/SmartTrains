@@ -159,7 +159,6 @@ public abstract class Modal {
         SQLiteDatabase db = getReadableDatabase();
         db.insert(getModalName(), null, values);
         db.close();
-        System.out.println("closed");
         return instance;
     }
 

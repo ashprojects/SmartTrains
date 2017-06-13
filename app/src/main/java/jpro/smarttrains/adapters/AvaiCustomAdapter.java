@@ -95,7 +95,7 @@ public class AvaiCustomAdapter extends BaseAdapter {
         System.out.println("DESC:: "+journeys.get(position).getDesc());
         if(!journeys.get(position).getDesc().contains("Working")){
             holder.progressBar.setVisibility(View.INVISIBLE);
-            //System.out.println("++++++++++++++++++++++++++++++++++++ DISABLED: "+journeys.getCursor(position).getDesc());
+            //System.out.println("++++++++++++++++++++++++++++++++++++ DISABLED: "+journeys.get(position).getDesc());
         }
         try{
             holder.desc.setText(journeys.get(position).getDesc().split("-")[1]);
@@ -124,8 +124,8 @@ public class AvaiCustomAdapter extends BaseAdapter {
         if(!journeys.get(position).getStatus().startsWith("AVA")){
             holder.listSpan.setBackgroundResource(R.drawable.redborder);
             //System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$ SETTING DATE :");
-            //System.out.println("DATE: "+journeys.getCursor(position).getDate()+" destdate: "+journeys.getCursor(position).getDestDate());
-            //holder.dtnday1.setText(SmartUtils.getDayName(journeys.getCursor(position).getInitDate())+" "+ journeys.getCursor(position).getInitDate().getD()+" "+SmartUtils.getParsedDate(journeys.getCursor(position).getInitDate(),"MMM"));
+            //System.out.println("DATE: "+journeys.get(position).getDate()+" destdate: "+journeys.get(position).getDestDate());
+            //holder.dtnday1.setText(SmartUtils.getDayName(journeys.getCursor(position).getInitDate())+" "+ journeys.get(position).getInitDate().getD()+" "+SmartUtils.getParsedDate(journeys.get(position).getInitDate(),"MMM"));
             holder.trStatus.setTextColor(Color.RED);
             holder.dtnday1.setText(getTime(journeys.get(position).getTrain().getDepartureTimeof(journeys.get(position).getInitStn()))+", "+SmartUtils.getDayName(journeys.get(position).getInitDate())+" "+journeys.get(position).getInitDate().getD()+" "+ SmartUtils.getParsedDate(journeys.get(position).getInitDate(),"MMM"));
             img.setVisibility(View.INVISIBLE);
@@ -150,7 +150,7 @@ public class AvaiCustomAdapter extends BaseAdapter {
                 holder.desc.setText("Not running on " + journeys.get(position).getDate().getDate()+ " (Only "+ SmartUtils.getRunsOnString(journeys.get(position).getTrain().getRunsOn())+")");
                 holder.dtnday1.setText(getTime(journeys.get(position).getTrain().getDepartureTimeof(journeys.get(position).getSrc()))+"-");
                 holder.dtnday2.setText(getTime(journeys.get(position).getTrain().getArrivalTimeof((journeys.get(position).getDest())))+"-");
-                // holder.dtnday2.setText(getTime(journeys.getCursor(position).getTrain().getArrivalTimeof((journeys.getCursor(position).getDest())))+"-");
+                // holder.dtnday2.setText(getTime(journeys.get(position).getTrain().getArrivalTimeof((journeys.get(position).getDest())))+"-");
             }
             else
                 holder.desc.setText(journeys.get(position).getDesc());

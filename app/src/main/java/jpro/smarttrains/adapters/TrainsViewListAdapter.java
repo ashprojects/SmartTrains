@@ -84,7 +84,7 @@ public class TrainsViewListAdapter extends BaseAdapter {
         } else {
             holder = (TrainsViewListAdapter.ViewHolder) view.getTag();
         }
-        //System.out.println("FOR TRAINS: ^^^^^^: " + trains.getCursor(i).getNo());
+        //System.out.println("FOR TRAINS: ^^^^^^: " + trains.get(i).getNo());
             try{
                 //holder.pos.setText(""+i);
                 //System.out.println(holder);
