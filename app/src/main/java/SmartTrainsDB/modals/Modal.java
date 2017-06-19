@@ -18,7 +18,7 @@ import SmartTrainsDB.modals.fields.IntegerField;
  * Created by root on 11/6/17.
  */
 
-public abstract class Modal {
+public abstract class Modal implements SQLiteOpenHelperCompactable {
     private ContentValues values = new ContentValues();
     private Field primaryKey;
 
@@ -179,4 +179,13 @@ public abstract class Modal {
         return filter(null, null);
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(getCreateSQL());
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
 }

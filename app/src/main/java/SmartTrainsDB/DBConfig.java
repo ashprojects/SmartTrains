@@ -1,6 +1,7 @@
 package SmartTrainsDB;
 
 import SmartTrainsDB.modals.Modal;
+import SmartTrainsDB.modals.SQLiteOpenHelperCompactable;
 import SmartTrainsDB.modals.TestTable;
 
 /**
@@ -11,7 +12,7 @@ public class DBConfig {
     public static final String dbName = "smart_trains";
     public static final int version = 1;
 
-    public static final Modal[] allRegisteredModals = new Modal[]{
+    public static final SQLiteOpenHelperCompactable[] allRegisteredModals = new Modal[]{
             new TestTable()
     };
 }

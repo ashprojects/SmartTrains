@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.HashMap;
 
 import SmartTrainsDB.modals.Modal;
+import SmartTrainsDB.modals.SQLiteOpenHelperCompactable;
 import commons.Config;
 
 /**
@@ -26,23 +27,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
-        for (Modal modal : DBConfig.allRegisteredModals) {
-            allModals.put(modal.getModalName(), modal);
+        for (SQLiteOpenHelperCompactable modal : DBConfig.allRegisteredModals) {
+            if (modal instanceof Modal) {
+                allModals.put(modal.getModalName(), (Modal) modal);
+            }
         }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        System.out.println("DBHelper on createRow");
-        for (Modal modal : DBConfig.allRegisteredModals) {
-            db.execSQL(modal.getCreateSQL());
-            System.out.println(modal.getCreateSQL());
+        for (SQLiteOpenHelperCompactable modal : DBConfig.allRegisteredModals) {
+            modal.onCreate(db);
         }
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        for (SQLiteOpenHelperCompactable modal : DBConfig.allRegisteredModals) {
+            modal.onUpgrade(db, oldVersion, newVersion);
+        }
 
     }
 
