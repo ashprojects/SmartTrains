@@ -56,9 +56,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                 pd.show();
                 Intent in=new Intent(OfflineRoutesActivity.this,TrainRoute.class);
                 TrainBean tb=(TrainBean) adapterView.getItemAtPosition(i);
-                long stime = System.currentTimeMillis();
                 Train x = SmartTrainsDB.modals.Train.objects.getTrain(tb);
-                System.out.println(System.currentTimeMillis() - stime);
                 in.putExtra("train",x);
                 in.putExtra("isAvailableOffline",true);
                 pd.hide();
