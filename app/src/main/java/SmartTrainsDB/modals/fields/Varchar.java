@@ -8,7 +8,6 @@ import android.database.Cursor;
 
 public class Varchar extends Field {
     private static final String sqlTypeName = "VARCHAR";
-    protected String value;
     private int maxLength = 32;
 
     public Varchar(int maxLength) {
@@ -29,6 +28,15 @@ public class Varchar extends Field {
             maxLength = -maxLength;
         }
         this.maxLength = maxLength;
+    }
+
+    public Varchar(int maxLength, boolean unique, boolean notNull) {
+        super(unique, notNull);
+        this.maxLength = maxLength;
+    }
+
+    public Varchar(boolean unique, boolean notNull) {
+        super(unique, notNull);
     }
 
     @Override

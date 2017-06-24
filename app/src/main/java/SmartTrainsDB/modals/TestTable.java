@@ -30,7 +30,7 @@ public class TestTable extends Modal {
     }
 
     @Override
-    protected HashMap<String, Field> getFeildTypes() {
+    protected HashMap<String, Field> getFieldTypes() {
         return fieldTypes;
     }
 

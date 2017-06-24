@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import SmartTrainTools.RouteListItem;
 import SmartTrainTools.SmartTools;
 import SmartTrainTools.Train;
-import SmartTrainsDB.DatabaseHandler;
 import jpro.smarttrains.R;
 
 
@@ -37,9 +36,9 @@ public class TrainRoute extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("started");
         setContentView(R.layout.activity_train_route);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        db=new DatabaseHandler(this);
 
         no=(TextView)findViewById(R.id.srn);
 
@@ -63,7 +62,6 @@ public class TrainRoute extends AppCompatActivity {
         if(isAvailableOffline){
             download.setVisibility(View.GONE);
         }
-        System.out.println(train.getRoute());
         ArrayList<RouteListItem> routeListItems=train.getRoute();
         setTitle(train.getNoAsString()+" "+train.getName()+" ROUTE");
         int sr=1;
@@ -137,7 +135,7 @@ public class TrainRoute extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.addTrainRoute(train);
+                SmartTrainsDB.modals.TrainRoute.objects.addTrainRoute(train);
                 System.out.println("ADDED!");
                 Toast.makeText(getApplicationContext(),"Route Saved Offline!",Toast.LENGTH_SHORT).show();
                 download.setEnabled(false);
@@ -146,7 +144,6 @@ public class TrainRoute extends AppCompatActivity {
 
     }
     Train train;
-    DatabaseHandler db;
     TableLayout mainTable;
     Button download;
     boolean isAvailableOffline=false;

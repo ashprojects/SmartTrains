@@ -10,10 +10,6 @@ import SmartTrainsDB.modals.Modal;
 import SmartTrainsDB.modals.SQLiteOpenHelperCompactable;
 import commons.Config;
 
-/**
- * Created by root on 11/6/17.
- */
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper ourInstance;
     private static HashMap<String, Modal> allModals = new HashMap<>();
