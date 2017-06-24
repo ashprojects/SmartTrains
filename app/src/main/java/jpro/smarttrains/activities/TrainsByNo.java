@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import SmartTrainTools.Train;
-import SmartTrainsDB.DatabaseHandler;
 import SmartTrainsDB.TrainBean;
+import SmartTrainsDB.modals.RecentTrain;
 import commons.Config;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.CustomTrainSpinnerAdapter;
@@ -45,7 +45,6 @@ public class TrainsByNo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db=new DatabaseHandler(this);
         setContentView(R.layout.activity_trains_by_no);
         trainBeanArrayList=new ArrayList<>();
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
@@ -68,23 +67,10 @@ public class TrainsByNo extends AppCompatActivity {
 
 
         deletethis=(ImageView)findViewById(R.id.delete_this);
-        /*deletethis.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LinearLayout vwParentRow = (LinearLayout)view.getParent();
-                TextView child = (TextView)vwParentRow.getChildAt(0);
-                TrainBean tb=new TrainBean();
-                tb.setTrno(child.getText().toString());
-                db.deleteTrainSearch(tb);
-                trainBeanArrayList.clear();
-                trainBeanArrayList.addAll(db.getAllTrainSearches());
-                recentTrainSearchesListAdapter.update(trainBeanArrayList);
-            }
-        });
-*/
+
 
         recentsLV=(ListView)findViewById(R.id.recents_listview);
-        trainBeanArrayList.addAll(db.getAllTrainSearches());
+        trainBeanArrayList.addAll(RecentTrain.objects.getAllRecentTrain());
         recentTrainSearchesListAdapter=new RecentTrainSearchesListAdapter(getApplicationContext(),trainBeanArrayList);
         recentsLV.setAdapter(recentTrainSearchesListAdapter);
 
@@ -104,7 +90,7 @@ public class TrainsByNo extends AppCompatActivity {
                     new AlertDialog.Builder(TrainsByNo.this).setTitle("Clear History?").setMessage("Clear all recent Train searches?").setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            db.deleteAllTrainSearches();
+                            RecentTrain.objects.deleteAllRecentTrains();
                             trainBeanArrayList.clear();
                             recentTrainSearchesListAdapter.update(trainBeanArrayList);
                         }
@@ -175,10 +161,9 @@ public class TrainsByNo extends AppCompatActivity {
                     snackbar.show();
                 } else {
                     //TrainBean trainBean=new TrainBean(t.getSource().getCode(),t.getDestination().getCode(),t.getName(),t.getNo());
-
-                    db.addTrain(t);
+                    RecentTrain.objects.addTrain(t);
                     trainBeanArrayList.clear();
-                    trainBeanArrayList.addAll(db.getAllTrainSearches());
+                    trainBeanArrayList.addAll(RecentTrain.objects.getAllRecentTrain());
                     recentTrainSearchesListAdapter.update(trainBeanArrayList);
                     Intent in=new Intent(getApplicationContext(),TrainsInfo.class);
                     in.putExtra("train",t);
@@ -194,7 +179,6 @@ public class TrainsByNo extends AppCompatActivity {
 
     DelayedAutoCompleteTextView trBox;
     ProgressBar pBar;
-    DatabaseHandler db;
     RecentTrainSearchesListAdapter recentTrainSearchesListAdapter;
     LinearLayout recents;
     Train lastTrainSelected=null;

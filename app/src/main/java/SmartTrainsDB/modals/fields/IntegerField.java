@@ -17,6 +17,9 @@ public class IntegerField extends Field {
         super(false);
     }
 
+    public IntegerField(boolean unique, boolean notNull) {
+        super(unique, notNull);
+    }
 
     @Override
     public String getSqlTypeName() {

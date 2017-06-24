@@ -3,7 +3,10 @@ package SmartTrainTools;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 /**
  * Created by root on 19/3/17.
  */
@@ -55,5 +58,12 @@ public class SmartUtils {
         }catch (ParseException E){
             return "/"+X.getM();
         }
+    }
+
+    public static String now(String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                format, Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

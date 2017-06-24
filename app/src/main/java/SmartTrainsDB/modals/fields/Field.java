@@ -6,7 +6,7 @@ import android.database.Cursor;
  *  abstract class to represent a column to table in db
  */
 public abstract class Field {
-    private boolean isPrimaryKey = false;
+    private boolean isPrimaryKey = false, unique = false, notNull = false;
     private String name;
 
     public Field() {
@@ -16,8 +16,16 @@ public abstract class Field {
         this.isPrimaryKey = isPrimaryKey;
     }
 
+    public Field(boolean unique, boolean notNull) {
+        this.unique = unique;
+        this.notNull = notNull;
+    }
+
     public String getDefinition() {
-        return name + " " + getSqlTypeName() + " " + (isPrimaryKey ? " PRIMARY KEY " : " ");
+        return name + " "
+                + getSqlTypeName()
+                + " " + (isPrimaryKey ? " PRIMARY KEY " : (unique ? " UNIQUE " : " "))
+                + " " + (notNull ? " NOT NULL " : " ");
     }
 
     public String getName() {

@@ -15,7 +15,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import SmartTrainTools.Train;
-import SmartTrainsDB.DatabaseHandler;
 import SmartTrainsDB.TrainBean;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.RecentTrainSearchesListAdapter;
@@ -39,13 +38,12 @@ public class OfflineRoutesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_routes);
         setTitle("Saved Train Routes");
-        db=new DatabaseHandler(this);
 
         offlistview=(ListView)findViewById(R.id.offline_listview);
         trainBeanArrayList=new ArrayList<>();
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        trainBeanArrayList.addAll(db.getSavedRoutesBeans());
+        trainBeanArrayList.addAll(SmartTrainsDB.modals.TrainRoute.objects.getSavedRoutesTrainBeans());
         adapter=new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this,trainBeanArrayList);
         offlistview.setAdapter(adapter);
 
@@ -58,10 +56,11 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                 pd.show();
                 Intent in=new Intent(OfflineRoutesActivity.this,TrainRoute.class);
                 TrainBean tb=(TrainBean) adapterView.getItemAtPosition(i);
-                Train x= db.getTrainOffline(tb);
+                Train x = SmartTrainsDB.modals.Train.objects.getTrain(tb);
                 in.putExtra("train",x);
                 in.putExtra("isAvailableOffline",true);
                 pd.hide();
+                System.out.println("about to start");
                 startActivity(in);
             }
         });
@@ -73,7 +72,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                     new AlertDialog.Builder(OfflineRoutesActivity.this).setTitle("Delete?").setMessage("Clear all saved routes?").setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            db.deleteAllTrainRoutes();
+                            SmartTrainsDB.modals.TrainRoute.objects.deleteAllTrainRoutes();
                             trainBeanArrayList.clear();
                             adapter.update(trainBeanArrayList);
                         }
@@ -91,5 +90,4 @@ public class OfflineRoutesActivity extends AppCompatActivity {
     ListView offlistview;
 
     RecentTrainSearchesListAdapter adapter;
-    DatabaseHandler db;
 }
