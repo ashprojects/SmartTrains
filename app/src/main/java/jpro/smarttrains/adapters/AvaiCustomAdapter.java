@@ -150,7 +150,7 @@ public class AvaiCustomAdapter extends BaseAdapter {
                 holder.desc.setText("Not running on " + journeys.get(position).getDate().getDate()+ " (Only "+ SmartUtils.getRunsOnString(journeys.get(position).getTrain().getRunsOn())+")");
                 holder.dtnday1.setText(getTime(journeys.get(position).getTrain().getDepartureTimeof(journeys.get(position).getSrc()))+"-");
                 holder.dtnday2.setText(getTime(journeys.get(position).getTrain().getArrivalTimeof((journeys.get(position).getDest())))+"-");
-               // holder.dtnday2.setText(getTime(journeys.get(position).getTrain().getArrivalTimeof((journeys.get(position).getDest())))+"-");
+                // holder.dtnday2.setText(getTime(journeys.get(position).getTrain().getArrivalTimeof((journeys.get(position).getDest())))+"-");
             }
             else
                 holder.desc.setText(journeys.get(position).getDesc());
