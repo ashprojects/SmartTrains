@@ -16,6 +16,10 @@ public class DoubleField extends Field {
     public DoubleField() {
     }
 
+    public DoubleField(boolean unique, boolean notNull) {
+        super(unique, notNull);
+    }
+
     @Override
     public String getSqlTypeName() {
         return sqlTypeName;

@@ -25,7 +25,7 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
 
     public abstract String getModalName();
 
-    protected abstract HashMap<String, Field> getFeildTypes();
+    protected abstract HashMap<String, Field> getFieldTypes();
 
     protected Modal getNewInstance() {
         try {
@@ -45,14 +45,14 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
     }
 
     private void populateFieldName() {
-        for (Map.Entry<String, Field> entry : getFeildTypes().entrySet()) {
+        for (Map.Entry<String, Field> entry : getFieldTypes().entrySet()) {
             Field field = entry.getValue();
             field.setName(entry.getKey());
         }
     }
 
     private Field ensurePrimaryKey() {
-        HashMap<String, Field> fieldTypes = getFeildTypes();
+        HashMap<String, Field> fieldTypes = getFieldTypes();
         for (Field field : fieldTypes.values()) {
             if (field.isPrimaryKey()) {
                 if (!field.getName().equals("_id") || !(field instanceof IntegerField))
@@ -66,13 +66,13 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
     }
 
     public Set<String> getAllFields() {
-        return getFeildTypes().keySet();
+        return getFieldTypes().keySet();
     }
 
     public String getCreateSQL() {
         StringBuilder createCommand = new StringBuilder("CREATE TABLE ");
         createCommand.append(getModalName()).append("(");
-        for (Iterator<Map.Entry<String, Field>> iterator = getFeildTypes().entrySet().iterator(); iterator.hasNext(); ) {
+        for (Iterator<Map.Entry<String, Field>> iterator = getFieldTypes().entrySet().iterator(); iterator.hasNext(); ) {
             Map.Entry<String, Field> entry = iterator.next();
             Field field = entry.getValue();
             createCommand.append(field.getDefinition());
@@ -88,7 +88,7 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         if (!getAllFields().contains(fieldName)) {
             return false;
         }
-        if (value != null && !getFeildTypes().get(fieldName).validate(value)) {
+        if (value != null && !getFieldTypes().get(fieldName).validate(value)) {
             return false;
         }
         if (value == null) {
@@ -124,18 +124,28 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         database.delete(getModalName(), getSelection(), getSelectionArgs());
     }
 
-    public void update() {
-        getWritableDatabase().update(getModalName(), values, getSelection(), getSelectionArgs());
+    public void delete(String selection, String[] selectionArgs) {
+        SQLiteDatabase database = getWritableDatabase();
+        database.delete(getModalName(), selection, selectionArgs);
     }
 
-    public Cursor getCursor(String selection, String[] selectionArgs) {
+    public void update() {
+        SQLiteDatabase database = getWritableDatabase();
+        database.update(getModalName(), values, getSelection(), getSelectionArgs());
+    }
+
+    public Cursor getCursor(String selection, String[] selectionArgs, String orderBy) {
         return getReadableDatabase().query(
                 getModalName(),
                 getAllFields().toArray(new String[]{}),
                 selection,
                 selectionArgs,
-                null, null, null
+                null, null, orderBy
         );
+    }
+
+    public Cursor getCursor(String selection, String[] selectionArgs) {
+        return this.getCursor(selection, selectionArgs, null);
     }
 
     public Modal insert(ContentValues values) {
@@ -143,7 +153,6 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         instance.values = new ContentValues(values);
         SQLiteDatabase db = getReadableDatabase();
         instance.values.put(primaryKey.getName(), db.insert(getModalName(), null, values));
-        db.close();
         return instance;
     }
 
@@ -152,7 +161,7 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         ArrayList<Modal> modals = new ArrayList<>();
         while (cursor.moveToNext()) {
             Modal newInstance = getNewInstance();
-            for (Map.Entry<String, Field> entry : getFeildTypes().entrySet()) {
+            for (Map.Entry<String, Field> entry : getFieldTypes().entrySet()) {
                 newInstance.put(entry.getKey(), entry.getValue().getValue(cursor));
             }
             modals.add(newInstance);
