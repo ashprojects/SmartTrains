@@ -85,6 +85,10 @@
         <activity
             android:name=".activities.About"
             android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.PNRStatusActivity"
+            android:label="@string/title_activity_pnrstatus"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

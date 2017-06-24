@@ -19,14 +19,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <EditText
-                android:layout_weight="0.6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:hint="Enter PNR"
-                android:textAlignment="center"
-                />
+
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +52,7 @@
                     android:layout_weight="0.4"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:id="@+id/loadAllPnrStatusProgressBar"
+                    android:id="@+id/pnr_home_loadAllPnrStatusProgressBar"
                     />
 
 
@@ -72,7 +65,7 @@
         <ListView
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:id="@+id/allPnrListView"
+            android:id="@+id/pnr_home_allPnrListView"
             android:layout_height="wrap_content">
 
         </ListView>

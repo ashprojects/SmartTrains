@@ -8,13 +8,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by root on 10/6/17.
  */
 
-public class PNRStatus {
+public class PNRStatus implements Serializable {
     private String PNR;
     private boolean chartPrepared;
     private TravelClass travelClass;

@@ -248,6 +248,9 @@ public class MainHome extends AppCompatActivity
                 break;
             case R.id.nav_about:
                 in = new Intent(MainHome.this, About.class);
+                break;
+            case R.id.nav_pnrStatus:
+                in = new Intent(MainHome.this, PnrStatusHomeActivity.class);
         }
         startActivity(in);
         return true;
