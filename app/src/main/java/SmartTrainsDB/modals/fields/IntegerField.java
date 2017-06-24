@@ -7,7 +7,7 @@ import android.database.Cursor;
  */
 
 public class IntegerField extends Field {
-    private static final String sqlTypeName = "INT";
+    private static final String sqlTypeName = "INTEGER";
 
     public IntegerField(boolean isPrimaryKey) {
         super(isPrimaryKey);
@@ -25,7 +25,7 @@ public class IntegerField extends Field {
 
     @Override
     public String getDefinition() {
-        return isPrimaryKey() ? super.getDefinition() + " AUTO INCREMENT" : super.getDefinition();
+        return isPrimaryKey() ? super.getDefinition() + " AUTOINCREMENT" : super.getDefinition();
     }
 
     @Override

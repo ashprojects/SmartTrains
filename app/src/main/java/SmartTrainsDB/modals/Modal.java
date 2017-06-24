@@ -61,6 +61,7 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         }
         Field field = new IntegerField(true);
         fieldTypes.put("_id", field);
+        field.setName("_id");
         return field;
     }
 

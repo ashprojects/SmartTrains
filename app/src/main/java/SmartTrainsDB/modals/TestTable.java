@@ -2,13 +2,13 @@ package SmartTrainsDB.modals;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import SmartTrainsDB.DatabaseHelper;
 import SmartTrainsDB.modals.fields.DateTime;
 import SmartTrainsDB.modals.fields.DoubleField;
 import SmartTrainsDB.modals.fields.Field;
-import SmartTrainsDB.modals.fields.IntegerField;
 import SmartTrainsDB.modals.fields.Varchar;
 
 /**
@@ -19,7 +19,6 @@ public class TestTable extends Modal {
     public static HashMap<String, Field> fieldTypes = new HashMap<>();
 
     static {
-        fieldTypes.put("id", new IntegerField(true));
         fieldTypes.put("name", new Varchar(32));
         fieldTypes.put("percent", new DoubleField());
         fieldTypes.put("date", new DateTime());
@@ -36,6 +35,7 @@ public class TestTable extends Modal {
     }
 
     public static void test() {
+
         TestTable table = (TestTable) DatabaseHelper.getInstance().getModal("TEST");
         DatabaseHelper.getInstance().getWritableDatabase();
 //        System.out.println(table.getCreateSQL());
@@ -52,6 +52,18 @@ public class TestTable extends Modal {
         //values.put("date","sds");
         TestTable t = (TestTable) table.insert(values);
         System.out.println(t);
+        System.out.println("inserted");
+        ArrayList<Modal> filter = table.all();
+        System.out.println("size of filter(1)=" + filter.size());
+        t.put("percent", 2.2);
+        t.update();
+        filter = table.all();
+        System.out.println("size of filter(1)=" + filter.size());
+        System.out.println("new percent(2.2)=" + filter.get(0).get("percent"));
+        t.delete();
+        filter = table.all();
+        System.out.println("size of filter(0)=" + filter.size());
+
 
     }
 }
