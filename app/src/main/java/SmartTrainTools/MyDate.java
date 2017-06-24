@@ -117,9 +117,9 @@ public class MyDate implements Serializable{
 
     public static MyDate parseMyDate(String date, String format) throws ParseException {
         SimpleDateFormat smf = new SimpleDateFormat(format);
-        Date formatedDate = smf.parse(date);
-        return new MyDate(formatedDate.getDay(), formatedDate.getMonth(), formatedDate.getYear());
-
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(smf.parse(date));
+        return new MyDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
     }
 
 }
