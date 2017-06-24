@@ -127,7 +127,7 @@ public class Journey implements Comparable<Journey>{
     private Station fetchCachedQuotaStation(){
         String url = Config.qCacheUrl;
         HashMap<String,String> params=new HashMap<>();
-        params.put("reqType","get");
+        params.put("reqType", "get");
         params.put("t",""+this.getTrain().getNo());
         params.put("i","smartize.admin");
         Document resp;
