@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import commons.Config;
+
 /**
  * Created by root on 10/6/17.
  */
@@ -27,16 +29,16 @@ public class PNRStatus implements Serializable {
     public PNRStatus(String PNR) throws IOException, ParseException {
         this.PNR = PNR;
         Document document = Jsoup.connect("https://www.api.railrider.in/ajax_pnr_check.php")
-                .data("pnr_post", "2332480054")
+                .data("pnr_post", PNR)
                 .post();
         JSONParser parser = new JSONParser();
         JSONObject pnrStatus = (JSONObject) parser.parse(document.body().text());
 
-        this.chartPrepared = !(pnrStatus.get("chart_prepared") == "N");
+        this.chartPrepared = !(pnrStatus.get("chart_prepared").equals("N"));
         this.travelClass = new TravelClass(pnrStatus.get("class1").toString());
         String dateOfJourney = pnrStatus.get("doj").toString();
         try {
-            this.dateOfJourney = MyDate.parseMyDate(dateOfJourney, "DD-MM-YYYY");
+            this.dateOfJourney = MyDate.parseMyDate(dateOfJourney, "dd-MM-yyyy");
         } catch (java.text.ParseException e) {
             e.printStackTrace();
             this.dateOfJourney = new MyDate(1, 1, 1970);
@@ -46,7 +48,7 @@ public class PNRStatus implements Serializable {
         this.to = parseStation((JSONObject) pnrStatus.get("to_station"));
         this.reservationUpto = parseStation((JSONObject) pnrStatus.get("reservation_upto"));
         this.trainNo = pnrStatus.get("train_num").toString();
-        this.trainName = pnrStatus.get("train_name").toString();
+        this.trainName = Config.rc.getTrainName(trainNo);
         this.passengers = new ArrayList<>(6);
         for (Object passenger : (JSONArray) pnrStatus.get("passengers")) {
             passengers.add(this.parsePassenger((JSONObject) passenger));
@@ -134,7 +136,7 @@ public class PNRStatus implements Serializable {
         return new Passenger(passenger.get("booking_status").toString(), passenger.get("current_status").toString());
     }
 
-    public class Passenger {
+    public class Passenger implements Serializable {
         private String bookingStatus, currentStatus;
 
         public Passenger(String bookingStatus, String currentStatus) {

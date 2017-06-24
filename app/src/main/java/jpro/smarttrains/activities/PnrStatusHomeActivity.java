@@ -1,15 +1,18 @@
 package jpro.smarttrains.activities;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,39 +26,54 @@ import jpro.smarttrains.R;
 
 public class PnrStatusHomeActivity extends AppCompatActivity {
 
+    FloatingActionButton newPnrBtn;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pnr_status_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fb = new FloatingActionButton(this);
+        fb.setBackgroundColor(Color.RED);
+        newPnrBtn = (FloatingActionButton) findViewById(R.id.pnr_status_home_fab_bottom);
+        newPnrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-
-        View promptView = layoutInflater.inflate(R.layout.input_prompt, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        final EditText pnr = (EditText) promptView.findViewById(R.id.userInput);
-        Button btn = (Button) promptView.findViewById(R.id.userInputBtn);
-        pnr.setHint("ENTER PNR");
-        btn.setText("SHOW STATUS");
-        alertDialogBuilder.setView(promptView);
-        alertDialogBuilder.setCancelable(true);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GetPNRStatusAsync a = new GetPNRStatusAsync();
-                System.out.println("== CREATED ASYNC OPERATIONS " + pnr.getText().toString());
-                a.execute(pnr.getText().toString());
+                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
+                String clipdata = item.getText().toString();
+                LayoutInflater layoutInflater = LayoutInflater.from(PnrStatusHomeActivity.this);
+                View promptView = layoutInflater.inflate(R.layout.input_prompt, null);
+                final EditText pnr = (EditText) promptView.findViewById(R.id.userInput);
+                Button btn = (Button) promptView.findViewById(R.id.userInputBtn);
+                pnr.setHint("ENTER PNR");
+                btn.setText("SHOW STATUS");
+                if (clipdata.matches("[0-9]+") && clipdata.length() == 10) {
+                    pnr.setText(clipdata);
+                }
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PnrStatusHomeActivity.this);
+                alertDialogBuilder.setView(promptView);
+                alertDialogBuilder.setCancelable(true);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        GetPNRStatusAsync a = new GetPNRStatusAsync();
+                        a.execute(pnr.getText().toString());
+                    }
+                });
+                alertDialogBuilder.show();
             }
         });
 
@@ -64,7 +82,6 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
 
 
     class GetPNRStatusAsync extends AsyncTask<String, Void, PNRStatus> {
-
 
         @Override
         protected void onPostExecute(PNRStatus pnrStatus) {
@@ -82,9 +99,9 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
             try {
                 status = new PNRStatus(strings[0]);
             } catch (ParseException E) {
-
+                E.printStackTrace();
             } catch (IOException E) {
-                System.out.println("IOEXCEPTION AT " + strings[0]);
+                E.printStackTrace();
             }
             return status;
         }
@@ -97,5 +114,6 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         }
 
         ProgressDialog pd;
+
     }
 }
