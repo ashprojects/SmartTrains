@@ -50,7 +50,7 @@ public class TestTable extends Modal {
         //
         // values.put("percent", 2.2);
         //values.put("date","sds");
-        TestTable t = (TestTable) table.createRow(values);
+        TestTable t = (TestTable) table.insert(values);
         System.out.println(t);
 
     }

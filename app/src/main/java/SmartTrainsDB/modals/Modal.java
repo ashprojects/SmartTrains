@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import SmartTrainsDB.DatabaseHelper;
+import SmartTrainsDB.modals.exceptions.ImproperlyConfiguredException;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.IntegerField;
 
@@ -40,6 +41,7 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
 
     public Modal() {
         populateFieldName();
+        primaryKey = ensurePrimaryKey();
     }
 
     private void populateFieldName() {
@@ -51,11 +53,10 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
 
     private Field ensurePrimaryKey() {
         HashMap<String, Field> fieldTypes = getFeildTypes();
-        boolean isPrimaryKeyPresent = false;
         for (Field field : fieldTypes.values()) {
             if (field.isPrimaryKey()) {
-                isPrimaryKeyPresent = true;
-                return field;
+                if (!field.getName().equals("_id") || !(field instanceof IntegerField))
+                    throw new ImproperlyConfiguredException("primary key should be named _id and should be int");
             }
         }
         Field field = new IntegerField(true);
@@ -110,28 +111,11 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
     }
 
     protected String getSelection() {
-        StringBuilder selection = new StringBuilder("");
-        for (Iterator<Map.Entry<String, Field>> iterator = getFeildTypes().entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<String, Field> entry = iterator.next();
-            selection.append(entry.getKey() + " = ?");
-            if (iterator.hasNext()) {
-                selection.append(" AND ");
-            }
-        }
-        return selection.toString();
+        return primaryKey.getName() + "=?";
     }
 
     protected String[] getSelectionArgs() {
-        ArrayList<String> args = new ArrayList<>();
-        for (Iterator<Map.Entry<String, Field>> iterator = getFeildTypes().entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<String, Field> entry = iterator.next();
-            if (values.get(entry.getKey()) != null) {
-                args.add(values.get(entry.getKey()).toString());
-            } else {
-                args.add("NULL");
-            }
-        }
-        return args.toArray(new String[]{});
+        return new String[]{values.get(primaryKey.getName()).toString()};
     }
 
     public void delete() {
@@ -153,11 +137,11 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         );
     }
 
-    public Modal createRow(ContentValues values) {
+    public Modal insert(ContentValues values) {
         Modal instance = getNewInstance();
         instance.values = new ContentValues(values);
         SQLiteDatabase db = getReadableDatabase();
-        db.insert(getModalName(), null, values);
+        instance.values.put(primaryKey.getName(), db.insert(getModalName(), null, values));
         db.close();
         return instance;
     }
@@ -168,7 +152,7 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         while (cursor.moveToNext()) {
             Modal newInstance = getNewInstance();
             for (Map.Entry<String, Field> entry : getFeildTypes().entrySet()) {
-                newInstance.put(entry.getKey(), entry.getValue().getValue());
+                newInstance.put(entry.getKey(), entry.getValue().getValue(cursor));
             }
             modals.add(newInstance);
         }

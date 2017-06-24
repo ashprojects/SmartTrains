@@ -32,11 +32,6 @@ public class Varchar extends Field {
     }
 
     @Override
-    public String getValue() {
-        return this.value;
-    }
-
-    @Override
     public String getSqlTypeName() {
         return sqlTypeName + "(" + maxLength + ") ";
     }

@@ -3,7 +3,7 @@ package SmartTrainsDB.modals.fields;
 import android.database.Cursor;
 
 /**
- * Created by root on 11/6/17.
+ *  class to represent interger type column in db
  */
 
 public class IntegerField extends Field {
@@ -17,18 +17,6 @@ public class IntegerField extends Field {
         super(false);
     }
 
-    @Override
-    public Integer getValue() {
-        if (this.value instanceof Integer) {
-            return (Integer) this.value;
-        }
-        return Integer.parseInt(this.value.toString());
-    }
-
-    @Override
-    public void setValue(String value) {
-        this.value = Integer.parseInt(value);
-    }
 
     @Override
     public String getSqlTypeName() {
@@ -36,8 +24,13 @@ public class IntegerField extends Field {
     }
 
     @Override
+    public String getDefinition() {
+        return isPrimaryKey() ? super.getDefinition() + " AUTO INCREMENT" : super.getDefinition();
+    }
+
+    @Override
     public boolean validate(Object object) {
-        if (this.value instanceof Integer) {
+        if (object instanceof Integer) {
             return true;
         }
         try {
