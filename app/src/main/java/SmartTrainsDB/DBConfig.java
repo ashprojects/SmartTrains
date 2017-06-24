@@ -1,6 +1,7 @@
 package SmartTrainsDB;
 
 import SmartTrainsDB.modals.Modal;
+import SmartTrainsDB.modals.PNR;
 import SmartTrainsDB.modals.RecentTrain;
 import SmartTrainsDB.modals.SQLiteOpenHelperCompactable;
 import SmartTrainsDB.modals.Train;
@@ -13,6 +14,7 @@ public class DBConfig {
     public static final SQLiteOpenHelperCompactable[] allRegisteredModals = new Modal[]{
             Train.objects,
             RecentTrain.objects,
-            TrainRoute.objects
+            TrainRoute.objects,
+            PNR.objects
     };
 }

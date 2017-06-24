@@ -62,6 +62,10 @@ public class MyDate implements Serializable{
         return putZeros(this.d, this.m, this.y);
     }
 
+    public Date date() {
+        return new Date(y, m, d);
+    }
+
     public void decrement() {
 
         calendar.add(Calendar.DATE,-1);
@@ -120,6 +124,11 @@ public class MyDate implements Serializable{
         Calendar cal = Calendar.getInstance();
         cal.setTime(smf.parse(date));
         return new MyDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+    }
+
+    public String format(String format) {
+        SimpleDateFormat smf = new SimpleDateFormat(format);
+        return smf.format(date());
     }
 
 }
