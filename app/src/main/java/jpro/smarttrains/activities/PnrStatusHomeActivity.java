@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.simple.parser.ParseException;
 
@@ -45,8 +46,10 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pnr_status_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FloatingActionButton fb = new FloatingActionButton(this);
         fb.setBackgroundColor(Color.RED);
+        setTitle("My Journeys");
         newPnrBtn = (FloatingActionButton) findViewById(R.id.pnr_status_home_fab_bottom);
         newPnrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +64,7 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                 pnr.setHint("ENTER PNR");
                 btn.setText("SHOW STATUS");
                 if (clipdata.matches("[0-9]+") && clipdata.length() == 10) {
+                    Toast.makeText(PnrStatusHomeActivity.this, "Pasted from Clipboard", Toast.LENGTH_SHORT).show();
                     pnr.setText(clipdata);
                 }
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PnrStatusHomeActivity.this);
