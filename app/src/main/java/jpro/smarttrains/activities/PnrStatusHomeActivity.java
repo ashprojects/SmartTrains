@@ -63,6 +63,7 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         FloatingActionButton fb = new FloatingActionButton(this);
         fb.setBackgroundColor(Color.RED);
         setTitle("My Journeys");
+
         newPnrBtn = (FloatingActionButton) findViewById(R.id.pnr_status_home_fab_bottom);
         newPnrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +101,11 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         PNR.objects.insert(c);
         savedPNRs = (ListView) findViewById(R.id.content_pnr_status_home).findViewById(R.id.pnr_home_allPnrListView);
         savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
+        try {
+            savedPNRs.setNestedScrollingEnabled(true);
+        } catch (Exception E) {
 
+        }
 
     }
 
