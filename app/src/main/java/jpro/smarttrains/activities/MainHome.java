@@ -45,6 +45,7 @@ public class MainHome extends AppCompatActivity
         sSimpleAvail=(ImageButton)findViewById(R.id.seat_avai_simple);
         sOfflineRoutes=(ImageButton)findViewById(R.id.offlineroutes_trigger);
         sTrainBetweenStns=(ImageButton)findViewById(R.id.trains_bwstns_btn);
+        pnrStatusImageButton = (ImageButton) findViewById(R.id.pnr_status_launch_btn);
         verDesc=(TextView)findViewById(R.id.verDesc);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,6 +136,15 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 sAvaiBtn.startAnimation(AnimationUtils.loadAnimation(MainHome.this,R.anim.wobble));
                 Intent in=new Intent(MainHome.this,SmartAvailActivity.class);
+                startActivity(in);
+            }
+        });
+
+        pnrStatusImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pnrStatusImageButton.startAnimation(AnimationUtils.loadAnimation(MainHome.this, R.anim.wobble));
+                Intent in = new Intent(MainHome.this, PnrStatusHomeActivity.class);
                 startActivity(in);
             }
         });
@@ -256,7 +266,7 @@ public class MainHome extends AppCompatActivity
         return true;
     }
 
-    ImageButton sAvaiBtn,splitBtn,sTrbyNameBtn,sSimpleAvail,sTrainBetweenStns,sOfflineRoutes;
+    ImageButton sAvaiBtn, splitBtn, sTrbyNameBtn, sSimpleAvail, sTrainBetweenStns, sOfflineRoutes, pnrStatusImageButton;
     String tipOfTheDay="";
     LinearLayout tipSpan;
     TextView rqdesc;

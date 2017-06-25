@@ -3,7 +3,6 @@ package jpro.smarttrains.activities;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -15,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -75,6 +76,14 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                 View promptView = layoutInflater.inflate(R.layout.input_prompt, null);
                 final EditText pnr = (EditText) promptView.findViewById(R.id.userInput);
                 Button btn = (Button) promptView.findViewById(R.id.userInputBtn);
+                ImageButton clearPnrBtn = (ImageButton) promptView.findViewById(R.id.input_promt_clear);
+                clearPnrBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        pnr.setText("");
+                    }
+                });
+
                 pnr.setHint("ENTER PNR");
                 btn.setText("SHOW STATUS");
                 if (clipdata.matches("[0-9]+") && clipdata.length() == 10) {
@@ -87,18 +96,18 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        GetPNRStatusAsync a = new GetPNRStatusAsync();
-                        a.execute(pnr.getText().toString());
+                        if (pnr.getText().toString().length() < 10) {
+                            Toast.makeText(PnrStatusHomeActivity.this, "Please enter valid PNR", Toast.LENGTH_SHORT);
+                        } else {
+                            GetPNRStatusAsync a = new GetPNRStatusAsync();
+                            a.execute(pnr.getText().toString());
+                        }
                     }
                 });
                 alertDialogBuilder.show();
             }
         });
-        PNR p = (PNR) PNR.objects.all().get(0);
-        ContentValues c = p.getValues();
-        c.put(PNR.PNR, SessionIdentifierGenerator.nextSessionId());
-        c.putNull("_id");
-        PNR.objects.insert(c);
+
         savedPNRs = (ListView) findViewById(R.id.content_pnr_status_home).findViewById(R.id.pnr_home_allPnrListView);
         savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
         try {
@@ -106,6 +115,14 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         } catch (Exception E) {
 
         }
+
+        savedPNRs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                System.out.println(view.getTag());
+
+            }
+        });
 
     }
 
@@ -116,6 +133,11 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         protected void onPostExecute(PNRStatus pnrStatus) {
             pd.hide();
             if (pnrStatus != null) {
+                if (!PNR.objects.alreadyExists(pnrStatus.getPNR())) {
+                    PNR.objects.addPNR(pnrStatus);
+                    savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
+
+                }
                 Intent in = new Intent(PnrStatusHomeActivity.this, PNRStatusActivity.class);
                 in.putExtra("pnrObject", pnrStatus);
                 startActivity(in);

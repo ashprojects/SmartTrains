@@ -30,8 +30,7 @@ public class DateTime extends Varchar {
 
     @Override
     public boolean validate(Object object) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                dateTimeFormat, Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateTimeFormat, Locale.getDefault());
         try {
             dateFormat.parse(object.toString());
             return true;

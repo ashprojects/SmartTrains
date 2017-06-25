@@ -7,20 +7,28 @@
     android:padding="10dp">
 
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
+    <FrameLayout
+            android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint=""
+            android:maxLength="10"
+            android:textAlignment="center"
             android:inputType="number"
             android:id="@+id/userInput" />
 
-        <requestFocus />
+        <ImageButton
+            android:id="@+id/input_promt_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_cross"
+            android:background="@color/transparent"
+            android:layout_gravity="end|center_vertical" />
+    </FrameLayout>
 
-    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/userInputBtn"
