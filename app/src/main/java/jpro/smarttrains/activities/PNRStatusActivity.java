@@ -14,6 +14,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import SmartTrainTools.PNRStatus;
+import SmartTrainsDB.modals.PNR;
 import jpro.smarttrains.R;
 
 public class PNRStatusActivity extends AppCompatActivity {
@@ -48,6 +49,9 @@ public class PNRStatusActivity extends AppCompatActivity {
             }
         });
         pnrStatus = (PNRStatus) getIntent().getSerializableExtra("pnrObject");
+        if (!PNR.objects.alreadyExists(pnrStatus.getPNR())) {
+            PNR.objects.addPNR(pnrStatus);
+        }
         setTitle("To " + pnrStatus.getTo().getName());
         dateTextView = (TextView) findViewById(R.id.pnr_status_date);
         trainTextView = (TextView) findViewById(R.id.pnr_status_trname);

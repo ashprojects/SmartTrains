@@ -16,18 +16,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
-
 import SmartTrainTools.PNRStatus;
+import SmartTrainsDB.modals.PNR;
 import jpro.smarttrains.R;
+import jpro.smarttrains.adapters.PNRListViewAdapter;
 
 public class PnrStatusHomeActivity extends AppCompatActivity {
 
     FloatingActionButton newPnrBtn;
+    ListView savedPNRs;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -81,6 +83,9 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
             }
         });
 
+        savedPNRs = (ListView) findViewById(R.id.content_pnr_status_home).findViewById(R.id.pnr_home_allPnrListView);
+        savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
+
 
     }
 
@@ -104,7 +109,7 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                 status = new PNRStatus(strings[0]);
             } catch (ParseException E) {
                 E.printStackTrace();
-            } catch (IOException E) {
+            } catch (Exception E) {
                 E.printStackTrace();
             }
             return status;

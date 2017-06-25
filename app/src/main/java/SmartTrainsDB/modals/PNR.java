@@ -20,8 +20,8 @@ public class PNR extends Modal {
     public static final String CHART_PREPARED = "chart_prepared";
     public static final String TRAVEL_CLASS = "travel_class";
     public static final String DATE_OF_JOURNEY = "date_of_journey";
-    public static final String FROM = "from";
-    public static final String TO = "to";
+    public static final String FROM = "_from";
+    public static final String TO = "_to";
     public static final String BOARDING_POINT = "boarding_point";
     public static final String RESERVATION_UPTO = "reservation_upto";
     public static final String TRAIN_NO = "train_no";
@@ -65,6 +65,10 @@ public class PNR extends Modal {
         values.put(RESERVATION_UPTO, pnr.getReservationUpto().getCode());
         values.put(TRAIN_NO, pnr.getTrainNo());
         return (SmartTrainsDB.modals.PNR) insert(values);
+    }
+
+    public boolean alreadyExists(String pnr) {
+        return filter(PNR + "=?", new String[]{pnr}).size() > 0;
     }
 
 }

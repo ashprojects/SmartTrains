@@ -30,9 +30,11 @@ public class PNRStatus implements Serializable {
         this.PNR = PNR;
         Document document = Jsoup.connect("https://www.api.railrider.in/ajax_pnr_check.php")
                 .data("pnr_post", PNR)
+                .timeout(30000)
                 .post();
         JSONParser parser = new JSONParser();
         JSONObject pnrStatus = (JSONObject) parser.parse(document.body().text());
+        System.out.println(document.body().text());
 
         this.chartPrepared = !(pnrStatus.get("chart_prepared").equals("N"));
         this.travelClass = new TravelClass(pnrStatus.get("class1").toString());

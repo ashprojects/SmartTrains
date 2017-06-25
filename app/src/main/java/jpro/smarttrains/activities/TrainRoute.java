@@ -36,7 +36,6 @@ public class TrainRoute extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("started");
         setContentView(R.layout.activity_train_route);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

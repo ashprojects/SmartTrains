@@ -60,7 +60,6 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                 in.putExtra("train",x);
                 in.putExtra("isAvailableOffline",true);
                 pd.hide();
-                System.out.println("about to start");
                 startActivity(in);
             }
         });

@@ -41,7 +41,9 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_pnr_status_home" />
+    <include
+        layout="@layout/content_pnr_status_home"
+        android:id="@+id/content_pnr_status_home" />
 
 
     <android.support.design.widget.FloatingActionButton
