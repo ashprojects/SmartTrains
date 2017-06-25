@@ -182,4 +182,8 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+    public ContentValues getValues() {
+        return new ContentValues(values);
+    }
 }

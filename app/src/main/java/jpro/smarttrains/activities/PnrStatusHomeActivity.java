@@ -3,6 +3,7 @@ package jpro.smarttrains.activities;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -20,6 +21,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.simple.parser.ParseException;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import SmartTrainTools.PNRStatus;
 import SmartTrainsDB.modals.PNR;
@@ -42,6 +46,13 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    public final static class SessionIdentifierGenerator {
+        private static SecureRandom random = new SecureRandom();
+
+        public static String nextSessionId() {
+            return new BigInteger(130, random).toString(32);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +93,11 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                 alertDialogBuilder.show();
             }
         });
-
+        PNR p = (PNR) PNR.objects.all().get(0);
+        ContentValues c = p.getValues();
+        c.put(PNR.PNR, SessionIdentifierGenerator.nextSessionId());
+        c.putNull("_id");
+        PNR.objects.insert(c);
         savedPNRs = (ListView) findViewById(R.id.content_pnr_status_home).findViewById(R.id.pnr_home_allPnrListView);
         savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
 
