@@ -1,11 +1,13 @@
 package jpro.smarttrains.activities;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -136,7 +138,10 @@ public class Splash extends AppCompatActivity {
                 Intent in = new Intent(Splash.this, MainHome.class);
                 in.putExtra("welcomeMsg",welcomeMsg);
                 in.putExtra("tips",tips);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(Splash.this).toBundle());
+                else
+                    startActivity(in);
             }
 
         }

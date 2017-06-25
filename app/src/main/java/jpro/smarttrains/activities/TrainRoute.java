@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import AnimationTools.Animator;
 import SmartTrainTools.RouteListItem;
 import SmartTrainTools.SmartTools;
 import SmartTrainTools.Train;
@@ -140,7 +141,11 @@ public class TrainRoute extends AppCompatActivity {
                 download.setEnabled(false);
             }
         });
+        initAnimations();
+    }
 
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.FADE, 250);
     }
     Train train;
     TableLayout mainTable;

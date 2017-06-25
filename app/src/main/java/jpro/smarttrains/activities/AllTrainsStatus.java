@@ -1,6 +1,7 @@
 package jpro.smarttrains.activities;
 
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import AnimationTools.Animator;
 import Exceptions.AvailabilityFailure;
 import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
@@ -52,6 +54,10 @@ public class AllTrainsStatus extends AppCompatActivity {
         super.onDestroy();
 
 
+    }
+
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
     }
     @Override
     public void onBackPressed(){
@@ -149,7 +155,11 @@ public class AllTrainsStatus extends AppCompatActivity {
                 Intent i=getIntent();
                 i.putExtra("date",x);
                 finish();
-                startActivity(i);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(AllTrainsStatus.this).toBundle());
+                else
+                    startActivity(i);
+
             }
         });
 
@@ -160,7 +170,10 @@ public class AllTrainsStatus extends AppCompatActivity {
                 Intent i=getIntent();
                 i.putExtra("date",x);
                 finish();
-                startActivity(i);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(AllTrainsStatus.this).toBundle());
+                else
+                    startActivity(i);
             }
         });
 
@@ -176,7 +189,16 @@ public class AllTrainsStatus extends AppCompatActivity {
                 in.putExtra("stn1",x.getSrc());
                 in.putExtra("stn2",x.getDesc());
                 */
-                startActivity(in);
+                try {
+                    x.getTrain().getSource();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        startActivity(in, ActivityOptions.makeSceneTransitionAnimation(AllTrainsStatus.this).toBundle());
+                    else
+                        startActivity(in);
+                } catch (Exception E) {
+
+                }
+
                 String text=x.getDesc();
                 /*if(text.contains("Different")){
                     AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(view.getContext());
@@ -202,6 +224,7 @@ public class AllTrainsStatus extends AppCompatActivity {
 
             }
         });
+        initAnimations();
     }
 
     private void makeToast(String text){

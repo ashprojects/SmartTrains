@@ -31,7 +31,7 @@
             android:title="Saved Routes" />
         <item
             android:id="@+id/nav_pnrStatus"
-            android:icon="@drawable/ic_download"
+            android:icon="@drawable/ic_pnr_logo_dark"
             android:title="PNR Status" />
         <item
             android:id="@+id/nav_about"

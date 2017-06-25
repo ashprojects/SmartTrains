@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import AnimationTools.Animator;
 import SmartTrainTools.AvailabilityStatus;
 import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
@@ -324,9 +325,13 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                 selectedTrainsLL.setVisibility(View.GONE);
             }
         });
+        initAnimations();
 
     }
 
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+    }
 
     private boolean allGood(){
         System.out.println("/****");

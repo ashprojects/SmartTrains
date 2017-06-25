@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import AnimationTools.Animator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.RailwayCodes;
 import SmartTrainTools.SmartTools;
@@ -56,15 +60,84 @@ public class TrainsBetweenStationActivityHome extends AppCompatActivity {
         showBtn=(Button)findViewById(R.id.showTrains);
         dateInfo = (TextView) findViewById(R.id.dateInfoTextView);
         dateSelbtn = (Button) findViewById(R.id.dateSelBtnTrainBetweenStations);
-
+        clear_stn1 = (ImageView) findViewById(R.id.train_between_clear_Src);
+        clear_stn2 = (ImageView) findViewById(R.id.train_between_clear_dest);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        clear_stn1.setAlpha(0F);
+        clear_stn2.setAlpha(0F);
+
+        clear_stn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                from.setText("");
+            }
+        });
+
+        clear_stn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                to.setText("");
+            }
+        });
         Stations= RailwayCodes.pullStations();
 
         stnArrayAdapter = new StationsViewArrayAdapter(this, R.layout.def_spinner,R.id.txtContent, Stations);
 
         from.setAdapter(stnArrayAdapter);
         to.setAdapter(stnArrayAdapter);
+
+        from.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                try {
+                    if (!(from.getText().length() > 0)) {
+                        clear_stn1.setAlpha(0F);
+                    } else {
+                        clear_stn1.setAlpha(0.4F);
+                    }
+                } catch (Exception E) {
+                    clear_stn1.setAlpha(0F);
+                }
+            }
+        });
+        to.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                try {
+                    if (!(to.getText().length() > 0)) {
+                        clear_stn2.setAlpha(0F);
+                    } else {
+                        clear_stn2.setAlpha(0.4F);
+                    }
+                } catch (Exception E) {
+                    clear_stn2.setAlpha(0F);
+                }
+            }
+        });
+
 
         from.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,6 +182,11 @@ public class TrainsBetweenStationActivityHome extends AppCompatActivity {
                 }
             }
         });
+        initAnimations();
+    }
+
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
     }
 
     private void hideKeyboard() {
@@ -195,6 +273,7 @@ public class TrainsBetweenStationActivityHome extends AppCompatActivity {
     String[]  Stations;
     MyDate dateObj = null;
     TextView dateInfo;
+    ImageView clear_stn1, clear_stn2;
     StationsViewArrayAdapter stnArrayAdapter;
 
 }

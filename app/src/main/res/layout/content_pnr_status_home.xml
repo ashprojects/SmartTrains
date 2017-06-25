@@ -72,6 +72,7 @@
             android:id="@+id/pnr_home_allPnrListView"
             android:divider="@android:color/transparent"
             android:dividerHeight="5.0sp"
+            android:descendantFocusability="blocksDescendants"
             android:layout_height="match_parent">
 
         </ListView>

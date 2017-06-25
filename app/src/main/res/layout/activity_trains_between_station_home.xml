@@ -31,74 +31,8 @@
 
             />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="0dp"
-            android:layout_height="wrap_content">
-            <AutoCompleteTextView
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="ENTER SOURCE"
-                style="@style/description"
-                android:id="@+id/srcStn_Autocomplete"
-                />
-        </android.support.design.widget.TextInputLayout>
+        <include layout="@layout/content_train_between_stations"></include>
 
-       <android.support.design.widget.TextInputLayout
-           android:layout_width="match_parent"
-           android:layout_marginTop="2dp"
-           android:layout_marginBottom="5dp"
-           android:layout_height="wrap_content">
-           <AutoCompleteTextView
-               android:layout_marginTop="5dp"
-               style="@style/description"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:hint="ENTER DESTINATION"
-               android:id="@+id/destStn_Autocomplete"
-               />
-       </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:focusable="true"
-                android:id="@+id/dateSelBtnTrainBetweenStations"
-                android:layout_weight="0.4"
-                android:layout_width="0dp"
-                android:text="SELECT DATE"
-                android:textColor="#ffffff"
-                android:background="@color/colorPrimary"
-                android:layout_height="match_parent"
-
-                />
-
-            <TextView
-                android:id="@+id/dateInfoTextView"
-                android:layout_weight="0.6"
-                android:layout_width="0dp"
-                style="@style/description"
-                android:layout_height="wrap_content"
-                android:text="DATE (OPTIONAL)"
-                android:layout_gravity="left|center_vertical" />
-
-        </LinearLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="SHOW TRAINS"
-            android:textColor="#FFFF"
-            android:textStyle="bold"
-            android:id="@+id/showTrains"
-            android:background="@color/colorPrimary"
-            />
     </LinearLayout>
 
 

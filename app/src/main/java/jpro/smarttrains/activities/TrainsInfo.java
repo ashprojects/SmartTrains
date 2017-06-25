@@ -1,5 +1,6 @@
 package jpro.smarttrains.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -43,6 +44,11 @@ public class TrainsInfo extends AppCompatActivity {
         to=(TextView)findViewById(R.id.to);
         seatBtn=(Button)findViewById(R.id.trSeatAvaiBtn);
         T=(Train)getIntent().getSerializableExtra("train");
+        try {
+            T.getSource();
+        } catch (Exception E) {
+
+        }
         System.out.println(T);
         int[] rn=T.getRunsOn();
         from.setText(T.getSource().getName()+" - "+T.getSource().getCode());
@@ -79,7 +85,10 @@ public class TrainsInfo extends AppCompatActivity {
             public void onClick(View view) {
                 Intent in=new Intent(getApplicationContext(),TrainRoute.class);
                 in.putExtra("train",T);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(TrainsInfo.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
@@ -90,7 +99,10 @@ public class TrainsInfo extends AppCompatActivity {
                 in.putExtra("train",T);
                 in.putExtra("stn2",(Station)getIntent().getSerializableExtra("stn2"));
                 in.putExtra("stn1",(Station)getIntent().getSerializableExtra("stn1"));
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(TrainsInfo.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
     }

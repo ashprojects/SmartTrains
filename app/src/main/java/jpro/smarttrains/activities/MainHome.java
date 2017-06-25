@@ -1,8 +1,10 @@
 package jpro.smarttrains.activities;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import AnimationTools.Animator;
 import Downloader.DownloadAndInstallAPKFile;
 import commons.Config;
 import jpro.smarttrains.R;
@@ -36,19 +39,9 @@ public class MainHome extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_home);
-        rqdesc=(TextView)findViewById(R.id.rq_desc);
-        tipSpan=(LinearLayout)findViewById(R.id.tipSpan);
-        tipText=(TextView)findViewById(R.id.tipText);
-        sAvaiBtn=(ImageButton)findViewById(R.id.smart_avail_start_btn);
-        splitBtn=(ImageButton)findViewById(R.id.split_start_btn);
-        sTrbyNameBtn=(ImageButton)findViewById(R.id.trains_by_no_btn);
-        sSimpleAvail=(ImageButton)findViewById(R.id.seat_avai_simple);
-        sOfflineRoutes=(ImageButton)findViewById(R.id.offlineroutes_trigger);
-        sTrainBetweenStns=(ImageButton)findViewById(R.id.trains_bwstns_btn);
-        pnrStatusImageButton = (ImageButton) findViewById(R.id.pnr_status_launch_btn);
-        verDesc=(TextView)findViewById(R.id.verDesc);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +138,10 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 pnrStatusImageButton.startAnimation(AnimationUtils.loadAnimation(MainHome.this, R.anim.wobble));
                 Intent in = new Intent(MainHome.this, PnrStatusHomeActivity.class);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
@@ -154,7 +150,8 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 sOfflineRoutes.startAnimation(AnimationUtils.loadAnimation(MainHome.this,R.anim.wobble));
                 Intent in=new Intent(MainHome.this,OfflineRoutesActivity.class);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
             }
         });
 
@@ -163,7 +160,10 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 splitBtn.startAnimation(AnimationUtils.loadAnimation(MainHome.this,R.anim.wobble));
                 Intent in=new Intent(MainHome.this,SplitJourneyHome.class);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
@@ -172,7 +172,10 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 sTrbyNameBtn.startAnimation(AnimationUtils.loadAnimation(MainHome.this,R.anim.wobble));
                 Intent in=new Intent(MainHome.this,TrainsByNo.class);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
@@ -181,7 +184,10 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 sTrainBetweenStns.startAnimation(AnimationUtils.loadAnimation(MainHome.this,R.anim.wobble));
                 Intent in=new Intent(MainHome.this,TrainsBetweenStationActivityHome.class);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
@@ -190,15 +196,36 @@ public class MainHome extends AppCompatActivity
             public void onClick(View view) {
                 sSimpleAvail.startAnimation(AnimationUtils.loadAnimation(MainHome.this,R.anim.wobble));
                 Intent in=new Intent(MainHome.this,SeatAvailabilitySimple.class);
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
 
+        initAnimations();
+
     }
 
 
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+    }
 
+    private void initVariables() {
+        rqdesc = (TextView) findViewById(R.id.rq_desc);
+        tipSpan = (LinearLayout) findViewById(R.id.tipSpan);
+        tipText = (TextView) findViewById(R.id.tipText);
+        sAvaiBtn = (ImageButton) findViewById(R.id.smart_avail_start_btn);
+        splitBtn = (ImageButton) findViewById(R.id.split_start_btn);
+        sTrbyNameBtn = (ImageButton) findViewById(R.id.trains_by_no_btn);
+        sSimpleAvail = (ImageButton) findViewById(R.id.seat_avai_simple);
+        sOfflineRoutes = (ImageButton) findViewById(R.id.offlineroutes_trigger);
+        sTrainBetweenStns = (ImageButton) findViewById(R.id.trains_bwstns_btn);
+        pnrStatusImageButton = (ImageButton) findViewById(R.id.pnr_status_launch_btn);
+        verDesc = (TextView) findViewById(R.id.verDesc);
+    }
 
     @Override
     public void onBackPressed() {
@@ -262,7 +289,10 @@ public class MainHome extends AppCompatActivity
             case R.id.nav_pnrStatus:
                 in = new Intent(MainHome.this, PnrStatusHomeActivity.class);
         }
-        startActivity(in);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+        else
+            startActivity(in);
         return true;
     }
 

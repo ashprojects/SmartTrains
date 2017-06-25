@@ -211,7 +211,7 @@
     <Button
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
-
+        android:foreground="?android:selectableItemBackground"
         android:layout_height="wrap_content"
         android:text="@string/gts"
         android:id="@+id/gtsBtn"

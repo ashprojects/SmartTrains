@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +27,7 @@ import org.json.simple.parser.ParseException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import AnimationTools.Animator;
 import SmartTrainTools.PNRStatus;
 import SmartTrainsDB.modals.PNR;
 import jpro.smarttrains.R;
@@ -110,20 +112,24 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
 
         savedPNRs = (ListView) findViewById(R.id.content_pnr_status_home).findViewById(R.id.pnr_home_allPnrListView);
         savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
-        try {
+        if (Build.VERSION.SDK_INT >= 21)
             savedPNRs.setNestedScrollingEnabled(true);
-        } catch (Exception E) {
 
-        }
 
         savedPNRs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println(view.getTag());
+                System.out.println("--VIEW");
 
             }
         });
 
+        initAnimations();
+
+    }
+
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 200);
     }
 
 

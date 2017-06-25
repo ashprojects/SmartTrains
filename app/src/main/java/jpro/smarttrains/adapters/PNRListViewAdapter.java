@@ -37,8 +37,9 @@ public class PNRListViewAdapter extends ArrayAdapter<Modal> {
             view = mInflater.inflate(resource, parent, false);
         }
         final PNR item = (PNR) getItem(position);
+        System.out.println("-- FOR " + position + " item:" + item + " " + item.get(PNR.DATE_OF_JOURNEY));
         setText(view, R.id.pnr_list_item_pnrNo, "PNR No. " + item.get(PNR.PNR));
-        setText(view, R.id.pnr_list_item_pnrDate, item.get(PNR.DATE_OF_JOURNEY).toString());
+        setText(view, R.id.pnr_list_item_pnrDate, "" + item.get(PNR.DATE_OF_JOURNEY));
         setText(view, R.id.pnr_list_item_pnrTitle, "Trip to " + item.get(PNR.TO));
         setText(view, R.id.pnr_list_item_trInfo, item.get(PNR.TRAIN_NO).toString() + " " + Config.rc.getTrainName(item.get(PNR.TRAIN_NO).toString()));
 
@@ -55,12 +56,8 @@ public class PNRListViewAdapter extends ArrayAdapter<Modal> {
                 }).setNegativeButton("NO", null).show();
             }
         });
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("--VIEW");
-            }
-        });
+
+
         return view;
     }
 

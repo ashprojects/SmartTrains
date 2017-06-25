@@ -1,11 +1,13 @@
 package jpro.smarttrains.activities;
 
+import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,8 +44,6 @@ import static SmartTrainTools.SmartTools.findTrains;
 public class SmartAvailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
-        Intent myIntent = new Intent(getApplicationContext(), MainHome.class);
-        startActivity(myIntent);
         super.onBackPressed();
     }
 
@@ -111,8 +111,6 @@ public class SmartAvailActivity extends AppCompatActivity {
                 int mYear = c.get(Calendar.YEAR);
                 int mMonth = c.get(Calendar.MONTH);
                 int mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                System.out.println(dateG);
                 DatePickerDialog dpd = new DatePickerDialog(SmartAvailActivity.this, onc, mYear, mMonth, mDay);
                 c.add(Calendar.DAY_OF_MONTH, 120);
                 dpd.getDatePicker().setMaxDate(c.getTimeInMillis());
@@ -251,8 +249,12 @@ public class SmartAvailActivity extends AppCompatActivity {
 
             }
         });
+        initAnimations();
 
+    }
 
+    private void initAnimations() {
+        AnimationTools.Animator.addActivityTransition(getWindow(), AnimationTools.Animator.Type.EXPLODE, 250);
     }
 
     private static class TaskProgress {
@@ -377,7 +379,10 @@ public class SmartAvailActivity extends AppCompatActivity {
             in.putExtra("toStn", toStn);
             in.putExtra("date", dateG);
             in.putExtra("travelClass", (TravelClass)classSel.getSelectedItem());
-            startActivity(in);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                startActivity(in, ActivityOptions.makeSceneTransitionAnimation(SmartAvailActivity.this).toBundle());
+            else
+                startActivity(in);
 
         } else {
             makeToast("Sorry, We couldn't find any trains between provided stations. Are you connected to the Internet?");

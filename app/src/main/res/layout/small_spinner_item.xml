@@ -9,5 +9,5 @@
     android:background="#ffffff"
     android:text="HELLOW RODL"
     android:padding="8dp"
-    
+    android:foreground="?android:selectableItemBackground"
     />

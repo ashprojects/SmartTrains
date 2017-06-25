@@ -1,9 +1,11 @@
 package jpro.smarttrains.activities;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import AnimationTools.Animator;
 import SmartTrainTools.Train;
 import SmartTrainsDB.TrainBean;
 import jpro.smarttrains.R;
@@ -32,6 +35,9 @@ public class OfflineRoutesActivity extends AppCompatActivity {
         return true;
     }
 
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,10 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                 in.putExtra("train",x);
                 in.putExtra("isAvailableOffline",true);
                 pd.hide();
-                startActivity(in);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(OfflineRoutesActivity.this).toBundle());
+                else
+                    startActivity(in);
             }
         });
 
@@ -80,6 +89,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
 
             }
         });
+        initAnimations();
     }
 
 

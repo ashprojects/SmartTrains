@@ -258,6 +258,7 @@
         android:id="@+id/gtsAvai"
         android:background="@color/colorPrimaryDark"
         android:layout_height="35dp"
+        android:foreground="?android:selectableItemBackground"
         />
 
 </LinearLayout>

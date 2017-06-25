@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/greenborder"
+    android:foreground="?android:selectableItemBackground"
     android:id="@+id/avListLL"
     android:layout_marginBottom="3dp"
     android:layout_marginLeft="5dp"

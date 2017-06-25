@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import AnimationTools.Animator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Path;
 import SmartTrainTools.RailwayCodes;
@@ -67,21 +68,23 @@ public class SplitJourneyHome extends AppCompatActivity {
         StationsViewArrayAdapter carrayAdapter = new StationsViewArrayAdapter(this, R.layout.def_spinner,R.id.txtContent, Stations);
 
 
-        stn1=(AutoCompleteTextView)findViewById(R.id.split_stn1);
-        stn2=(AutoCompleteTextView)findViewById(R.id.split_stn2);
+        stn1 = (AutoCompleteTextView) findViewById(R.id.srcStn_Autocomplete);
+        stn2 = (AutoCompleteTextView) findViewById(R.id.destStn_Autocomplete);
         stn1.setThreshold(1);
         stn2.setThreshold(1);
         stn1.setAdapter(carrayAdapter);
         stn2.setAdapter(carrayAdapter);
 
-        clear_stn1=(ImageView)findViewById(R.id.clear_stn1);
-        clear_stn2=(ImageView)findViewById(R.id.clear_stn2);
-        classSel=(Spinner)findViewById(R.id.split_classSel);
-        classSel.setAdapter(spinnerAdapter);
-        dateSelBtn=(Button)findViewById(R.id.split_dateSelBtn);
-        splitbtn=(Button)findViewById(R.id.split_Btn);
-        dateSel=(TextView)findViewById(R.id.split_dateSel1);
-
+        clear_stn1 = (ImageView) findViewById(R.id.train_between_clear_Src);
+        clear_stn2 = (ImageView) findViewById(R.id.train_between_clear_dest);
+        /*classSel=(Spinner)findViewById(R.id.split_classSel);
+        classSel.setAdapter(spinnerAdapter);*/
+        dateSelBtn = (Button) findViewById(R.id.dateSelBtnTrainBetweenStations);
+        splitbtn = (Button) findViewById(R.id.showTrains);
+        dateSel = (TextView) findViewById(R.id.dateInfoTextView);
+        splitbtn.setText("SPLIT JOURNEY");
+        clear_stn1.setAlpha(0F);
+        clear_stn2.setAlpha(0F);
         dateSelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,7 +233,11 @@ public class SplitJourneyHome extends AppCompatActivity {
         } catch (Exception E){
 
         }
+        initAnimations();
+    }
 
+    private void initAnimations() {
+        Animator.addActivityTransition(getWindow(), Animator.Type.FADE, 250);
     }
 
     private DatePickerDialog.OnDateSetListener onc = new DatePickerDialog.OnDateSetListener() {
