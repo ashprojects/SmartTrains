@@ -534,7 +534,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                     avTableRoot.addView(row);
             }
 
-            SmartAnimator.circularRevealView(avTableRoot, 500, SmartAnimator.What.OPEN, null);
+            SmartAnimator.circularRevealView(avTableRoot, 250, SmartAnimator.What.OPEN, null);
             final ScrollView scrollview = ((ScrollView) findViewById(R.id.activity_seat_availability_simple));
             scrollview.post(new Runnable() {
                 @Override

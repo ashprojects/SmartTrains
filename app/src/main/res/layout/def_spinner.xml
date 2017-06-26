@@ -16,7 +16,7 @@
         android:paddingLeft="6dp"
         android:paddingRight="4dp"
         android:paddingTop="5dp"
-        android:textSize="16dp"
+        android:textSize="15sp"
         android:textColor="@color/colorPrimaryDark"
         android:paddingBottom="5dp"
         android:id="@+id/txtRed" />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:id="@+id/txtContent"
         android:textStyle="bold"
-        android:textSize="16dp"
+        android:textSize="15sp"
         android:layout_height="wrap_content"
         android:text="AMAR"
         />

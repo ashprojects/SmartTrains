@@ -76,10 +76,14 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         newPnrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
-                String clipdata = item.getText().toString();
+                String clipdata = "";
+                try {
+                    ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
+                    clipdata = item.getText().toString();
+                } catch (NullPointerException E) {
 
+                }
 
                 final View dialogView = View.inflate(PnrStatusHomeActivity.this, R.layout.input_prompt, null);
                 final EditText pnr = (EditText) dialogView.findViewById(R.id.userInput);
