@@ -32,7 +32,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Path;
 import SmartTrainTools.RailwayCodes;
@@ -40,6 +39,7 @@ import SmartTrainTools.SmartTools;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
 import SmartTrainTools.TravelClass;
+import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.StationsViewArrayAdapter;
 

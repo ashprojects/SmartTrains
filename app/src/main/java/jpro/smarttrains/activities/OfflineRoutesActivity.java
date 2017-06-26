@@ -16,9 +16,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.Train;
 import SmartTrainsDB.TrainBean;
+import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.RecentTrainSearchesListAdapter;
 

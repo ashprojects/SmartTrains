@@ -32,9 +32,9 @@ import org.json.simple.parser.ParseException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.PNRStatus;
 import SmartTrainsDB.modals.PNR;
+import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.PNRListViewAdapter;
 
@@ -102,7 +102,7 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                     @Override
                     public void onShow(final DialogInterface dialog) {
 
-                        SmartAnimator.circularRevealView(dialogView, 500, SmartAnimator.What.OPEN, new Animator.AnimatorListener() {
+                        SmartAnimator.circularRevealView(dialogView, 250, SmartAnimator.What.OPEN, new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
@@ -212,6 +212,7 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         });
 
         initAnimations();
+
 
     }
 

@@ -25,7 +25,7 @@ import commons.Config;
  *
  * @author ashish
  */
-public class Journey implements Comparable<Journey>{
+public class Journey {
     Train train;
 
     Station src,dest,initStn;
@@ -534,28 +534,6 @@ public class Journey implements Comparable<Journey>{
         return initStn;
     }
 
-    @Override
-    public int compareTo(Journey J) {
-        if(this.status.startsWith("AVAI")&&J.getStatus().startsWith("AVAI")){
-            return Integer.parseInt(this.status.split(" ")[1])>Integer.parseInt(J.getStatus().split(" ")[1])?-1:0;
-        }
-        if(this.status.startsWith("AVAI")||this.getStatus().startsWith("CURR")||J.getStatus().startsWith("N.A.")||this.status.startsWith("GN"))
-            return -1;
-        if(J.getStatus().startsWith("AVAI")||this.status.startsWith("N.A.")||J.getStatus().startsWith("CURR"))
-            return 1;
-        if(this.status.startsWith("RAC"))
-            return -1;
-        if(J.getStatus().startsWith("RAC"))
-            return 1;
 
-        if(this.getStatus().startsWith("RL")&&J.getStatus().startsWith("GN"))
-            return 1;
-        if(J.getStatus().startsWith("RL")&&this.getStatus().startsWith("GN"))
-            return -1;
-        if((J.getStatus().startsWith("GN")&&this.getStatus().startsWith("GN"))||(J.getStatus().startsWith("RL")&&this.getStatus().startsWith("RL"))) {
-            return 0;
-        }
-        return 0;
-    }
     private int dateIndex=0;
 }

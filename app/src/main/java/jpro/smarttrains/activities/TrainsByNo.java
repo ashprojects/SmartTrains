@@ -20,10 +20,10 @@ import android.widget.ProgressBar;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.Train;
 import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.RecentTrain;
+import Utilities.SmartAnimator;
 import commons.Config;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.CustomTrainSpinnerAdapter;

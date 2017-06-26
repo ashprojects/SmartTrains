@@ -9,18 +9,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
+import comparators.s.train.ArrivalTimeComparator;
+import comparators.s.train.TravelTimeComparator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.ListAdapterTrainBetweenStation;
 
@@ -34,6 +41,7 @@ public class TrainBetweenStations extends AppCompatActivity {
         setTitle("All Trains");
         trains = (ArrayList<Train>) getIntent().getSerializableExtra("trains");
         listView = (ListView) findViewById(R.id.allTrainsList);
+        sortBySpinner = (Spinner) findViewById(R.id.train_between_sort_by_spinner);
         f = (TextView) findViewById(R.id.stnStartTBS);
         t = (TextView) findViewById(R.id.stnEndTBS);
         fromStn = (Station) getIntent().getSerializableExtra("from");
@@ -49,6 +57,37 @@ public class TrainBetweenStations extends AppCompatActivity {
                 Train train = (Train) listAdapter.getItem(i);
                 new loadTrainInfo().execute(train);
             }
+        });
+
+
+        String[] sortMethods = new String[]{"Arrival Time", "Travel Time"};
+        sortSpinnerAdapter = new ArrayAdapter<String>(this, R.layout.small_spinner_item, sortMethods);
+        sortBySpinner.setAdapter(sortSpinnerAdapter);
+        sortBySpinner.setSelection(0);
+
+        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Comparator<Train> comparator = null;
+                switch (sortSpinnerAdapter.getItem(position)) {
+                    case "Arrival Time":
+                        comparator = new ArrivalTimeComparator();
+                        break;
+                    case "Travel Time":
+                        comparator = new TravelTimeComparator();
+                        break;
+                    default:
+                        System.out.println("__ REACHED DEFAULT");
+                }
+                Collections.sort(trains, comparator);
+                listAdapter.update(trains);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
         });
 
     }
@@ -119,5 +158,8 @@ public class TrainBetweenStations extends AppCompatActivity {
     ArrayList<Train> trains;
     MyDate date;
     TextView f, t;
+    Button shufll_btn;
+    Spinner sortBySpinner;
+    ArrayAdapter<String> sortSpinnerAdapter;
     ListAdapterTrainBetweenStation listAdapter;
 }

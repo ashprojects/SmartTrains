@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.RouteListItem;
 import SmartTrainTools.SmartTools;
 import SmartTrainTools.Train;
+import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 
 

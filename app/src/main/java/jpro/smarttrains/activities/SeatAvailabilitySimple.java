@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.AvailabilityStatus;
 import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
@@ -50,6 +49,7 @@ import SmartTrainTools.SmartTools;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
 import SmartTrainTools.TravelClass;
+import Utilities.SmartAnimator;
 import commons.Config;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.CustomTrainSpinnerAdapter;

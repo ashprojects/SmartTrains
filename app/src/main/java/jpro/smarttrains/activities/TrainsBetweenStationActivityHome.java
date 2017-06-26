@@ -27,12 +27,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import AnimationTools.SmartAnimator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.RailwayCodes;
 import SmartTrainTools.SmartTools;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
+import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.StationsViewArrayAdapter;
 

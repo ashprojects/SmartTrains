@@ -1,4 +1,4 @@
-package AnimationTools;
+package Utilities;
 
 import android.animation.Animator;
 import android.os.Build;

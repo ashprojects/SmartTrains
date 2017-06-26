@@ -19,6 +19,7 @@ import java.util.Collections;
 
 import SmartTrainTools.Journey;
 import SmartTrainTools.SmartUtils;
+import comparators.s.journey.AvailabilityStatusComparator;
 import jpro.smarttrains.R;
 
 /**
@@ -50,7 +51,7 @@ public class AvaiCustomAdapter extends BaseAdapter {
 
     public void update(ArrayList<Journey> L){
         this.journeys.clear();
-        Collections.sort(L);
+        Collections.sort(L, new AvailabilityStatusComparator());
         this.journeys.addAll(L);
 
         this.notifyDataSetChanged();

@@ -39,12 +39,21 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <include
         layout="@layout/content_pnr_status_home"
         android:id="@+id/content_pnr_status_home" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/pnr_status_home_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_sync" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/pnr_status_home_fab_bottom"

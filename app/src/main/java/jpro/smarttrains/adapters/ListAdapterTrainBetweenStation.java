@@ -27,7 +27,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
     private int lastAnimatedPos = 0;
 
     public ListAdapterTrainBetweenStation(Context context, ArrayList<Train> trains, Station start, Station end, MyDate date) {
-        this.trains = trains;
+        this.trains = new ArrayList<>(trains);
         this.src = start;
         this.dest = end;
         this.mInflater = LayoutInflater.from(context);
@@ -37,7 +37,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
 
     public void update(ArrayList<Train> newTrains) {
         this.trains.clear();
-        this.trains = newTrains;
+        this.trains = new ArrayList<>(newTrains);
         notifyDataSetChanged();
     }
 

@@ -26,8 +26,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 
-import AnimationTools.SmartAnimator;
 import Downloader.DownloadAndInstallAPKFile;
+import Utilities.SmartAnimator;
 import commons.Config;
 import jpro.smarttrains.R;
 

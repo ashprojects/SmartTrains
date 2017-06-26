@@ -28,7 +28,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import AnimationTools.SmartAnimator;
 import Exceptions.AvailabilityFailure;
 import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
@@ -36,7 +35,9 @@ import SmartTrainTools.SmartUtils;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
 import SmartTrainTools.TravelClass;
+import Utilities.SmartAnimator;
 import commons.Config;
+import comparators.s.journey.AvailabilityStatusComparator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.AvaiCustomAdapter;
 
@@ -263,7 +264,7 @@ public class AllTrainsStatus extends AppCompatActivity {
                 //makeToast("Completed!");
                 Snackbar.make(findViewById(R.id.all_train_status_activity),"All Status fetched successfully",Snackbar.LENGTH_SHORT).show();
                 allCompletedTextView.setVisibility(View.VISIBLE);
-                Collections.sort(journeys);
+                Collections.sort(journeys, new AvailabilityStatusComparator());
                 bA.update(journeys);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                      getWindow().setStatusBarColor(getResources().getColor(R.color.darkGreen));
