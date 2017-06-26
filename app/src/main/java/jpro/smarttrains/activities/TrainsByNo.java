@@ -20,7 +20,7 @@ import android.widget.ProgressBar;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import SmartTrainTools.Train;
 import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.RecentTrain;
@@ -144,7 +144,7 @@ public class TrainsByNo extends AppCompatActivity {
     }
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
 
     private void retry(){

@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.RailwayCodes;
 import SmartTrainTools.SmartTools;
@@ -186,7 +186,7 @@ public class TrainsBetweenStationActivityHome extends AppCompatActivity {
     }
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
 
     private void hideKeyboard() {

@@ -32,7 +32,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Path;
 import SmartTrainTools.RailwayCodes;
@@ -237,7 +237,7 @@ public class SplitJourneyHome extends AppCompatActivity {
     }
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.FADE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.FADE, 250);
     }
 
     private DatePickerDialog.OnDateSetListener onc = new DatePickerDialog.OnDateSetListener() {

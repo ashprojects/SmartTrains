@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import SmartTrainTools.Train;
 import SmartTrainsDB.TrainBean;
 import jpro.smarttrains.R;
@@ -36,7 +36,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
     }
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
 
     @Override

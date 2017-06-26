@@ -15,4 +15,12 @@
         <item name="android:layout_weight">0.7</item>
         <item name="android:paddingLeft">5dp</item>
     </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/colorAccent</item>
+    </style>
 </resources>

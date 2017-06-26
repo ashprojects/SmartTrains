@@ -13,6 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -37,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import SmartTrainTools.AvailabilityStatus;
 import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
@@ -54,7 +57,6 @@ import jpro.smarttrains.adapters.QuotaSpinnerAdapter;
 import jpro.smarttrains.adapters.StationsViewArrayAdapter;
 import jpro.smarttrains.adapters.TrainSpinnerAdapter;
 import jpro.smarttrains.adapters.TravelClassAdapter;
-import jpro.smarttrains.views.DelayedAutoCompleteTextView;
 
 public class SeatAvailabilitySimple extends AppCompatActivity {
 
@@ -72,108 +74,25 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String[] travelQuota=new String[]{"GN GENERAL","TQ TATKAL"};
-        ArrayList<String> quotaArrayList= new ArrayList<>(Arrays.asList(travelQuota));
         setContentView(R.layout.activity_seat_availability_simple);
         setTitle("Seat Availability");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        avTableRoot=(TableLayout)findViewById(R.id.av_table);
-        trBox=(DelayedAutoCompleteTextView) findViewById(R.id.trNo);
-        stn1=(AutoCompleteTextView)findViewById(R.id.stn1);
-        stn2=(AutoCompleteTextView)findViewById(R.id.stn2);
-        dateSel=(TextView)findViewById(R.id.date);
-        ldt=(ProgressBar)findViewById(R.id.loadTrainspbar);
-        closeSelLL=(ImageButton)findViewById(R.id.closeSelBtn);
-        classSpinner=(Spinner)findViewById(R.id.classSpinner);
-        quotaSpinner=(Spinner)findViewById(R.id.quotaSpinner);
-        dateSelBtn=(Button)findViewById(R.id.dateSelBtnSimpleAvai);
-        allTrainsLL=(LinearLayout)findViewById(R.id.train_list_all_layout);
-        selectedTrainsLL=(LinearLayout)findViewById(R.id.train_spinner_layout);
-        trainSpinner=(Spinner)findViewById(R.id.trNoSpinner);
-        findBtn=(Button)findViewById(R.id.gtsAvai);
-
-        classSpinnerList=TravelClass.getAllClassesObjects();
-        Stations=RailwayCodes.pullStations();
-        stnArrayAdapter = new StationsViewArrayAdapter(this, R.layout.def_spinner,R.id.txtContent, Stations);
-        classSpinnerAdapter = new TravelClassAdapter<TravelClass>(this, R.layout.def_spinner,R.id.txtContent, classSpinnerList);
-        spinnerAdapter2=new QuotaSpinnerAdapter<>(this,R.layout.def_spinner,R.id.txtContent, quotaArrayList);
-        quotaAdapter = new ArrayAdapter<>(this, R.layout.small_spinner_item, travelQuota);
-        trains = new ArrayList<>(Config.rc.getTrains());
-
-
-        stn1.setAdapter(stnArrayAdapter);
-        stn2.setAdapter(stnArrayAdapter);
-        avTableRoot.setVisibility(View.GONE);
-        try{
-            lastSelectedTrain=(Train) getIntent().getSerializableExtra("train");
-            lastSelectedTrain.getName();
-            hasIntentData=true;
-
-            Stations=new String[lastSelectedTrain.getRoute().size()];
-            int k=0;
-            for(RouteListItem RT:lastSelectedTrain.getRoute()){
-                Stations[k++]=(RT.getStation().getName()+" - "+RT.getStation().getCode());
-            }
-
-            stnArrayAdapter=new StationsViewArrayAdapter(this, R.layout.def_spinner,R.id.txtContent, Stations);
-
-            System.out.println("STN_ADAPTER_COUNT:"+stnArrayAdapter.getCount());
-            System.out.println(TravelClass.getTravelClassesFrom(lastSelectedTrain.getClassAvail()));
-            classSpinnerAdapter.update(TravelClass.getTravelClassesFrom(lastSelectedTrain.getClassAvail()));
-            src=(Station) getIntent().getSerializableExtra("stn1");
-            dest=(Station) getIntent().getSerializableExtra("stn2");
-
-            int srcpos=stnArrayAdapter.getPosition(src.getName()+" - "+src.getCode());
-            int destpos=stnArrayAdapter.getPosition(dest.getName()+" - "+dest.getCode());
-            System.out.println("DEST: "+destpos+" SRC:"+srcpos);
-            stn1.setText(Stations[srcpos]);
-            stn2.setText(Stations[destpos]);
-            src=new Station(Stations[srcpos].split(" - ")[1]);
-            dest=new Station(Stations[destpos].split(" - ")[1]);
-
-            stn1.dismissDropDown();
-        } catch (Exception E){
-            E.printStackTrace();
-        }
-
-
-        ad=new CustomTrainSpinnerAdapter(this,R.layout.activity_seat_availability_simple,R.id.txtContent,trains);
-
-        classSpinner.setAdapter(classSpinnerAdapter);
-
-        trBox.setAdapter(ad);
-
-        quotaSpinner.setAdapter(spinnerAdapter2);
-
-
-
-        stn1.setThreshold(3);
-        stn2.setThreshold(3);
-        trBox.setThreshold(4);
-
-        trBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                lastSelectedTrain=(Train)ad.getItem(i);
-                trBox.setText(lastSelectedTrain.getNoAsString()+"-"+lastSelectedTrain.getName());
-                hasIntentData=false;
-
-                System.out.println("STN_ADAPTER_COUNT:"+stnArrayAdapter.getCount());
-
-                //classSpinnerAdapter.update(TravelClass.getTravelClassesFrom(lastSelectedTrain.getClassAvail()));
-                //stn1.requestFocus();
-                hideKeyboard();
-            }
-        });
-
+        initVariables();
+        getIntentInfo();
+        setAllOnClickListeners();
+        initClearButtons();
         if(hasIntentData){
+            trBox.setVisibility(View.VISIBLE);
             trBox.setText(lastSelectedTrain.getNoAsString()+"-"+lastSelectedTrain.getName());
             trBox.setEnabled(false);
         }
+        initAnimations();
+
+    }
 
 
+    private void setAllOnClickListeners() {
         dateSelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,7 +114,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 src=new Station(stn1.getText().toString().split("-")[1].trim());
-                avTableRoot.setVisibility(View.GONE);
+                avTableRoot.setVisibility(View.INVISIBLE);
                 selectedTrainsLL.setVisibility(View.GONE);
                 stn2.requestFocus();
 
@@ -209,7 +128,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                 //dest=new Station(stnArrayAdapter.getItem(position).toString().split("-")[1].trim());
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 hideKeyboard();
-                avTableRoot.setVisibility(View.GONE);
+                avTableRoot.setVisibility(View.INVISIBLE);
                 selectedTrainsLL.setVisibility(View.GONE);
                 classSpinner.requestFocus();
             }
@@ -223,13 +142,13 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                 selectedClass=((TravelClass)classSpinnerAdapter.getItem(i)).getClassCode();
                 switch (selectedClass){
                     case "SL": extraClass="3A";
-                                break;
+                        break;
                     case "3A": extraClass="2A";
-                                break;
+                        break;
                     case "2A": extraClass="3A";
-                                break;
+                        break;
                     case "1A": extraClass="2A";
-                                break;
+                        break;
                 }
                 quotaSpinner.requestFocus();
             }
@@ -256,6 +175,21 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             }
         });
 
+        clear_stn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stn1.setText("");
+                clear_stn1.setAlpha(0F);
+            }
+        });
+        clear_stn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stn2.setText("");
+                clear_stn2.setAlpha(0.4F);
+            }
+        });
+
         findBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -267,14 +201,12 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                         boolean st = allGood();
                         System.out.println("ST+="+st);
                         if (!spSpanOpen) {
-                            System.out.println("TRBOX+=" + trBox.getText() + " " + st);
                             st = st && (trBox.getText().toString().split("-").length == 2);
                         }
                         if (st) {
 
                             new findSeats().execute();
                         } else {
-                            System.out.println("+= FROM BLOCK1");
                             showInvalidSnack("Please fill the page with valid values");
                         }
                     } else {
@@ -301,12 +233,10 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                             System.out.println("ST:=" + st);
                             st = st && (trBox.getText().toString().split("-").length == 2);
                         }
-                        System.out.println("ST:="+st);
                         if (st) {
 
                             new findSeats().execute();
                         } else {
-                            System.out.println("+= FROM BLOCK2");
                             showInvalidSnack("Please fill the page with valid values");
                         }
 
@@ -317,20 +247,128 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             }
         });
 
-        closeSelLL.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+    private void getIntentInfo() {
+        try {
+            lastSelectedTrain = (Train) getIntent().getSerializableExtra("train");
+            lastSelectedTrain.getName();
+            hasIntentData = true;
+            Stations = new String[lastSelectedTrain.getRoute().size()];
+            int k = 0;
+            for (RouteListItem RT : lastSelectedTrain.getRoute())
+                Stations[k++] = (RT.getStation().getName() + " - " + RT.getStation().getCode());
+            stnArrayAdapter = new StationsViewArrayAdapter(this, R.layout.def_spinner, R.id.txtContent, Stations);
+            classSpinnerAdapter.update(TravelClass.getTravelClassesFrom(lastSelectedTrain.getClassAvail()));
+            src = (Station) getIntent().getSerializableExtra("stn1");
+            dest = (Station) getIntent().getSerializableExtra("stn2");
+            int srcpos = stnArrayAdapter.getPosition(src.getName() + " - " + src.getCode());
+            int destpos = stnArrayAdapter.getPosition(dest.getName() + " - " + dest.getCode());
+            System.out.println("DEST: " + destpos + " SRC:" + srcpos);
+            stn1.setText(Stations[srcpos]);
+            stn2.setText(Stations[destpos]);
+            src = new Station(Stations[srcpos].split(" - ")[1]);
+            dest = new Station(Stations[destpos].split(" - ")[1]);
+            stn1.dismissDropDown();
+        } catch (Exception E) {
+            E.printStackTrace();
+        }
+    }
+
+    private void initVariables() {
+        String[] travelQuota = new String[]{"GN GENERAL", "TQ TATKAL"};
+        ArrayList<String> quotaArrayList = new ArrayList<>(Arrays.asList(travelQuota));
+        avTableRoot = (TableLayout) findViewById(R.id.av_table);
+        trBox = (TextView) findViewById(R.id.trNo);
+        stn1 = (AutoCompleteTextView) findViewById(R.id.stn1);
+        stn2 = (AutoCompleteTextView) findViewById(R.id.stn2);
+        dateSel = (TextView) findViewById(R.id.date);
+        clear_stn1 = (ImageView) findViewById(R.id.seat_avai_clear_src);
+        clear_stn2 = (ImageView) findViewById(R.id.seat_avai_clear_dest);
+        ldt = (ProgressBar) findViewById(R.id.loadTrainspbar);
+        noTrainsDesc = (TextView) findViewById(R.id.seat_avai_simple_no_trains_tv);
+        classSpinner = (Spinner) findViewById(R.id.classSpinner);
+        quotaSpinner = (Spinner) findViewById(R.id.quotaSpinner);
+        dateSelBtn = (Button) findViewById(R.id.dateSelBtnSimpleAvai);
+        selectedTrainsLL = (LinearLayout) findViewById(R.id.train_spinner_layout);
+        trainSpinner = (Spinner) findViewById(R.id.trNoSpinner);
+        findBtn = (Button) findViewById(R.id.gtsAvai);
+        classSpinnerList = TravelClass.getAllClassesObjects();
+        Stations = RailwayCodes.pullStations();
+        stnArrayAdapter = new StationsViewArrayAdapter(this, R.layout.def_spinner, R.id.txtContent, Stations);
+        classSpinnerAdapter = new TravelClassAdapter<TravelClass>(this, R.layout.def_spinner, R.id.txtContent, classSpinnerList);
+        spinnerAdapter2 = new QuotaSpinnerAdapter<>(this, R.layout.def_spinner, R.id.txtContent, quotaArrayList);
+        quotaAdapter = new ArrayAdapter<>(this, R.layout.small_spinner_item, travelQuota);
+        trains = new ArrayList<>(Config.rc.getTrains());
+        stn1.setAdapter(stnArrayAdapter);
+        stn2.setAdapter(stnArrayAdapter);
+        classSpinner.setAdapter(classSpinnerAdapter);
+        quotaSpinner.setAdapter(spinnerAdapter2);
+        stn1.setThreshold(2);
+        stn2.setThreshold(2);
+        avTableRoot.setVisibility(View.GONE);
+    }
+
+    private void initClearButtons() {
+        clear_stn1.setAlpha(0F);
+        clear_stn2.setAlpha(0F);
+
+        stn1.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                spSpanOpen=false;
-                allTrainsLL.setVisibility(View.VISIBLE);
-                selectedTrainsLL.setVisibility(View.GONE);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                try {
+                    if (!(stn1.getText().length() > 0)) {
+                        clear_stn1.setAlpha(0F);
+                    } else {
+                        clear_stn1.setAlpha(0.4F);
+                    }
+                } catch (Exception E) {
+                    clear_stn1.setAlpha(0F);
+                }
             }
         });
-        initAnimations();
+        stn2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                try {
+                    if (!(stn2.getText().length() > 0)) {
+                        clear_stn2.setAlpha(0F);
+                    } else {
+                        clear_stn2.setAlpha(0.4F);
+                    }
+                } catch (Exception E) {
+                    clear_stn2.setAlpha(0F);
+                }
+            }
+        });
 
     }
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
 
     private boolean allGood(){
@@ -495,7 +533,8 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                 if(row.getChildCount()!=0)
                     avTableRoot.addView(row);
             }
-            avTableRoot.setVisibility(View.VISIBLE);
+
+            SmartAnimator.circularRevealView(avTableRoot, 500, SmartAnimator.What.OPEN, null);
             final ScrollView scrollview = ((ScrollView) findViewById(R.id.activity_seat_availability_simple));
             scrollview.post(new Runnable() {
                 @Override
@@ -516,15 +555,14 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             ldt.setVisibility(View.GONE);
             if(status){
                 spSpanOpen=true;
-                allTrainsLL.setVisibility(View.GONE);
-                selectedTrainsLL.setVisibility(View.VISIBLE);
+                noTrainsDesc.setVisibility(View.GONE);
+                SmartAnimator.circularRevealView(selectedTrainsLL, 500, SmartAnimator.What.OPEN, null);
 
                 trainSpinnerAdapter=new TrainSpinnerAdapter(SeatAvailabilitySimple.this,R.layout.def_spinner,R.id.txtContent,trains);
                 trainSpinner.setAdapter(trainSpinnerAdapter);
                 trainSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        avTableRoot.setVisibility(View.GONE);
                         classSpinnerAdapter.update(TravelClass.getTravelClassesFrom(((Train)trainSpinnerAdapter.getItem(i)).getClassAvail()));
                         lastSelectedTrain=(Train)trainSpinnerAdapter.getItem(i);
                         Station T_Src=((Train) trainSpinnerAdapter.getItem(i)).getQuerySrcStn();
@@ -533,9 +571,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                         src=T_Src;
                         dest=T_Dest;
                         //stn2.setSelection(T_Dest.getName()+" - "+T_Dest.getCode());
-
                         classSpinner.setSelection(0);
-                        System.out.println("CLSPINNER: "+classSpinner.getSelectedItem());
                         selectedClass=((TravelClass)classSpinner.getSelectedItem()).getClassCode();
                     }
 
@@ -544,7 +580,13 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
 
                     }
                 });
-                lastSelectedTrain=(Train)trainSpinnerAdapter.getItem(0);
+                if (lastSelectedTrain != null) {
+                    trainSpinner.setSelection(trainSpinnerAdapter.getPosition(lastSelectedTrain));
+                } else {
+                    lastSelectedTrain = (Train) trainSpinnerAdapter.getItem(0);
+                    trainSpinner.setSelection(0);
+                }
+                //
 
             } else if(noDirTrains){
                 new AlertDialog.Builder(SeatAvailabilitySimple.this).setTitle("No Direct Trains Found")
@@ -675,14 +717,8 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
             dateG = new MyDate(dayOfMonth, monthOfYear + 1, year);
             dateSel.setText(dateG.getBeautifiedDate());
-            if(allGood()&&(!hasIntentData)) {
-                try{
-                    trBox.getText().toString().split("-")[1].toString();
-
-                } catch (Exception E){
-                    new findTrains().execute();
-                }
-
+            if (allGood()) {
+                new findTrains().execute();
             }
             //corrPng.setVisibility(View.VISIBLE);
 
@@ -690,10 +726,10 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
     };
 
     String[] Stations;
-    DelayedAutoCompleteTextView trBox;
+    TextView trBox;
     Train lastSelectedTrain=null;
     String date,selectedClass,selectedQuota,extraClass="3A";
-    TextView dateSel;
+    TextView dateSel, noTrainsDesc;
     Spinner classSpinner,quotaSpinner;
     AutoCompleteTextView stn1,stn2;
     ProgressBar ldt;
@@ -703,7 +739,8 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
     ArrayList<Train> trains;
     ArrayList<TravelClass> classSpinnerList;
     Spinner trainSpinner;
-    LinearLayout allTrainsLL,selectedTrainsLL;
+    //LinearLayout allTrainsLL;
+    LinearLayout selectedTrainsLL;
     TrainSpinnerAdapter trainSpinnerAdapter;
     TravelClassAdapter classSpinnerAdapter;
     ArrayAdapter<String> quotaAdapter;
@@ -714,5 +751,6 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
     boolean spSpanOpen=false,hasIntentData=false;
     CustomTrainSpinnerAdapter ad;
     Button dateSelBtn,findBtn;
+    ImageView clear_stn1, clear_stn2;
 
 }

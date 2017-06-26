@@ -29,6 +29,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import AnimationTools.SmartAnimator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.RailwayCodes;
 import SmartTrainTools.SmartUtils;
@@ -187,7 +188,6 @@ public class SmartAvailActivity extends AppCompatActivity {
         stn1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("///88888888888888888888   Clicked on: " + view);
                 stn2.requestFocus();
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
@@ -254,7 +254,7 @@ public class SmartAvailActivity extends AppCompatActivity {
     }
 
     private void initAnimations() {
-        AnimationTools.Animator.addActivityTransition(getWindow(), AnimationTools.Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
 
     private static class TaskProgress {

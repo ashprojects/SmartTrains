@@ -26,7 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import Downloader.DownloadAndInstallAPKFile;
 import commons.Config;
 import jpro.smarttrains.R;
@@ -210,7 +210,7 @@ public class MainHome extends AppCompatActivity
 
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
 
     private void initVariables() {

@@ -14,6 +14,7 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import commons.Config;
@@ -148,14 +149,9 @@ public class Train implements Serializable,Comparable<Train> {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+
         final Train other = (Train) obj;
-        if (this.no != other.no) {
-            return false;
-        }
-        return this.name.equals(other.getName());
+        return other.getNo().equals(this.getNo()) && other.getName().equals(this.getName());
     }
 
     public ArrayList<TravelClass> getClasses() {
@@ -259,6 +255,22 @@ public class Train implements Serializable,Comparable<Train> {
             }
         }
         return s;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = no != null ? no.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (route != null ? route.hashCode() : 0);
+        result = 31 * result + (classes != null ? classes.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(classAvail);
+        result = 31 * result + Arrays.hashCode(runsOn);
+        result = 31 * result + (querySrcStn != null ? querySrcStn.hashCode() : 0);
+        result = 31 * result + (queryDestStn != null ? queryDestStn.hashCode() : 0);
+        result = 31 * result + (querySrcTime != null ? querySrcTime.hashCode() : 0);
+        result = 31 * result + (queryDestTime != null ? queryDestTime.hashCode() : 0);
+        result = 31 * result + (queryTravelTime != null ? queryTravelTime.hashCode() : 0);
+        return result;
     }
 
     public void setClassAvail(int[] classAvail) {

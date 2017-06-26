@@ -28,7 +28,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import AnimationTools.Animator;
+import AnimationTools.SmartAnimator;
 import Exceptions.AvailabilityFailure;
 import SmartTrainTools.Journey;
 import SmartTrainTools.MyDate;
@@ -57,7 +57,7 @@ public class AllTrainsStatus extends AppCompatActivity {
     }
 
     private void initAnimations() {
-        Animator.addActivityTransition(getWindow(), Animator.Type.EXPLODE, 250);
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 250);
     }
     @Override
     public void onBackPressed(){
