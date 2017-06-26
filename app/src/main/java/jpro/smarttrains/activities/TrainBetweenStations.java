@@ -26,8 +26,8 @@ import java.util.Comparator;
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Station;
 import SmartTrainTools.Train;
-import comparators.s.train.ArrivalTimeComparator;
-import comparators.s.train.TravelTimeComparator;
+import comparator.train.ArrivalTimeComparator;
+import comparator.train.TravelTimeComparator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.ListAdapterTrainBetweenStation;
 

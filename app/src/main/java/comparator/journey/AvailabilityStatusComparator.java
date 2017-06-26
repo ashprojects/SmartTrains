@@ -1,4 +1,4 @@
-package comparators.s.journey;
+package comparator.journey;
 
 import java.util.Comparator;
 

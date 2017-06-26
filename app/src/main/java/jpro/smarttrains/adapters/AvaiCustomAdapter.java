@@ -19,7 +19,7 @@ import java.util.Collections;
 
 import SmartTrainTools.Journey;
 import SmartTrainTools.SmartUtils;
-import comparators.s.journey.AvailabilityStatusComparator;
+import comparator.journey.AvailabilityStatusComparator;
 import jpro.smarttrains.R;
 
 /**

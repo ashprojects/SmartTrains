@@ -37,7 +37,7 @@ import SmartTrainTools.Train;
 import SmartTrainTools.TravelClass;
 import Utilities.SmartAnimator;
 import commons.Config;
-import comparators.s.journey.AvailabilityStatusComparator;
+import comparator.journey.AvailabilityStatusComparator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.AvaiCustomAdapter;
 
