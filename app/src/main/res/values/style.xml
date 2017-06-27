@@ -17,7 +17,6 @@
     </style>
 
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-
         <item name="android:layout_gravity">center_vertical</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowIsFloating">false</item>

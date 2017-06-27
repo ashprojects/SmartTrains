@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import Utilities.ArrayShifter;
 import commons.Config;
 
 /**
@@ -81,7 +82,36 @@ public class Train implements Serializable,Comparable<Train> {
     }
 
     public int[] getRunsOn() {
+
         return runsOn;
+    }
+
+    public int[] getRunsOnArrayForStation(Station X) {
+        try {
+            this.route.get(1);
+        } catch (NullPointerException E) {
+            return null;
+        }
+        int[] tempRunsOn = new int[this.runsOn.length];
+        System.arraycopy(this.runsOn, 0, tempRunsOn, 0, tempRunsOn.length);
+        int day_X, day_Y, factor;
+        Station Y = getQuerySrcStn();
+        day_X = getDayNumberOf(X);
+        day_Y = getDayNumberOf(Y);
+        factor = day_X - day_Y;
+
+        if (factor > 0) {
+            while (factor > 0) {
+                ArrayShifter.intArrayShiftForward(tempRunsOn);
+                factor--;
+            }
+        } else if (factor < 0) {
+            while (factor < 0) {
+                ArrayShifter.intArrayShiftBackward(tempRunsOn);
+                factor++;
+            }
+        }
+        return tempRunsOn;
     }
 
     public String getArrivalTimeof(Station S){

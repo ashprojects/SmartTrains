@@ -1,7 +1,6 @@
 package jpro.smarttrains.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,10 +33,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import SmartTrainTools.AvailabilityStatus;
 import SmartTrainTools.Journey;
@@ -58,7 +60,7 @@ import jpro.smarttrains.adapters.StationsViewArrayAdapter;
 import jpro.smarttrains.adapters.TrainSpinnerAdapter;
 import jpro.smarttrains.adapters.TravelClassAdapter;
 
-public class SeatAvailabilitySimple extends AppCompatActivity {
+public class SeatAvailabilitySimple extends AppCompatActivity implements com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
 
     @Override
     public void onBackPressed() {
@@ -92,27 +94,76 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
     }
 
 
+
     private void setAllOnClickListeners() {
         dateSelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (src == null || dest == null) {
+                    showInvalidSnack("Please Enter Stations first");
+                    return;
+                }
                 final Calendar c = Calendar.getInstance();
                 int mYear = c.get(Calendar.YEAR);
                 int mMonth = c.get(Calendar.MONTH);
                 int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                System.out.println(dateG);
+                /*System.out.println(dateG);
                 DatePickerDialog dpd = new DatePickerDialog(SeatAvailabilitySimple.this, onc, mYear, mMonth, mDay);
                 c.add(Calendar.DAY_OF_MONTH, 120);
                 dpd.getDatePicker().setMaxDate(c.getTimeInMillis());
                 dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
-                dpd.show();
+                dpd.show();*/
+                Calendar today = Calendar.getInstance();
+                DatePickerDialog dialog = new DatePickerDialog();
+                dialog.setMinDate(today);
+                List<Calendar> days = new LinkedList<Calendar>();
+                List<Integer> runs = new LinkedList<Integer>();
+                if (hasIntentData) {
+                    for (int j = 0; j < 7; ++j) {
+                        runs.add(lastSelectedTrain.getRunsOnArrayForStation(src)[j]);
+                    }
+
+                    int i = 0;
+                    System.out.println("---- Runs: " + Arrays.asList(runs));
+                    System.out.println(("---- Today:" + today.getTime()));
+                    while (i < 120) {
+                        System.out.println("---- FOR:" + today.getTime() + " :" + runs.get(today.get(Calendar.DAY_OF_WEEK) - 1));
+                        if (runs.get(today.get(Calendar.DAY_OF_WEEK) - 1) == 1) {
+                            Calendar n = Calendar.getInstance();
+                            n.setTimeInMillis(today.getTimeInMillis());
+                            days.add(n);
+                        }
+                        today.setTimeInMillis(today.getTimeInMillis() + 24 * 60 * 60 * 1000);
+                        i++;
+                    }
+                    Calendar[] carr = new Calendar[days.size()];
+                    for (i = 0; i < carr.length; ++i) {
+                        carr[i] = days.get(i);
+                        System.out.println("----+" + carr[i].getTime());
+                    }
+
+                    dialog.setSelectableDays(carr);
+
+                }
+
+                dialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        dateG = new MyDate(dayOfMonth, monthOfYear + 1, year);
+                        dateSel.setText(dateG.getBeautifiedDate());
+                        new findTrains().execute();
+                    }
+                });
+                dialog.show(getSupportFragmentManager(), "Select Date");
             }
         });
 
         stn1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dateG = null;
+                dateSel.setText("SELECT DATE");
                 src=new Station(stn1.getText().toString().split("-")[1].trim());
                 avTableRoot.setVisibility(View.INVISIBLE);
                 selectedTrainsLL.setVisibility(View.GONE);
@@ -124,6 +175,8 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
         stn2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dateG = null;
+                dateSel.setText("SELECT DATE");
                 dest=new Station(stn2.getText().toString().split("-")[1].trim());
                 //dest=new Station(stnArrayAdapter.getItem(position).toString().split("-")[1].trim());
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -548,6 +601,11 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
             showInvalidSnack("Request Failed. Please Try Again Later");
     }
 
+    @Override
+    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
+    }
+
     private class findTrains extends AsyncTask<Void,Void,Void>{
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -580,7 +638,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
 
                     }
                 });
-                if (lastSelectedTrain != null) {
+                if (hasIntentData) {
                     trainSpinner.setSelection(trainSpinnerAdapter.getPosition(lastSelectedTrain));
                 } else {
                     lastSelectedTrain = (Train) trainSpinnerAdapter.getItem(0);
@@ -602,7 +660,19 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                             }
                         }).setNegativeButton("No",null).show();
             } else {
-                showInvalidSnack("Connection Failed. Please try again");
+
+                final Snackbar snackbar = Snackbar.make(findViewById(R.id.activity_seat_availability_simple), "Connection Failed", Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.setAction("RETRY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        new findTrains().execute();
+                    }
+                });
+
+                snackbar.show();
             }
 
         }
@@ -706,24 +776,7 @@ public class SeatAvailabilitySimple extends AppCompatActivity {
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    private DatePickerDialog.OnDateSetListener onc = new DatePickerDialog.OnDateSetListener() {
 
-        @Override
-        public void onDateSet(DatePicker view, int year,
-                              int monthOfYear, int dayOfMonth) {
-
-
-
-            date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-            dateG = new MyDate(dayOfMonth, monthOfYear + 1, year);
-            dateSel.setText(dateG.getBeautifiedDate());
-            if (allGood()) {
-                new findTrains().execute();
-            }
-            //corrPng.setVisibility(View.VISIBLE);
-
-        }
-    };
 
     String[] Stations;
     TextView trBox;
