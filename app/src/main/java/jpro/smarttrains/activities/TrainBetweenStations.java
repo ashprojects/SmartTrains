@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.ChangeBounds;
+import android.transition.TransitionManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -79,8 +81,9 @@ public class TrainBetweenStations extends AppCompatActivity {
                     default:
                         System.out.println("__ REACHED DEFAULT");
                 }
+                TransitionManager.beginDelayedTransition(listView, new ChangeBounds());
                 Collections.sort(trains, comparator);
-                listAdapter.update(trains);
+                listAdapter.notifyDataSetChanged();
             }
 
             @Override

@@ -27,7 +27,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
     private int lastAnimatedPos = 0;
 
     public ListAdapterTrainBetweenStation(Context context, ArrayList<Train> trains, Station start, Station end, MyDate date) {
-        this.trains = new ArrayList<>(trains);
+        this.trains = trains;
         this.src = start;
         this.dest = end;
         this.mInflater = LayoutInflater.from(context);
@@ -35,11 +35,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
         this.context = context;
     }
 
-    public void update(ArrayList<Train> newTrains) {
-        this.trains.clear();
-        this.trains = new ArrayList<>(newTrains);
-        notifyDataSetChanged();
-    }
+
 
     @Override
     public int getCount() {
@@ -106,6 +102,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
             return view;
         }
 
+
         holder.stn1.setText(trains.get(i).getQuerySrcStn().getName() + "-" + trains.get(i).getQuerySrcStn().getCode());
         holder.stn2.setText(trains.get(i).getQueryDestStn().getName() + "-" + trains.get(i).getQueryDestStn().getCode());
 
@@ -144,6 +141,7 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
                 holder.layoutHeader.setBackgroundColor(Color.parseColor("#a9a9a9"));
             }
         }
+        view.setTransitionName("train:" + i);
         return view;
     }
 
