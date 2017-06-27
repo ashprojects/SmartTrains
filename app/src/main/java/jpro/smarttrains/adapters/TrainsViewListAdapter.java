@@ -135,7 +135,7 @@ public class TrainsViewListAdapter extends BaseAdapter {
     static class ViewHolder {
         @Override
         public String toString() {
-            return "ViewHolder{" +
+            return "TrainViewHolder{" +
                     "runsOn=" + runsOn +
                     ", stn1=" + stn1 +
                     ", stn2=" + stn2 +

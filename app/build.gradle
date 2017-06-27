@@ -50,6 +50,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:design:25.0.0'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.6'
     testCompile 'junit:junit:4.12'
     compile files('libs/jgrapht-0.8.3.jar')
     compile files('libs/json-simple-1.1.jar')

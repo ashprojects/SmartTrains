@@ -2,11 +2,17 @@ package jpro.smarttrains.activities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,13 +20,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 import SmartTrainTools.MyDate;
@@ -28,6 +32,7 @@ import SmartTrainTools.Station;
 import SmartTrainTools.Train;
 import comparator.train.ArrivalTimeComparator;
 import comparator.train.TravelTimeComparator;
+import jp.wasabeef.recyclerview.animators.FlipInBottomXAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.ListAdapterTrainBetweenStation;
 
@@ -40,7 +45,8 @@ public class TrainBetweenStations extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("All Trains");
         trains = (ArrayList<Train>) getIntent().getSerializableExtra("trains");
-        listView = (ListView) findViewById(R.id.allTrainsList);
+        System.out.println("found trains " + trains.size());
+        recyclerView = (RecyclerView) findViewById(R.id.allTrainsList);
         sortBySpinner = (Spinner) findViewById(R.id.train_between_sort_by_spinner);
         f = (TextView) findViewById(R.id.stnStartTBS);
         t = (TextView) findViewById(R.id.stnEndTBS);
@@ -48,16 +54,14 @@ public class TrainBetweenStations extends AppCompatActivity {
         toStn = (Station) getIntent().getSerializableExtra("to");
         date = (MyDate) getIntent().getSerializableExtra("date");
         listAdapter = new ListAdapterTrainBetweenStation(TrainBetweenStations.this, trains, fromStn, toStn, date);
-        listView.setAdapter(listAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setItemAnimator(new FlipInBottomXAnimator());
+        recyclerView.getItemAnimator().setChangeDuration(1000);
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(true);
+        recyclerView.setAdapter(listAdapter);
         f.setText(fromStn.getName());
         t.setText(toStn.getName());
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Train train = (Train) listAdapter.getItem(i);
-                new loadTrainInfo().execute(train);
-            }
-        });
+        recyclerView.addOnItemTouchListener(new OnItemTouchListener(getApplicationContext(), recyclerView));
 
 
         String[] sortMethods = new String[]{"Arrival Time", "Travel Time"};
@@ -79,8 +83,9 @@ public class TrainBetweenStations extends AppCompatActivity {
                     default:
                         System.out.println("__ REACHED DEFAULT");
                 }
-                Collections.sort(trains, comparator);
-                listAdapter.update(trains);
+                //Collections.sort(trains, comparator);
+                //listAdapter.update(trains);
+                listAdapter.update(comparator);
             }
 
             @Override
@@ -150,8 +155,46 @@ public class TrainBetweenStations extends AppCompatActivity {
         ProgressDialog pd;
     }
 
+    class OnItemTouchListener implements RecyclerView.OnItemTouchListener {
+        private GestureDetector gestureDetector;
 
-    ListView listView;
+        public OnItemTouchListener(Context context, final RecyclerView recyclerView) {
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && gestureDetector.onTouchEvent(e)) {
+                Train train = (Train) listAdapter.getItem(rv.getChildAdapterPosition(child));
+                new loadTrainInfo().execute(train);
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
+
+
+    RecyclerView recyclerView;
     LinearLayout checkBoxLL;
     CheckBox checkBox;
     Station fromStn, toStn;

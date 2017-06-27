@@ -2,16 +2,16 @@ package jpro.smarttrains.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import SmartTrainTools.MyDate;
 import SmartTrainTools.Station;
@@ -23,7 +23,7 @@ import jpro.smarttrains.R;
  * Created by root on 8/6/17.
  */
 
-public class ListAdapterTrainBetweenStation extends BaseAdapter {
+public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAdapterTrainBetweenStation.TrainViewHolder> {
     private int lastAnimatedPos = 0;
 
     public ListAdapterTrainBetweenStation(Context context, ArrayList<Train> trains, Station start, Station end, MyDate date) {
@@ -36,17 +36,24 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
     }
 
     public void update(ArrayList<Train> newTrains) {
+        int size = trains.size();
         this.trains.clear();
+        notifyItemRangeRemoved(0, size);
         this.trains = new ArrayList<>(newTrains);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, trains.size());
+    }
+
+    public void update(Comparator<Train> comparator) {
+        //this.trains.sort(comparator);
+        Collections.sort(this.trains, comparator);
+        notifyItemRangeChanged(0, trains.size());
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return this.trains == null ? 0 : this.trains.size();
     }
 
-    @Override
     public Object getItem(int i) {
         return trains.get(i);
     }
@@ -57,37 +64,17 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        ListAdapterTrainBetweenStation.ViewHolder holder;
-        if (view == null) {
+    public TrainViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        TrainViewHolder holder;
 
-            view = mInflater.inflate(R.layout.default_train_list, null);
-            holder = new ListAdapterTrainBetweenStation.ViewHolder();
-            holder.tr = new TextView[7];
-            holder.trNo = (TextView) view.findViewById(R.id.deftrNo);
-            holder.trName = (TextView) view.findViewById(R.id.deftrName);
-            holder.stn1 = (TextView) view.findViewById(R.id.defstn1);
-            holder.pos = (TextView) view.findViewById(R.id.position);
-            holder.stn2 = (TextView) view.findViewById(R.id.defstn2);
-            holder.tr[0] = (TextView) view.findViewById(R.id.trSun);
-            holder.tr[1] = (TextView) view.findViewById(R.id.trM);
-            holder.tr[2] = (TextView) view.findViewById(R.id.trTue);
-            holder.tr[3] = (TextView) view.findViewById(R.id.trW);
-            holder.tr[4] = (TextView) view.findViewById(R.id.trT);
-            holder.tr[5] = (TextView) view.findViewById(R.id.trF);
-            holder.tr[6] = (TextView) view.findViewById(R.id.trS);
-            holder.timeSrc = (TextView) view.findViewById(R.id.defdt_n_day1);
-            holder.timeDest = (TextView) view.findViewById(R.id.defdt_n_day2);
-            holder.ttm = (TextView) view.findViewById(R.id.travelTime);
-            holder.layoutHeader = (LinearLayout) view.findViewById(R.id.trNoSpan);
-            holder.classLayout = (LinearLayout) view.findViewById(R.id.classesLL);
-            //holder.runsOn=(TextView)view.findViewById(R.id.runsOn);
+        View view = mInflater.inflate(R.layout.default_train_list, viewGroup, false);
+        holder = new TrainViewHolder(view);
 
-            view.setTag(holder);
-        } else {
-            holder = (ListAdapterTrainBetweenStation.ViewHolder) view.getTag();
-        }
-        //System.out.println("FOR TRAINS: ^^^^^^: " + trains.get(i).getNo());
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(TrainViewHolder holder, int i) {
         try {
             //holder.pos.setText(""+i);
             //System.out.println(holder);
@@ -103,7 +90,6 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
             holder.timeDest.setText(arrtime);
         } catch (NullPointerException E) {
             E.printStackTrace();
-            return view;
         }
 
         holder.stn1.setText(trains.get(i).getQuerySrcStn().getName() + "-" + trains.get(i).getQuerySrcStn().getCode());
@@ -134,23 +120,43 @@ public class ListAdapterTrainBetweenStation extends BaseAdapter {
         //holder.clss.setText(tmp);
         holder.ttm.setText(trains.get(i).getQueryTravelTime().split(":")[0] + " hrs " + trains.get(i).getQueryTravelTime().split(":")[1] + " mins");
         //holder.runsOn.setText(a);
-        if ((i == trains.size() - 1) && (i != lastAnimatedPos)) {
-            lastAnimatedPos = i;
-            Animation animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide);
-            view.startAnimation(animation);
-        }
+
         if (date != null) {
             if (!trains.get(i).runsOnDate(date)) {
                 holder.layoutHeader.setBackgroundColor(Color.parseColor("#a9a9a9"));
             }
         }
-        return view;
     }
 
-    static class ViewHolder {
+    static class TrainViewHolder extends RecyclerView.ViewHolder {
+        public TrainViewHolder(View view) {
+            super(view);
+            TrainViewHolder holder = this;
+            holder.tr = new TextView[7];
+            holder.trNo = (TextView) view.findViewById(R.id.deftrNo);
+            holder.trName = (TextView) view.findViewById(R.id.deftrName);
+            holder.stn1 = (TextView) view.findViewById(R.id.defstn1);
+            holder.pos = (TextView) view.findViewById(R.id.position);
+            holder.stn2 = (TextView) view.findViewById(R.id.defstn2);
+            holder.tr[0] = (TextView) view.findViewById(R.id.trSun);
+            holder.tr[1] = (TextView) view.findViewById(R.id.trM);
+            holder.tr[2] = (TextView) view.findViewById(R.id.trTue);
+            holder.tr[3] = (TextView) view.findViewById(R.id.trW);
+            holder.tr[4] = (TextView) view.findViewById(R.id.trT);
+            holder.tr[5] = (TextView) view.findViewById(R.id.trF);
+            holder.tr[6] = (TextView) view.findViewById(R.id.trS);
+            holder.timeSrc = (TextView) view.findViewById(R.id.defdt_n_day1);
+            holder.timeDest = (TextView) view.findViewById(R.id.defdt_n_day2);
+            holder.ttm = (TextView) view.findViewById(R.id.travelTime);
+            holder.layoutHeader = (LinearLayout) view.findViewById(R.id.trNoSpan);
+            holder.classLayout = (LinearLayout) view.findViewById(R.id.classesLL);
+            //holder.runsOn=(TextView)view.findViewById(R.id.runsOn);
+
+        }
+
         @Override
         public String toString() {
-            return "ViewHolder{" +
+            return "TrainViewHolder{" +
                     "runsOn=" + runsOn +
                     ", stn1=" + stn1 +
                     ", stn2=" + stn2 +
