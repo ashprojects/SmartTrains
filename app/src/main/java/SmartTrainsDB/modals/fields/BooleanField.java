@@ -15,6 +15,6 @@ public class BooleanField extends IntegerField {
 
     @Override
     public Object getValue(Cursor cursor) {
-        return (Integer) super.getValue(cursor) == 1;
+        return super.getValue(cursor);
     }
 }

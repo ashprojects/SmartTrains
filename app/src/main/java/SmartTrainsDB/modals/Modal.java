@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,11 +16,8 @@ import SmartTrainsDB.modals.exceptions.ImproperlyConfiguredException;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.IntegerField;
 
-/**
- * Created by root on 11/6/17.
- */
 
-public abstract class Modal implements SQLiteOpenHelperCompactable {
+public abstract class Modal implements SQLiteOpenHelperCompactable, Serializable {
     private ContentValues values = new ContentValues();
     private Field primaryKey;
 
@@ -156,8 +154,8 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
         return instance;
     }
 
-    public ArrayList<Modal> filter(String selection, String[] selectionArgs) {
-        Cursor cursor = getCursor(selection, selectionArgs);
+    public ArrayList<Modal> filter(String selection, String[] selectionArgs, String orderBy) {
+        Cursor cursor = getCursor(selection, selectionArgs, orderBy);
         ArrayList<Modal> modals = new ArrayList<>();
         while (cursor.moveToNext()) {
             Modal newInstance = getNewInstance();
@@ -167,6 +165,10 @@ public abstract class Modal implements SQLiteOpenHelperCompactable {
             modals.add(newInstance);
         }
         return modals;
+    }
+
+    public ArrayList<Modal> filter(String selection, String[] selectionArgs) {
+        return filter(selection, selectionArgs, null);
     }
 
     public ArrayList<Modal> all() {

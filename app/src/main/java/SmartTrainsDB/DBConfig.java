@@ -2,6 +2,7 @@ package SmartTrainsDB;
 
 import SmartTrainsDB.modals.Modal;
 import SmartTrainsDB.modals.PNR;
+import SmartTrainsDB.modals.Passenger;
 import SmartTrainsDB.modals.RecentTrain;
 import SmartTrainsDB.modals.SQLiteOpenHelperCompactable;
 import SmartTrainsDB.modals.Train;
@@ -15,6 +16,7 @@ public class DBConfig {
             Train.objects,
             RecentTrain.objects,
             TrainRoute.objects,
-            PNR.objects
+            PNR.objects,
+            Passenger.objects
     };
 }

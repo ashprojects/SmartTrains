@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class TravelClass implements Serializable{
     private String classCode;
     private String classFull;
-    static HashMap<String,String> allClasses;
+    public static HashMap<String, String> allClasses;
 
     static {
         allClasses=new HashMap<>();

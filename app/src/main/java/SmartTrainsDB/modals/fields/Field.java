@@ -2,10 +2,12 @@ package SmartTrainsDB.modals.fields;
 
 import android.database.Cursor;
 
+import java.io.Serializable;
+
 /**
  *  abstract class to represent a column to table in db
  */
-public abstract class Field {
+public abstract class Field implements Serializable {
     private boolean isPrimaryKey = false, unique = false, notNull = false;
     private String name;
 

@@ -206,7 +206,10 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         savedPNRs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("--VIEW");
+                Intent in = new Intent(PnrStatusHomeActivity.this, PNRStatusActivity.class);
+                PNR item = (PNR) savedPNRs.getAdapter().getItem(i);
+                in.putExtra("pnr", item.get(PNR.PNR).toString());
+                startActivity(in);
 
             }
         });
@@ -230,10 +233,9 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                 if (!PNR.objects.alreadyExists(pnrStatus.getPNR())) {
                     PNR.objects.addPNR(pnrStatus);
                     savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
-
                 }
                 Intent in = new Intent(PnrStatusHomeActivity.this, PNRStatusActivity.class);
-                in.putExtra("pnrObject", pnrStatus);
+                in.putExtra("pnr", pnrStatus.getPNR());
                 startActivity(in);
             }
         }

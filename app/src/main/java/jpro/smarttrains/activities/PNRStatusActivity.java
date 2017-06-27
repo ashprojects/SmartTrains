@@ -13,7 +13,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import SmartTrainTools.PNRStatus;
+import SmartTrainTools.MyDate;
+import SmartTrainTools.TravelClass;
+import SmartTrainsDB.modals.PNR;
+import SmartTrainsDB.modals.Passenger;
+import SmartTrainsDB.modals.fields.DateTime;
+import commons.Config;
 import jpro.smarttrains.R;
 
 public class PNRStatusActivity extends AppCompatActivity {
@@ -47,9 +52,10 @@ public class PNRStatusActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        pnrStatus = (PNRStatus) getIntent().getSerializableExtra("pnrObject");
+        String pnr = (String) getIntent().getSerializableExtra("pnr");
+        pnrStatus = PNR.objects.getPNR(pnr);
 
-        setTitle("To " + pnrStatus.getTo().getName());
+        setTitle("To " + Config.rc.getStationName(pnrStatus.get(PNR.TO).toString()));
         dateTextView = (TextView) findViewById(R.id.pnr_status_date);
         trainTextView = (TextView) findViewById(R.id.pnr_status_trname);
         classTextView = (TextView) findViewById(R.id.pnr_status_class);
@@ -61,16 +67,18 @@ public class PNRStatusActivity extends AppCompatActivity {
         passengersTableLayout = (TableLayout) findViewById(R.id.pnr_status_table_layout);
         bgToolbarImage = (ImageView) findViewById(R.id.pnr_status_image);
         try {
-            dateTextView.setText(pnrStatus.getDateOfJourney().getBeautifiedDate());
-            trainTextView.setText(pnrStatus.getTrainNo() + " " + pnrStatus.getTrainName());
-            classTextView.setText(pnrStatus.getTravelClass().getClassFull());
-            chartStatusTextView.setText(pnrStatus.isChartPrepared() ? "CHART PREPARED" : "CHART NOT PREPARED");
-            stn1CodeTextView.setText(pnrStatus.getBoardingPoint().getCode());
-            stn2CodeTextview.setText(pnrStatus.getTo().getCode());
-            stn1NameTextView.setText(pnrStatus.getBoardingPoint().getName());
-            stn2NameTextView.setText(pnrStatus.getTo().getName());
+            dateTextView.setText(MyDate.parseMyDate(pnrStatus.get(PNR.DATE_OF_JOURNEY).toString(), DateTime.dateTimeFormat).getBeautifiedDate());
+            trainTextView.setText(pnrStatus.get(PNR.TRAIN_NO) + " " + Config.rc.getTrainName(pnrStatus.get(PNR.TRAIN_NO).toString()));
+            classTextView.setText(TravelClass.allClasses.get(pnrStatus.get(PNR.TRAVEL_CLASS).toString()));
+            chartStatusTextView.setText(
+                    pnrStatus.get(PNR.CHART_PREPARED).toString().equalsIgnoreCase("1") ? "CHART PREPARED" : "CHART NOT PREPARED"
+            );
+            stn1CodeTextView.setText(pnrStatus.get(PNR.BOARDING_POINT).toString());
+            stn2CodeTextview.setText(pnrStatus.get(PNR.TO).toString());
+            stn1NameTextView.setText(pnrStatus.get(PNR.BOARDING_POINT).toString());
+            stn2NameTextView.setText(pnrStatus.get(PNR.TO).toString());
             int sno = 1;
-            for (PNRStatus.Passenger currPassenger : pnrStatus.getPassengers()) {
+            for (Passenger currPassenger : pnrStatus.getPassengers()) {
                 TableRow row = new TableRow(this);
                 TableLayout.LayoutParams lp = new TableLayout.LayoutParams();
                 lp.bottomMargin = 10;
@@ -86,8 +94,8 @@ public class PNRStatusActivity extends AppCompatActivity {
                 row.addView(snTextView);
 
                 TextView bkTextView = new TextView(this);
-                bkTextView.setText(currPassenger.getBookingStatus());
-                if (!currPassenger.getBookingStatus().contains("CNF")) {
+                bkTextView.setText(currPassenger.get(Passenger.BOOKING_STATUS).toString());
+                if (!currPassenger.get(Passenger.BOOKING_STATUS).toString().contains("CNF")) {
                     bkTextView.setTextColor(Color.RED);
                 } else {
                     bkTextView.setTextColor(Color.parseColor("#558000"));
@@ -100,8 +108,8 @@ public class PNRStatusActivity extends AppCompatActivity {
                 bkTextView.setLayoutParams(lpb);
                 row.addView(bkTextView);
                 TextView ckTextView = new TextView(this);
-                ckTextView.setText(currPassenger.getCurrentStatus());
-                if (!currPassenger.getCurrentStatus().contains("CNF")) {
+                ckTextView.setText(currPassenger.get(Passenger.CURRENT_STATUS).toString());
+                if (!currPassenger.get(Passenger.CURRENT_STATUS).toString().contains("CNF")) {
                     ckTextView.setTextColor(Color.RED);
                 } else {
                     ckTextView.setTextColor(Color.parseColor("#558000"));
@@ -116,7 +124,7 @@ public class PNRStatusActivity extends AppCompatActivity {
                 passengersTableLayout.addView(row);
             }
         } catch (Exception E) {
-
+            E.printStackTrace();
         }
 
     }
@@ -124,6 +132,6 @@ public class PNRStatusActivity extends AppCompatActivity {
 
     TextView dateTextView, trainTextView, classTextView, chartStatusTextView, stn1CodeTextView, stn2CodeTextview, stn1NameTextView, stn2NameTextView;
     TableLayout passengersTableLayout;
-    PNRStatus pnrStatus;
+    PNR pnrStatus;
     ImageView bgToolbarImage;
 }

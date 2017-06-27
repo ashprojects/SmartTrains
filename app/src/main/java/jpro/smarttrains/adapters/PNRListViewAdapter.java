@@ -47,6 +47,7 @@ public class PNRListViewAdapter extends ArrayAdapter<Modal> {
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("--delete");
                 new AlertDialog.Builder(getContext()).setMessage("Would you like to delete this?").setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
