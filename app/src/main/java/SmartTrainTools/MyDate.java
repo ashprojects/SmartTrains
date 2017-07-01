@@ -63,7 +63,7 @@ public class MyDate implements Serializable{
     }
 
     public Date date() {
-        return new Date(y, m, d);
+        return new Date(y - 1900, m, d);
     }
 
     public void decrement() {
