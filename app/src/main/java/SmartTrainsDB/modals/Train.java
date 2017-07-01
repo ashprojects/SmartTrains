@@ -4,7 +4,6 @@ import android.content.ContentValues;
 
 import java.util.HashMap;
 
-import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.Varchar;
 
@@ -12,7 +11,7 @@ import SmartTrainsDB.modals.fields.Varchar;
  * Created by root on 24/6/17.
  */
 
-public class Train extends Modal {
+public class Train extends Modal implements Locomotive {
     public static final String TABLE_NAME = "trains";
     public static final String TRAIN_NO = "train_no";
     public static final String TRAIN_NAME = "train_name";
@@ -48,9 +47,29 @@ public class Train extends Modal {
         return (Train) this.insert(values);
     }
 
-    public SmartTrainTools.Train getTrain(TrainBean train) {
-        SmartTrainTools.Train train1 = new SmartTrainTools.Train(train.getTrno(), train.getTrname(), null);
-        train1.setRoute(TrainRoute.objects.getTrainRoute(train));
+    public SmartTrainTools.Train getTrain() {
+        SmartTrainTools.Train train1 = new SmartTrainTools.Train(getNo(), getName(), null);
+        train1.setRoute(TrainRoute.objects.getTrainRoute(getNo()));
         return train1;
+    }
+
+    @Override
+    public String getName() {
+        return get(TRAIN_NAME).toString();
+    }
+
+    @Override
+    public String getNo() {
+        return get(TRAIN_NO).toString();
+    }
+
+    @Override
+    public String getFrom() {
+        return get(FROM).toString();
+    }
+
+    @Override
+    public String getTo() {
+        return get(TO).toString();
     }
 }

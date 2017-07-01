@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 import SmartTrainTools.Train;
 import SmartTrainsDB.TrainBean;
+import SmartTrainsDB.modals.Modal;
 import SmartTrainsDB.modals.RecentTrain;
 import Utilities.SmartAnimator;
 import commons.Config;
@@ -48,10 +50,10 @@ public class TrainsByNo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trains_by_no);
-        trainBeanArrayList=new ArrayList<>();
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
         recents=(LinearLayout)findViewById(R.id.recents_trains_by_no_LL);
         trains = new ArrayList<Train>(Config.rc.getTrains());
+
         clearTr = (ImageView) findViewById(R.id.trains_by_no_clear_btn);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Trains by Name or Number");
@@ -92,12 +94,11 @@ public class TrainsByNo extends AppCompatActivity {
             }
         });
 
-        deletethis=(ImageView)findViewById(R.id.delete_this);
+
 
 
         recentsLV=(ListView)findViewById(R.id.recents_listview);
-        trainBeanArrayList.addAll(RecentTrain.objects.getAllRecentTrain());
-        recentTrainSearchesListAdapter=new RecentTrainSearchesListAdapter(getApplicationContext(),trainBeanArrayList);
+        recentTrainSearchesListAdapter = new RecentTrainSearchesListAdapter(TrainsByNo.this, R.layout.list_item_small_train_view, RecentTrain.objects.getAllRecentTrain());
         recentsLV.setAdapter(recentTrainSearchesListAdapter);
 
         trBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,24 +118,24 @@ public class TrainsByNo extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             RecentTrain.objects.deleteAllRecentTrains();
-                            trainBeanArrayList.clear();
-                            recentTrainSearchesListAdapter.update(trainBeanArrayList);
+                            recentTrainSearchesListAdapter.update(new ArrayList<Modal>());
                         }
                     }).setNegativeButton("NO",null).show();
                 }
 
             }
         });
+
         recentsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TrainBean T=(TrainBean) recentTrainSearchesListAdapter.getItem(i);
+                RecentTrain T = (RecentTrain) recentTrainSearchesListAdapter.getItem(i);
                 try{
-                    lastTrainSelected=new Train(T.getTrno(),false,false);
-                    lastTrainSelected.setName(T.getTrname());
+                    lastTrainSelected = new Train(T.get(RecentTrain.TRAIN_NO).toString(), false, false);
+                    lastTrainSelected.setName(T.get(RecentTrain.TRAIN_NAME).toString());
                     new GetTrainInfo().execute(lastTrainSelected);
                 } catch (IOException E){
-
+                    E.printStackTrace();
                 }
 
             }
@@ -193,9 +194,7 @@ public class TrainsByNo extends AppCompatActivity {
                 } else {
                     //TrainBean trainBean=new TrainBean(t.getSource().getCode(),t.getDestination().getCode(),t.getName(),t.getNo());
                     RecentTrain.objects.addTrain(t);
-                    trainBeanArrayList.clear();
-                    trainBeanArrayList.addAll(RecentTrain.objects.getAllRecentTrain());
-                    recentTrainSearchesListAdapter.update(trainBeanArrayList);
+                    recentTrainSearchesListAdapter.update(RecentTrain.objects.getAllRecentTrain());
                     Intent in=new Intent(getApplicationContext(),TrainsInfo.class);
                     in.putExtra("train",t);
                     startActivity(in);
@@ -217,6 +216,7 @@ public class TrainsByNo extends AppCompatActivity {
     ImageView deletethis;
     ImageView clearTr;
     ImageView clearimg;
+    ImageButton delete_item_img;
     ArrayList<Train> trains;
     ArrayList<TrainBean> trainBeanArrayList;
     Train T;

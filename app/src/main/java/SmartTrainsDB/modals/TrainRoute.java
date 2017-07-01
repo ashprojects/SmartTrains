@@ -10,7 +10,6 @@ import java.util.HashMap;
 import SmartTrainTools.RouteListItem;
 import SmartTrainTools.Station;
 import SmartTrainTools.Time;
-import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.IntegerField;
 import SmartTrainsDB.modals.fields.Varchar;
@@ -87,43 +86,30 @@ public class TrainRoute extends Modal {
         this.delete(null, null);
     }
 
-    public ArrayList<TrainBean> getSavedRoutesTrainBeans() {
+    public ArrayList<Train> getSavedRoutesTrains() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ArrayList<TrainBean> trainBean = new ArrayList<>();
-        String query = String.format("SELECT %s, %s, %s, %s FROM %s WHERE %s in (SELECT DISTINCT %s from %s)",
-                Train.TRAIN_NO, Train.TRAIN_NAME, Train.FROM, Train.TO,
+        ArrayList<Train> trains = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s in (SELECT DISTINCT %s from %s)",
                 Train.objects.getModalName(),
                 Train.TRAIN_NO,
                 TrainRoute.TRAIN_NO, TrainRoute.objects.getModalName()
         );
-        //String query = "SELECT ?, ?, ?, ? FROM ? WHERE ? in (SELECT DISTINCT ? from ?)";
-        String[] selectionArgs = new String[]{
-                Train.TRAIN_NO, Train.TRAIN_NAME, Train.FROM, Train.TO,
-                Train.objects.getModalName(),
-                Train.TRAIN_NO,
-                TrainRoute.TRAIN_NO, TrainRoute.objects.getModalName()
-        };
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
 
             do {
-                TrainBean tb = new TrainBean();
-                tb.setTrno(cursor.getString(0));
-                tb.setTrname(cursor.getString(1));
-                tb.setFrom(cursor.getString(2));
-                tb.setTo(cursor.getString(3));
-                trainBean.add(tb);
+                trains.add((Train) Train.objects.getNewInstance(cursor));
             } while (cursor.moveToNext());
         }
         cursor.close();
-        return trainBean;
+        return trains;
 
     }
 
-    public ArrayList<RouteListItem> getTrainRoute(TrainBean train) {
+    public ArrayList<RouteListItem> getTrainRoute(String trainNo) {
         ArrayList<RouteListItem> routeListItems = new ArrayList<>();
-        Cursor cursor = this.getCursor(TRAIN_NO + "= ?", new String[]{train.getTrno()}, STATION_NO);
+        Cursor cursor = this.getCursor(TRAIN_NO + "= ?", new String[]{trainNo}, STATION_NO);
         if (cursor.moveToFirst()) {
             do {
                 Station S = new Station(cursor.getString(cursor.getColumnIndex(STATION_CODE)));

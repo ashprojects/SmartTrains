@@ -1,10 +1,8 @@
 package SmartTrainsDB.modals;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +13,7 @@ import SmartTrainsDB.modals.fields.DateTime;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.Varchar;
 
-public class RecentTrain extends Modal {
+public class RecentTrain extends Modal implements Locomotive {
     public static final String TABLE_NAME = "train_searches";
     public static final String TRAIN_NO = "train_no";
     public static final String TRAIN_NAME = "train_name";
@@ -74,25 +72,27 @@ public class RecentTrain extends Modal {
                 new String[]{trainBean.getTrno()});
     }
 
-    public List<TrainBean> getAllRecentTrain() {
-        List<TrainBean> trainBeanArrayList = new ArrayList<>();
-        Cursor cursor = this.getCursor(null, null, CREATED_AT + " DESC");
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                System.out.println("DB_FOUND:" + cursor.getString(1));
-                TrainBean trainBean = new TrainBean();
-                trainBean.setTrno(cursor.getString(cursor.getColumnIndex(TRAIN_NO)));
-                trainBean.setTrname(cursor.getString(cursor.getColumnIndex(TRAIN_NAME)));
-                trainBean.setFrom(cursor.getString(cursor.getColumnIndex(FROM)));
-                trainBean.setTo(cursor.getString(cursor.getColumnIndex(TO)));
-                // Adding contact to list
-                trainBeanArrayList.add(trainBean);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return trainBeanArrayList;
+    public List getAllRecentTrain() {
+        return objects.all();
     }
 
+    @Override
+    public String getName() {
+        return get(TRAIN_NAME).toString();
+    }
+
+    @Override
+    public String getNo() {
+        return get(TRAIN_NO).toString();
+    }
+
+    @Override
+    public String getFrom() {
+        return get(FROM).toString();
+    }
+
+    @Override
+    public String getTo() {
+        return get(TO).toString();
+    }
 }

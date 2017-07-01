@@ -17,7 +17,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import SmartTrainTools.Train;
-import SmartTrainsDB.TrainBean;
+import SmartTrainsDB.modals.Modal;
 import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.RecentTrainSearchesListAdapter;
@@ -46,14 +46,13 @@ public class OfflineRoutesActivity extends AppCompatActivity {
         setTitle("Saved Train Routes");
 
         offlistview=(ListView)findViewById(R.id.offline_listview);
-        trainBeanArrayList=new ArrayList<>();
+
+
+        adapter = new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this, R.layout.list_item_small_train_view, new ArrayList<Modal>(SmartTrainsDB.modals.TrainRoute.objects.getSavedRoutesTrains()));
+
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        trainBeanArrayList.addAll(SmartTrainsDB.modals.TrainRoute.objects.getSavedRoutesTrainBeans());
-        adapter=new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this,trainBeanArrayList);
         offlistview.setAdapter(adapter);
-
-
         offlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -61,8 +60,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                 pd.setTitle("Loading...");
                 pd.show();
                 Intent in=new Intent(OfflineRoutesActivity.this,TrainRoute.class);
-                TrainBean tb=(TrainBean) adapterView.getItemAtPosition(i);
-                Train x = SmartTrainsDB.modals.Train.objects.getTrain(tb);
+                Train x = ((SmartTrainsDB.modals.Train) adapterView.getItemAtPosition(i)).getTrain();
                 in.putExtra("train",x);
                 in.putExtra("isAvailableOffline",true);
                 pd.hide();
@@ -76,13 +74,12 @@ public class OfflineRoutesActivity extends AppCompatActivity {
         clearimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(trainBeanArrayList.size()!=0) {
+                if (SmartTrainsDB.modals.Train.objects.all().size() != 0) {
                     new AlertDialog.Builder(OfflineRoutesActivity.this).setTitle("Delete?").setMessage("Clear all saved routes?").setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             SmartTrainsDB.modals.TrainRoute.objects.deleteAllTrainRoutes();
-                            trainBeanArrayList.clear();
-                            adapter.update(trainBeanArrayList);
+                            adapter.update(SmartTrainsDB.modals.TrainRoute.objects.all());
                         }
                     }).setNegativeButton("NO",null).show();
                 }
@@ -95,8 +92,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
 
 
     ImageView clearimg,deletethis;
-    ArrayList<TrainBean> trainBeanArrayList;
     ListView offlistview;
-
+    int size = 0;
     RecentTrainSearchesListAdapter adapter;
 }
