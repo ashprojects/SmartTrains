@@ -108,7 +108,10 @@ public class TrainRoute extends Modal {
         if (cursor.moveToFirst()) {
 
             do {
+                Train train = new Train();
+
                 TrainBean tb = new TrainBean();
+                train.
                 tb.setTrno(cursor.getString(0));
                 tb.setTrname(cursor.getString(1));
                 tb.setFrom(cursor.getString(2));

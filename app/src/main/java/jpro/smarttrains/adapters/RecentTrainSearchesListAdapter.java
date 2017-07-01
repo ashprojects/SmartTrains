@@ -13,20 +13,21 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import SmartTrainsDB.TrainBean;
+import SmartTrainsDB.modals.Modal;
 import SmartTrainsDB.modals.RecentTrain;
+import SmartTrainsDB.modals.Train;
 import jpro.smarttrains.R;
 
 /**
  * Created by root on 27/5/17.
  */
 
-public class RecentTrainSearchesListAdapter extends ArrayAdapter<TrainBean> {
-    ArrayList<TrainBean> items=new ArrayList<>();
+public class RecentTrainSearchesListAdapter extends ArrayAdapter<Modal> {
+    ArrayList<Modal> items = new ArrayList<>();
     Context context;
     private final int resource;
 
-    public RecentTrainSearchesListAdapter(Context context, int resource, List<TrainBean> items) {
+    public RecentTrainSearchesListAdapter(Context context, int resource, List<Modal> items) {
         super(context, resource, items);
         this.context = context;
         this.items = new ArrayList<>();
@@ -35,7 +36,7 @@ public class RecentTrainSearchesListAdapter extends ArrayAdapter<TrainBean> {
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void update(List<TrainBean> items){
+    public void update(List<Modal> items) {
         this.items.clear();
         this.items.addAll(items);
         notifyDataSetChanged();
@@ -67,14 +68,26 @@ public class RecentTrainSearchesListAdapter extends ArrayAdapter<TrainBean> {
         } else {
             holder = (RecentTrainSearchesListAdapter.ViewHolder) view.getTag();
         }
-        System.out.println("FOR i:"+i);
-        holder.no.setText(items.get(i).getTrno());
-        holder.name.setText(items.get(i).getTrname());
-        holder.from.setText(items.get(i).getFrom());
-        holder.to.setText(items.get(i).getTo());
+        try {
+            RecentTrain tt = (RecentTrain) items.get(i);
+            holder.no.setText(items.get(i).get(RecentTrain.TRAIN_NO).toString());
+            holder.name.setText(items.get(i).get(RecentTrain.TRAIN_NAME).toString());
+            holder.from.setText(items.get(i).get(RecentTrain.FROM).toString());
+            holder.to.setText(items.get(i).get(RecentTrain.TO).toString());
+        } catch (ClassCastException E) {
+            holder.no.setText(items.get(i).get(Train.TRAIN_NO).toString());
+            String trname = "";
+            trname = items.get(i).get(Train.TRAIN_NAME).toString();
+            holder.name.setText(trname);
+            holder.from.setText(items.get(i).get(Train.FROM).toString());
+            holder.to.setText(items.get(i).get(Train.TO).toString());
+
+        }
+
         final int x = i;
 
         // set On Click for delete it
+
 
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +96,8 @@ public class RecentTrainSearchesListAdapter extends ArrayAdapter<TrainBean> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         remove(items.get(x));
-                        RecentTrain.objects.deleteTrainSearch(items.get(x));
+                        items.get(x).delete();
+                        notifyDataSetChanged();
                     }
                 }).setNegativeButton("NO", null).show();
             }
