@@ -1,23 +1,31 @@
 package Utilities;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.TranslateAnimation;
 
-/**
- * Created by root on 27/6/17.
- */
+import jpro.smarttrains.adapters.ListAdapterTrainBetweenStation;
 
 public class RecyclerViewAnimator extends RecyclerView.ItemAnimator {
     private int counter = 0;
+    private Interpolator mInterpolator = new DecelerateInterpolator();
+    private RecyclerView recyclerView;
+    private ListAdapterTrainBetweenStation adapter;
+
+    public RecyclerViewAnimator(RecyclerView recyclerView, ListAdapterTrainBetweenStation adapter) {
+        this.recyclerView = recyclerView;
+        this.adapter = adapter;
+    }
 
     @Override
     public boolean animateDisappearance(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull ItemHolderInfo preLayoutInfo, @Nullable ItemHolderInfo postLayoutInfo) {
         System.out.println("IN disappearence");
+        recyclerView.getLayoutManager().removeView(viewHolder.itemView);
         return false;
     }
 
@@ -35,77 +43,40 @@ public class RecyclerViewAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animateChange(@NonNull final RecyclerView.ViewHolder oldHolder, @NonNull final RecyclerView.ViewHolder newHolder, @NonNull ItemHolderInfo preLayoutInfo, @NonNull ItemHolderInfo postLayoutInfo) {
-        System.out.println("in change");
-        ObjectAnimator rotateOldView = ObjectAnimator.ofFloat(oldHolder.itemView, View.ROTATION_X, 0, 90);
-        ObjectAnimator rotateNewView = ObjectAnimator.ofFloat(newHolder.itemView, View.ROTATION_X, -90, 0);
-        rotateOldView.addListener(new Animator.AnimatorListener() {
+        int diff = 0;
+        LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        int startIndex = manager.findFirstVisibleItemPosition();
+        int lastIndex = manager.findLastVisibleItemPosition();
+        int prevIndex = adapter.prevTrains.indexOf(((ListAdapterTrainBetweenStation.TrainViewHolder) newHolder).item);
+        if (prevIndex < startIndex) {
+            diff = recyclerView.getTop() - recyclerView.getHeight() / 2;
+        } else if (prevIndex > lastIndex) {
+            diff = recyclerView.getBottom() + recyclerView.getHeight() / 2;
+        } else {
+            diff = recyclerView.getChildAt(prevIndex).getTop() - newHolder.itemView.getTop();
+        }
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f, diff, 0.0f);
+        animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-                dispatchAnimationStarted(oldHolder);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                dispatchAnimationFinished(oldHolder);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        rotateNewView.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(Animation animation) {
                 dispatchAnimationStarted(newHolder);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                dispatchAnimationFinished(newHolder);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        AnimatorSet animation = new AnimatorSet();
-        animation.playSequentially(rotateOldView, rotateNewView);
-        animation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
                 counter++;
             }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(Animation animation) {
+                dispatchAnimationFinished(newHolder);
                 counter--;
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationRepeat(Animation animation) {
 
             }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-
-
         });
-        animation.start();
+        animation.setInterpolator(mInterpolator);
+        animation.setDuration(333);
+        newHolder.itemView.startAnimation(animation);
         return true;
     }
 
@@ -126,7 +97,6 @@ public class RecyclerViewAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean isRunning() {
-        System.out.println("in is running");
         return counter != 0;
     }
 }

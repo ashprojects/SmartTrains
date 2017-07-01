@@ -45,6 +45,7 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
 
     public void update(Comparator<Train> comparator) {
         //this.trains.sort(comparator);
+        prevTrains = new ArrayList<>(this.trains);
         Collections.sort(this.trains, comparator);
         notifyItemRangeChanged(0, trains.size());
     }
@@ -60,7 +61,7 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
 
     @Override
     public long getItemId(int i) {
-        return i;
+        return ((Train) getItem(i)).getNo().hashCode();
     }
 
     @Override
@@ -68,6 +69,7 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
         TrainViewHolder holder;
 
         View view = mInflater.inflate(R.layout.default_train_list, viewGroup, false);
+
         holder = new TrainViewHolder(view);
 
         return holder;
@@ -88,6 +90,7 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
                 arrtime = trains.get(i).getQueryDestTime().toString();
             holder.timeSrc.setText(deptime);
             holder.timeDest.setText(arrtime);
+            holder.item = getItem(i);
         } catch (NullPointerException E) {
             E.printStackTrace();
         }
@@ -128,7 +131,7 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
         }
     }
 
-    static class TrainViewHolder extends RecyclerView.ViewHolder {
+    public static class TrainViewHolder extends RecyclerView.ViewHolder {
         public TrainViewHolder(View view) {
             super(view);
             TrainViewHolder holder = this;
@@ -169,9 +172,11 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
 
         TextView stn1, stn2, timeSrc, timeDest, runsOn, trNo, trName, totTrNo, pos, tr[], clss, ttm;
         LinearLayout layoutHeader, classLayout;
+
+        public Object item;
     }
 
-    private ArrayList<Train> trains;
+    public ArrayList<Train> trains, prevTrains;
     private LayoutInflater mInflater;
     private Station src, dest, temp;
     private MyDate date = null;
