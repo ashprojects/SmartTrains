@@ -50,7 +50,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         trainBeanArrayList.addAll(SmartTrainsDB.modals.TrainRoute.objects.getSavedRoutesTrainBeans());
-        adapter=new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this,trainBeanArrayList);
+        adapter = new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this, R.layout.listitem_trains_by_no_recent, trainBeanArrayList);
         offlistview.setAdapter(adapter);
 
 

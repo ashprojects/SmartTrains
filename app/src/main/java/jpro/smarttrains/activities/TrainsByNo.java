@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -52,6 +53,7 @@ public class TrainsByNo extends AppCompatActivity {
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
         recents=(LinearLayout)findViewById(R.id.recents_trains_by_no_LL);
         trains = new ArrayList<Train>(Config.rc.getTrains());
+
         clearTr = (ImageView) findViewById(R.id.trains_by_no_clear_btn);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Trains by Name or Number");
@@ -92,12 +94,12 @@ public class TrainsByNo extends AppCompatActivity {
             }
         });
 
-        deletethis=(ImageView)findViewById(R.id.delete_this);
+
 
 
         recentsLV=(ListView)findViewById(R.id.recents_listview);
         trainBeanArrayList.addAll(RecentTrain.objects.getAllRecentTrain());
-        recentTrainSearchesListAdapter=new RecentTrainSearchesListAdapter(getApplicationContext(),trainBeanArrayList);
+        recentTrainSearchesListAdapter = new RecentTrainSearchesListAdapter(TrainsByNo.this, R.layout.listitem_trains_by_no_recent, trainBeanArrayList);
         recentsLV.setAdapter(recentTrainSearchesListAdapter);
 
         trBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -217,6 +219,7 @@ public class TrainsByNo extends AppCompatActivity {
     ImageView deletethis;
     ImageView clearTr;
     ImageView clearimg;
+    ImageButton delete_item_img;
     ArrayList<Train> trains;
     ArrayList<TrainBean> trainBeanArrayList;
     Train T;
