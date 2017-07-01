@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import SmartTrainTools.Train;
-import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.Modal;
 import SmartTrainsDB.modals.RecentTrain;
 import Utilities.SmartAnimator;
@@ -113,7 +112,7 @@ public class TrainsByNo extends AppCompatActivity {
         clearimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(trainBeanArrayList.size()!=0) {
+                if (!recentTrainSearchesListAdapter.isEmpty()) {
                     new AlertDialog.Builder(TrainsByNo.this).setTitle("Clear History?").setMessage("Clear all recent Train searches?").setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -192,7 +191,6 @@ public class TrainsByNo extends AppCompatActivity {
                     // snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
                 } else {
-                    //TrainBean trainBean=new TrainBean(t.getSource().getCode(),t.getDestination().getCode(),t.getName(),t.getNo());
                     RecentTrain.objects.addTrain(t);
                     recentTrainSearchesListAdapter.update(RecentTrain.objects.getAllRecentTrain());
                     Intent in=new Intent(getApplicationContext(),TrainsInfo.class);
@@ -218,6 +216,5 @@ public class TrainsByNo extends AppCompatActivity {
     ImageView clearimg;
     ImageButton delete_item_img;
     ArrayList<Train> trains;
-    ArrayList<TrainBean> trainBeanArrayList;
     Train T;
 }

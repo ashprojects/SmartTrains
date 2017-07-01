@@ -1,14 +1,12 @@
 package SmartTrainsDB.modals;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 
 import java.util.HashMap;
 import java.util.List;
 
 import SmartTrainTools.SmartUtils;
 import SmartTrainTools.Train;
-import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.fields.DateTime;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.Varchar;
@@ -56,20 +54,8 @@ public class RecentTrain extends Modal implements Locomotive {
         this.delete(null, null);
     }
 
-    public void deleteTrainSearch(TrainBean trainBean) {
-        this.delete(TRAIN_NO, new String[]{trainBean.getTrno()});
-    }
-
-    public void updateRecentTrain(TrainBean trainBean) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(TRAIN_NAME, trainBean.getTrname());
-        values.put(CREATED_AT, SmartUtils.now(DateTime.dateTimeFormat));
-
-        // updating row
-        db.update(getModalName(), values, TRAIN_NO + " = ?",
-                new String[]{trainBean.getTrno()});
+    public void deleteTrainSearch(String trainNo) {
+        this.delete(TRAIN_NO, new String[]{trainNo});
     }
 
     public List getAllRecentTrain() {
