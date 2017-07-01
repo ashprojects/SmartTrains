@@ -3,6 +3,7 @@ package jpro.smarttrains.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,6 @@ import java.util.List;
 import SmartTrainsDB.modals.Locomotive;
 import SmartTrainsDB.modals.Modal;
 import jpro.smarttrains.R;
-
-/**
- * Created by root on 27/5/17.
- */
 
 public class RecentTrainSearchesListAdapter extends ArrayAdapter<Modal> {
     ArrayList<Modal> items = new ArrayList<>();
@@ -46,6 +43,11 @@ public class RecentTrainSearchesListAdapter extends ArrayAdapter<Modal> {
         return items.size();
     }
 
+    @Nullable
+    @Override
+    public Modal getItem(int position) {
+        return this.items.get(position);
+    }
 
     @Override
     public long getItemId(int i) {
@@ -85,8 +87,8 @@ public class RecentTrainSearchesListAdapter extends ArrayAdapter<Modal> {
                 new AlertDialog.Builder(context).setMessage("Delete this Train Search?").setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        remove(items.get(x));
                         items.get(x).delete();
+                        items.remove(x);
                         notifyDataSetChanged();
                     }
                 }).setNegativeButton("NO", null).show();

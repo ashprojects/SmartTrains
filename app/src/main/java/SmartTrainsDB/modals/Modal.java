@@ -158,13 +158,17 @@ public abstract class Modal implements SQLiteOpenHelperCompactable, Serializable
         Cursor cursor = getCursor(selection, selectionArgs, orderBy);
         ArrayList<Modal> modals = new ArrayList<>();
         while (cursor.moveToNext()) {
-            Modal newInstance = getNewInstance();
-            for (Map.Entry<String, Field> entry : getFieldTypes().entrySet()) {
-                newInstance.put(entry.getKey(), entry.getValue().getValue(cursor));
-            }
-            modals.add(newInstance);
+            modals.add(getNewInstance(cursor));
         }
         return modals;
+    }
+
+    protected Modal getNewInstance(Cursor cursor) {
+        Modal newInstance = getNewInstance();
+        for (Map.Entry<String, Field> entry : getFieldTypes().entrySet()) {
+            newInstance.put(entry.getKey(), entry.getValue().getValue(cursor));
+        }
+        return newInstance;
     }
 
     public ArrayList<Modal> filter(String selection, String[] selectionArgs) {

@@ -14,8 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import SmartTrainTools.Train;
-import SmartTrainsDB.TrainBean;
+import SmartTrainsDB.modals.Modal;
 import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.RecentTrainSearchesListAdapter;
@@ -46,7 +48,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
         offlistview=(ListView)findViewById(R.id.offline_listview);
 
 
-        adapter = new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this, R.layout.list_item_small_train_view, SmartTrainsDB.modals.TrainRoute.objects.);
+        adapter = new RecentTrainSearchesListAdapter(OfflineRoutesActivity.this, R.layout.list_item_small_train_view, new ArrayList<Modal>(SmartTrainsDB.modals.TrainRoute.objects.getSavedRoutesTrains()));
 
         clearimg=(ImageView)findViewById(R.id.clearAllImg);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,8 +60,7 @@ public class OfflineRoutesActivity extends AppCompatActivity {
                 pd.setTitle("Loading...");
                 pd.show();
                 Intent in=new Intent(OfflineRoutesActivity.this,TrainRoute.class);
-                TrainBean tb=(TrainBean) adapterView.getItemAtPosition(i);
-                Train x = SmartTrainsDB.modals.Train.objects.getTrain(tb);
+                Train x = ((SmartTrainsDB.modals.Train) adapterView.getItemAtPosition(i)).getTrain();
                 in.putExtra("train",x);
                 in.putExtra("isAvailableOffline",true);
                 pd.hide();

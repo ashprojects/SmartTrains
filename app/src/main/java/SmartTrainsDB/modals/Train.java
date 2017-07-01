@@ -4,7 +4,6 @@ import android.content.ContentValues;
 
 import java.util.HashMap;
 
-import SmartTrainsDB.TrainBean;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.Varchar;
 
@@ -48,9 +47,9 @@ public class Train extends Modal implements Locomotive {
         return (Train) this.insert(values);
     }
 
-    public SmartTrainTools.Train getTrain(TrainBean train) {
-        SmartTrainTools.Train train1 = new SmartTrainTools.Train(train.getTrno(), train.getTrname(), null);
-        train1.setRoute(TrainRoute.objects.getTrainRoute(train));
+    public SmartTrainTools.Train getTrain() {
+        SmartTrainTools.Train train1 = new SmartTrainTools.Train(getNo(), getName(), null);
+        train1.setRoute(TrainRoute.objects.getTrainRoute(getNo()));
         return train1;
     }
 

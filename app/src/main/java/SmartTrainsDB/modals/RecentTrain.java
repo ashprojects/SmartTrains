@@ -73,7 +73,7 @@ public class RecentTrain extends Modal implements Locomotive {
     }
 
     public List getAllRecentTrain() {
-        return RecentTrain.objects.all();
+        return objects.all();
     }
 
     @Override
