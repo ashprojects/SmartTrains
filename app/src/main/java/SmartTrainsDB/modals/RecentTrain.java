@@ -13,7 +13,7 @@ import SmartTrainsDB.modals.fields.DateTime;
 import SmartTrainsDB.modals.fields.Field;
 import SmartTrainsDB.modals.fields.Varchar;
 
-public class RecentTrain extends Modal {
+public class RecentTrain extends Modal implements Locomotive {
     public static final String TABLE_NAME = "train_searches";
     public static final String TRAIN_NO = "train_no";
     public static final String TRAIN_NAME = "train_name";
@@ -76,4 +76,23 @@ public class RecentTrain extends Modal {
         return RecentTrain.objects.all();
     }
 
+    @Override
+    public String getName() {
+        return get(TRAIN_NAME).toString();
+    }
+
+    @Override
+    public String getNo() {
+        return get(TRAIN_NO).toString();
+    }
+
+    @Override
+    public String getFrom() {
+        return get(FROM).toString();
+    }
+
+    @Override
+    public String getTo() {
+        return get(TO).toString();
+    }
 }

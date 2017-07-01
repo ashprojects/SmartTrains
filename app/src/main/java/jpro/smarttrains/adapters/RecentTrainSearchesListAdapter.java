@@ -13,9 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import SmartTrainsDB.modals.Locomotive;
 import SmartTrainsDB.modals.Modal;
-import SmartTrainsDB.modals.RecentTrain;
-import SmartTrainsDB.modals.Train;
 import jpro.smarttrains.R;
 
 /**
@@ -68,21 +67,12 @@ public class RecentTrainSearchesListAdapter extends ArrayAdapter<Modal> {
         } else {
             holder = (RecentTrainSearchesListAdapter.ViewHolder) view.getTag();
         }
-        try {
-            RecentTrain tt = (RecentTrain) items.get(i);
-            holder.no.setText(items.get(i).get(RecentTrain.TRAIN_NO).toString());
-            holder.name.setText(items.get(i).get(RecentTrain.TRAIN_NAME).toString());
-            holder.from.setText(items.get(i).get(RecentTrain.FROM).toString());
-            holder.to.setText(items.get(i).get(RecentTrain.TO).toString());
-        } catch (ClassCastException E) {
-            holder.no.setText(items.get(i).get(Train.TRAIN_NO).toString());
-            String trname = "";
-            trname = items.get(i).get(Train.TRAIN_NAME).toString();
-            holder.name.setText(trname);
-            holder.from.setText(items.get(i).get(Train.FROM).toString());
-            holder.to.setText(items.get(i).get(Train.TO).toString());
+        Locomotive train = (Locomotive) items.get(i);
+        holder.no.setText(train.getNo());
+        holder.name.setText(train.getName());
+        holder.from.setText(train.getFrom());
+        holder.to.setText(train.getTo());
 
-        }
 
         final int x = i;
 
