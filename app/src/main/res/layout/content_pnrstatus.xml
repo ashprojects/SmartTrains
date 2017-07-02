@@ -56,6 +56,14 @@
             android:layout_margin="10dp"
             android:background="@color/colorPrimary"></View>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/description"
+            android:text="PNR NO"
+            android:id="@+id/pnr_status_no"
+            android:textColor="#000"
+            android:textAlignment="center" />
         <LinearLayout
             style="@style/description"
             android:weightSum="0.95"

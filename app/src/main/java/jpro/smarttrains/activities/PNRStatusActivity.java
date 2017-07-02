@@ -1,5 +1,6 @@
 package jpro.smarttrains.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -52,21 +53,37 @@ public class PNRStatusActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        String pnr = (String) getIntent().getSerializableExtra("pnr");
+        final String pnr = (String) getIntent().getSerializableExtra("pnr");
         pnrStatus = PNR.objects.getPNR(pnr);
 
         setTitle("To " + Config.rc.getStationName(pnrStatus.get(PNR.TO).toString()));
+
+        refresh = (FloatingActionButton) findViewById(R.id.pnr_status_refresh);
         dateTextView = (TextView) findViewById(R.id.pnr_status_date);
         trainTextView = (TextView) findViewById(R.id.pnr_status_trname);
         classTextView = (TextView) findViewById(R.id.pnr_status_class);
         chartStatusTextView = (TextView) findViewById(R.id.pnr_status_chart_status);
         stn1CodeTextView = (TextView) findViewById(R.id.pnr_status_st1code);
         stn1NameTextView = (TextView) findViewById(R.id.pnr_status_st1name);
+        pnrNoTextView = (TextView) findViewById(R.id.pnr_status_no);
         stn2CodeTextview = (TextView) findViewById(R.id.pnr_status_st2code);
         stn2NameTextView = (TextView) findViewById(R.id.pnr_status_st2name);
         passengersTableLayout = (TableLayout) findViewById(R.id.pnr_status_table_layout);
         bgToolbarImage = (ImageView) findViewById(R.id.pnr_status_image);
+
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(PNRStatusActivity.this, PnrStatusHomeActivity.class);
+                in.putExtra("PNR", pnr);
+                finish();
+                startActivity(in);
+            }
+        });
+
         try {
+            pnrNoTextView.setText("PNR NO. " + pnr);
             dateTextView.setText(MyDate.parseMyDate(pnrStatus.get(PNR.DATE_OF_JOURNEY).toString(), DateTime.dateTimeFormat).getBeautifiedDate());
             trainTextView.setText(pnrStatus.get(PNR.TRAIN_NO) + " " + Config.rc.getTrainName(pnrStatus.get(PNR.TRAIN_NO).toString()));
             classTextView.setText(TravelClass.allClasses.get(pnrStatus.get(PNR.TRAVEL_CLASS).toString()));
@@ -75,8 +92,8 @@ public class PNRStatusActivity extends AppCompatActivity {
             );
             stn1CodeTextView.setText(pnrStatus.get(PNR.BOARDING_POINT).toString());
             stn2CodeTextview.setText(pnrStatus.get(PNR.TO).toString());
-            stn1NameTextView.setText(pnrStatus.get(PNR.BOARDING_POINT).toString());
-            stn2NameTextView.setText(pnrStatus.get(PNR.TO).toString());
+            stn1NameTextView.setText(Config.rc.getStationName(pnrStatus.get(PNR.BOARDING_POINT).toString()));
+            stn2NameTextView.setText(Config.rc.getStationName(pnrStatus.get(PNR.TO).toString()));
             int sno = 1;
             for (Passenger currPassenger : pnrStatus.getPassengers()) {
                 TableRow row = new TableRow(this);
@@ -130,8 +147,9 @@ public class PNRStatusActivity extends AppCompatActivity {
     }
 
 
-    TextView dateTextView, trainTextView, classTextView, chartStatusTextView, stn1CodeTextView, stn2CodeTextview, stn1NameTextView, stn2NameTextView;
+    TextView dateTextView, pnrNoTextView, trainTextView, classTextView, chartStatusTextView, stn1CodeTextView, stn2CodeTextview, stn1NameTextView, stn2NameTextView;
     TableLayout passengersTableLayout;
     PNR pnrStatus;
     ImageView bgToolbarImage;
+    FloatingActionButton refresh;
 }

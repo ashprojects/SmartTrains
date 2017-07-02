@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/description"
     android:foreground="?android:selectableItemBackground"
@@ -37,6 +38,16 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         ></View>
+
+    <TextView
+
+        android:padding="2dp"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text="12853-AMARKANTAK EXRESS"
+        android:id="@+id/pnr_list_item_trInfo" />
+
     <LinearLayout
         android:layout_margin="3dp"
         android:orientation="horizontal"
@@ -93,16 +104,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="W/L"
+            android:textSize="13dp"
+            android:textColor="@color/colorPrimaryDark"
             android:textAlignment="center"
             android:layout_gravity="center" />
-        <TextView
-            android:padding="2dp"
-            android:layout_width="match_parent"
-            android:textAlignment="center"
-            android:layout_height="wrap_content"
-            android:text="12853 AMARKANTAK EXRESS"
-            android:id="@+id/pnr_list_item_trInfo"
-            />
 
     </LinearLayout>
 

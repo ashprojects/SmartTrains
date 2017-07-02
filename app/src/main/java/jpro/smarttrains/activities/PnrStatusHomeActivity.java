@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +75,12 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
         setTitle("My Journeys");
 
         newPnrBtn = (FloatingActionButton) findViewById(R.id.pnr_status_home_fab_bottom);
+
+        if (getIntent().hasExtra("PNR")) {
+            GetPNRStatusAsync a = new GetPNRStatusAsync(PnrStatusHomeActivity.this);
+            a.execute(getIntent().getSerializableExtra("PNR").toString());
+        }
+
         newPnrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +175,26 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                     }
                 });
 
+                pnr.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (pnr.getText().length() == 10) {
+                            GetPNRStatusAsync a = new GetPNRStatusAsync(PnrStatusHomeActivity.this);
+                            a.execute(pnr.getText().toString());
+                        }
+                    }
+                });
+
                 LayoutInflater layoutInflater = LayoutInflater.from(PnrStatusHomeActivity.this);
                 View promptView = layoutInflater.inflate(R.layout.input_prompt, null);
 
@@ -180,7 +208,7 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
                             Toast.makeText(PnrStatusHomeActivity.this, "Please enter valid PNR", Toast.LENGTH_SHORT);
                         } else {
                             dialog.dismiss();
-                            GetPNRStatusAsync a = new GetPNRStatusAsync();
+                            GetPNRStatusAsync a = new GetPNRStatusAsync(PnrStatusHomeActivity.this);
                             a.execute(pnr.getText().toString());
                         }
                     }
@@ -219,22 +247,37 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
 
     }
 
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
     private void initAnimations() {
         SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 200);
     }
 
 
-    class GetPNRStatusAsync extends AsyncTask<String, Void, PNRStatus> {
+    public class GetPNRStatusAsync extends AsyncTask<String, Void, PNRStatus> {
+
+        public GetPNRStatusAsync(Context context) {
+            this.context = context;
+        }
 
         @Override
         protected void onPostExecute(PNRStatus pnrStatus) {
             pd.hide();
             if (pnrStatus != null) {
                 if (!PNR.objects.alreadyExists(pnrStatus.getPNR())) {
+                    try {
+                        PNR.objects.getPNR(pnrStatus.getPNR()).delete();
+                    } catch (Exception E) {
+
+                    }
                     PNR.objects.addPNR(pnrStatus);
-                    savedPNRs.setAdapter(new PNRListViewAdapter(PnrStatusHomeActivity.this, R.layout.pnr_list_item, PNR.objects.all()));
+                    savedPNRs.setAdapter(new PNRListViewAdapter(context, R.layout.pnr_list_item, PNR.objects.all()));
                 }
-                Intent in = new Intent(PnrStatusHomeActivity.this, PNRStatusActivity.class);
+                Intent in = new Intent(context, PNRStatusActivity.class);
                 in.putExtra("pnr", pnrStatus.getPNR());
                 startActivity(in);
             }
@@ -255,12 +298,12 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            pd = new ProgressDialog(PnrStatusHomeActivity.this);
+            pd = new ProgressDialog(context);
             pd.setMessage("Connecting");
             pd.show();
         }
 
         ProgressDialog pd;
-
+        Context context;
     }
 }
