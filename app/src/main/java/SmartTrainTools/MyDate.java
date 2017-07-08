@@ -43,7 +43,7 @@ public class MyDate implements Serializable{
             dateObj=smf.parse(putZeros(d, m, y));
             calendar.setTime(dateObj);
         } catch (ParseException E){
-            System.out.println("ParseEx");
+            System.out.println(E);
         }
         this.d=d;
         this.m=m;
@@ -63,7 +63,7 @@ public class MyDate implements Serializable{
     }
 
     public Date date() {
-        return new Date(y - 1900, m, d);
+        return new Date(y - 1900, m - 1, d);
     }
 
     public void decrement() {
