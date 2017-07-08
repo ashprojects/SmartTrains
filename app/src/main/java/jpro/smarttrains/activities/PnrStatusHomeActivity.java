@@ -270,16 +270,20 @@ public class PnrStatusHomeActivity extends AppCompatActivity {
             if (pnrStatus != null) {
                 if (PNR.objects.alreadyExists(pnrStatus.getPNR())) {
                     try {
-                        PNR.objects.getPNR(pnrStatus.getPNR()).delete();
+                        PNR.objects.getPNR(pnrStatus.getPNR()).updatePNR(pnrStatus);
                     } catch (Exception E) {
                         E.printStackTrace();
                     }
+                } else {
+                    PNR.objects.addPNR(pnrStatus);
                 }
-                PNR.objects.addPNR(pnrStatus);
                 savedPNRs.setAdapter(new PNRListViewAdapter(context, R.layout.pnr_list_item, PNR.objects.all()));
                 Intent in = new Intent(context, PNRStatusActivity.class);
                 in.putExtra("pnr", pnrStatus.getPNR());
                 startActivity(in);
+                if (getIntent().hasExtra("PNR")) {
+                    finish();
+                }
             }
         }
 

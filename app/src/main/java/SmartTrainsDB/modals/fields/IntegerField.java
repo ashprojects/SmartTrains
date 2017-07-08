@@ -7,7 +7,7 @@ import android.database.Cursor;
  */
 
 public class IntegerField extends Field {
-    private static final String sqlTypeName = "INTEGER";
+    public static final String sqlTypeName = "INTEGER";
 
     public IntegerField(boolean isPrimaryKey) {
         super(isPrimaryKey);

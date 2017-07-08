@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -70,6 +72,7 @@ public class PNRStatusActivity extends AppCompatActivity {
         stn2NameTextView = (TextView) findViewById(R.id.pnr_status_st2name);
         passengersTableLayout = (TableLayout) findViewById(R.id.pnr_status_table_layout);
         bgToolbarImage = (ImageView) findViewById(R.id.pnr_status_image);
+        tracked = (Switch) findViewById(R.id.pnr_status_track_switch);
 
 
         refresh.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +82,13 @@ public class PNRStatusActivity extends AppCompatActivity {
                 in.putExtra("PNR", pnr);
                 finish();
                 startActivity(in);
+            }
+        });
+
+        tracked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                pnrStatus.setTracked(isChecked);
             }
         });
 
@@ -94,6 +104,7 @@ public class PNRStatusActivity extends AppCompatActivity {
             stn2CodeTextview.setText(pnrStatus.get(PNR.TO).toString());
             stn1NameTextView.setText(Config.rc.getStationName(pnrStatus.get(PNR.BOARDING_POINT).toString()));
             stn2NameTextView.setText(Config.rc.getStationName(pnrStatus.get(PNR.TO).toString()));
+            tracked.setChecked(pnrStatus.getTracked());
             int sno = 1;
             for (Passenger currPassenger : pnrStatus.getPassengers()) {
                 TableRow row = new TableRow(this);
@@ -148,6 +159,7 @@ public class PNRStatusActivity extends AppCompatActivity {
 
 
     TextView dateTextView, pnrNoTextView, trainTextView, classTextView, chartStatusTextView, stn1CodeTextView, stn2CodeTextview, stn1NameTextView, stn2NameTextView;
+    Switch tracked;
     TableLayout passengersTableLayout;
     PNR pnrStatus;
     ImageView bgToolbarImage;

@@ -90,7 +90,13 @@
         <activity
             android:name=".activities.PNRStatusActivity"
             android:label="@string/title_activity_pnrstatus"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".services.TrackPNR"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@drawable/logo" />
     </application>
 
 </manifest>

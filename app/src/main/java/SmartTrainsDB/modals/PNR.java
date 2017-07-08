@@ -1,6 +1,7 @@
 package SmartTrainsDB.modals;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class PNR extends Modal {
     public static final String RESERVATION_UPTO = "reservation_upto";
     public static final String TRAIN_NO = "train_no";
     public static final String UPDATED_AT = "updated_at";
+    public static final String TRACKED = "TRACKED";
 
 
     public static final HashMap<String, Field> fieldTypes = new HashMap<>();
@@ -43,6 +45,7 @@ public class PNR extends Modal {
         fieldTypes.put(RESERVATION_UPTO, new Varchar(6));
         fieldTypes.put(TRAIN_NO, new Varchar(5));
         fieldTypes.put(UPDATED_AT, new DateTime());
+        fieldTypes.put(TRACKED, new BooleanField());
     }
 
     public static final PNR objects = new PNR();
@@ -67,6 +70,13 @@ public class PNR extends Modal {
             dbPNR.passengerCache.add(Passenger.objects.add(passenger, pnr.getPNR()));
         }
         return dbPNR;
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion <= 1) {
+            db.execSQL(String.format("ALTER table %s ADD COLUMN %s %s", TABLE_NAME, TRACKED, BooleanField.sqlTypeName));
+        }
     }
 
     public void updatePNR(PNRStatus pnr) {
@@ -117,5 +127,23 @@ public class PNR extends Modal {
     public void delete() {
         Passenger.objects.delete(Passenger.PNR + "=?", new String[]{get(PNR).toString()});
         super.delete();
+    }
+
+    public void setTracked(boolean tracked) {
+        put(TRACKED, tracked ? 1 : 0);
+        update();
+    }
+
+    public boolean getTracked() {
+        return get(TRACKED).toString().equals("1");
+    }
+
+    public ArrayList<PNR> getAllTrackedPNRs() {
+        ArrayList<Modal> pnrs = filter(TRACKED + "=1", new String[]{});
+        ArrayList<PNR> pnrs1 = new ArrayList<>();
+        for (Modal pnr : pnrs) {
+            pnrs1.add((SmartTrainsDB.modals.PNR) pnr);
+        }
+        return pnrs1;
     }
 }
