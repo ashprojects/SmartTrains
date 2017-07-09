@@ -104,6 +104,10 @@ public class PNRStatusActivity extends AppCompatActivity {
             stn2CodeTextview.setText(pnrStatus.get(PNR.TO).toString());
             stn1NameTextView.setText(Config.rc.getStationName(pnrStatus.get(PNR.BOARDING_POINT).toString()));
             stn2NameTextView.setText(Config.rc.getStationName(pnrStatus.get(PNR.TO).toString()));
+            if (pnrStatus.get(PNR.CHART_PREPARED).toString().equalsIgnoreCase("1")) {
+                tracked.setEnabled(false);
+                pnrStatus.setTracked(false);
+            }
             tracked.setChecked(pnrStatus.getTracked());
             int sno = 1;
             for (Passenger currPassenger : pnrStatus.getPassengers()) {

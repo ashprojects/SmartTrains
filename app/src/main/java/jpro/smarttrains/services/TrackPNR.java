@@ -23,13 +23,10 @@ public class TrackPNR extends SelfRevivingService {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new UpdatePNRs().execute();
+        if (intent != null) {
+            new UpdatePNRs().execute();
+        }
         return START_STICKY;
     }
 
@@ -97,8 +94,6 @@ public class TrackPNR extends SelfRevivingService {
                 .setSmallIcon(R.drawable.logo)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true).build();
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         return notification;
     }
 }
