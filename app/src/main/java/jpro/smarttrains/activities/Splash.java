@@ -31,6 +31,7 @@ import Downloader.DownloadAndInstallAPKFile;
 import SmartTrainTools.SmartTools;
 import commons.Config;
 import jpro.smarttrains.R;
+import jpro.smarttrains.services.TrackPNR;
 
 public class Splash extends AppCompatActivity {
 
@@ -173,6 +174,7 @@ public class Splash extends AppCompatActivity {
         System.out.println("Update Checker started");
         StartAnimations();
         new CheckForUpdate().execute();
+        startService(new Intent(this, TrackPNR.class));
     }
     private void StartAnimations() {
         System.out.println("Update Checker started");

@@ -10,7 +10,7 @@ import SmartTrainsDB.modals.TrainRoute;
 
 public class DBConfig {
     public static final String dbName = "smart_trains";
-    public static final int version = 1;
+    public static final int version = 2;
 
     public static final SQLiteOpenHelperCompactable[] allRegisteredModals = new Modal[]{
             Train.objects,

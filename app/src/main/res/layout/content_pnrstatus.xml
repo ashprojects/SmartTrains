@@ -184,6 +184,20 @@
 
         </TableLayout>
 
+        <Switch
+            android:id="@+id/pnr_status_track_switch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="@string/track_pnr_switch_title"
+            android:layout_gravity="bottom|end"
+            android:textColor="@color/colorAccent"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            style="@style/description" />
+
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
