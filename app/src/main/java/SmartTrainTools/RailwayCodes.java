@@ -40,6 +40,15 @@ public class RailwayCodes implements Serializable{
         return null;
     }
 
+    public String getStationCode(String stname) {
+        for (String a : scodes) {
+            if (a.split("-")[0].trim().equals(stname)) {
+                return a.split(" - ")[1].trim();
+            }
+        }
+        return "STN";
+    }
+
     public static String getClassName(String T){
         switch (T){
             case "1A": return "FIRST AC";

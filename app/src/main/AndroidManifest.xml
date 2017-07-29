@@ -90,7 +90,9 @@
         <activity
             android:name=".activities.PNRStatusActivity"
             android:label="@string/title_activity_pnrstatus"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.LiveTrainStatusHome" />
+        <activity android:name=".activities.ShowTrainLiveStatus"></activity>
     </application>
 
 </manifest>

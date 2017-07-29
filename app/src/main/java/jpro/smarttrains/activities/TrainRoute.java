@@ -86,7 +86,7 @@ public class TrainRoute extends AppCompatActivity {
             int day=item.getDay();
             int dis=item.getDistanceFromSource();
             String diff = null;
-            diff = SmartTools.timeDifferenceInMinutes(item.getArrivalTime(), item.getDepartureTime());
+            diff = "" + SmartTools.timeDifferenceInMinutes(item.getArrivalTime(), item.getDepartureTime()) + " m";
             if(sr==1){
                arr="-";
                 diff = "-";

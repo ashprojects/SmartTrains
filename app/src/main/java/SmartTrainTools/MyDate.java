@@ -51,6 +51,17 @@ public class MyDate implements Serializable{
 
     }
 
+    public static MyDate getMyDateInstance(Calendar cal) {
+        return new MyDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+    }
+
+    public static Calendar getCalendarInstance(MyDate date) {
+        Calendar cal = Calendar.getInstance();
+        Date d = date.date();
+        cal.setTime(d);
+        return cal;
+    }
+
     public MyDate(MyDate M){
         this(M.getD(),M.getM(),M.getY());
     }
@@ -65,6 +76,7 @@ public class MyDate implements Serializable{
     public Date date() {
         return new Date(y - 1900, m - 1, d);
     }
+
 
     public void decrement() {
 

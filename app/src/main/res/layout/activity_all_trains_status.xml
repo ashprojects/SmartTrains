@@ -183,7 +183,7 @@
        android:background="@drawable/oval_accent_dark"
        android:padding="15dp"
 
-       android:translationY="-20dp"
+       android:translationY="-30dp"
        android:layout_marginBottom="20dp"
        />
     <ImageButton
@@ -192,11 +192,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+
         android:layout_marginLeft="10dp"
         android:src="@drawable/ic_backward_arrow"
         android:background="@drawable/oval_accent_dark"
         android:padding="15dp"
-        android:translationY="-20dp"
+        android:translationY="-30dp"
         android:layout_marginBottom="20dp"
         />
 </RelativeLayout>

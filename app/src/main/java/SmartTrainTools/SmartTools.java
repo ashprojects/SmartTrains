@@ -61,11 +61,11 @@ public class SmartTools {
 
      */
 
-    public static String timeDifferenceInMinutes(Time A, Time B) {
+    public static int timeDifferenceInMinutes(Time A, Time B) {
         int minuteA = Integer.parseInt(A.getHh()) * 60 + Integer.parseInt(A.getMm());
         int minuteB = Integer.parseInt(B.getHh()) * 60 + Integer.parseInt(B.getMm());
         int diff = minuteB - minuteA;
-        return (diff < 0 ? diff + 24 * 60 : diff) + " m";
+        return (diff < 0 ? diff + 24 * 60 : diff);
     }
 
     public static ArrayList<Train> findTrains(String src, String dest, String date) throws IOException{

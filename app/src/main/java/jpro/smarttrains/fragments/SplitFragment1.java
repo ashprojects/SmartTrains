@@ -90,10 +90,8 @@ public class SplitFragment1 extends Fragment {
     private class Work extends AsyncTask<Void,Void,Void>{
         @Override
         protected void onPreExecute() {
-
             snack=Snackbar.make(getView().findViewById(R.id.frag_AllTrains),"Fetching more trains. Please wait",Snackbar.LENGTH_INDEFINITE);
             snack.show();
-
         }
 
         @Override

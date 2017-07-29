@@ -31,7 +31,7 @@ public class Config extends Application {
     public static HashMap<String, String> cachedAvailabilityStatus=new HashMap<>();
     public static HashMap<String,String> cachedQuotaStation=new HashMap<>();
     public static ConnectivityGraph indiaMap;
-
+    public static String reqUserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36";
     @Override
     public void onCreate() {
         super.onCreate();

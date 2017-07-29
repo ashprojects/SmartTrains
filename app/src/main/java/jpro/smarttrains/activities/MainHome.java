@@ -202,6 +202,18 @@ public class MainHome extends AppCompatActivity
             }
         });
 
+        runningStatusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runningStatusBtn.startAnimation(AnimationUtils.loadAnimation(MainHome.this, R.anim.wobble));
+                Intent in = new Intent(MainHome.this, LiveTrainStatusHome.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
+                else
+                    startActivity(in);
+            }
+        });
+
 
         initAnimations();
 
@@ -216,6 +228,7 @@ public class MainHome extends AppCompatActivity
         rqdesc = (TextView) findViewById(R.id.rq_desc);
         tipSpan = (LinearLayout) findViewById(R.id.tipSpan);
         tipText = (TextView) findViewById(R.id.tipText);
+        runningStatusBtn = (ImageButton) findViewById(R.id.running_status_btn);
         sAvaiBtn = (ImageButton) findViewById(R.id.smart_avail_start_btn);
         splitBtn = (ImageButton) findViewById(R.id.split_start_btn);
         sTrbyNameBtn = (ImageButton) findViewById(R.id.trains_by_no_btn);
@@ -295,7 +308,7 @@ public class MainHome extends AppCompatActivity
         return true;
     }
 
-    ImageButton sAvaiBtn, splitBtn, sTrbyNameBtn, sSimpleAvail, sTrainBetweenStns, sOfflineRoutes, pnrStatusImageButton;
+    ImageButton sAvaiBtn, splitBtn, sTrbyNameBtn, sSimpleAvail, sTrainBetweenStns, sOfflineRoutes, pnrStatusImageButton, runningStatusBtn;
     String tipOfTheDay="";
     LinearLayout tipSpan;
     TextView rqdesc;
