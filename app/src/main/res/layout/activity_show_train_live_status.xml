@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/live_status_desc"
         style="@style/description"
-
+        android:textStyle="bold"
         />
 
     <android.support.design.widget.FloatingActionButton

@@ -163,7 +163,7 @@ public class SplitJourneyTabbed extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_split_jouney_tabbed, menu);
+        onBackPressed();
         return true;
     }
 
@@ -172,18 +172,8 @@ public class SplitJourneyTabbed extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if(id==android.R.id.home){
-            onBackPressed();
-        }
-
-        return super.onOptionsItemSelected(item);
+        onBackPressed();
+        return true;
     }
 
 

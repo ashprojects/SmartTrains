@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -67,6 +68,7 @@ public class LiveTrainStatusHome extends AppCompatActivity {
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+
     private void initVariables() {
 
         trainSelectTextView = (DelayedAutoCompleteTextView) findViewById(R.id.running_status_select_trName);
@@ -114,7 +116,14 @@ public class LiveTrainStatusHome extends AppCompatActivity {
                 trainSelectTextView.setText("");
             }
         });
-
+        try {
+            Train train = (Train) getIntent().getSerializableExtra("train");
+            selectedTrain = train;
+            trainSelectTextView.setText(train.getNo() + " - " + train.getName());
+            new GetTrainInfo().execute();
+        } catch (Exception E) {
+            E.printStackTrace();
+        }
         trainSelectTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -131,9 +140,32 @@ public class LiveTrainStatusHome extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar today = Calendar.getInstance();
 
-                dialog.setMinDate(trainLiveStatus.getMinDate());
-                dialog.setMaxDate(today);
-                dialog.show(getSupportFragmentManager(), "Select Date");
+                if (trainLiveStatus.getMinDate() == null) {
+                    Toast.makeText(LiveTrainStatusHome.this, "No Dates Selectable for Given Train", Toast.LENGTH_LONG).show();
+                } else {
+                    ArrayList<Calendar> calendars = new ArrayList<Calendar>();
+                    if (trainLiveStatus.getTrain().runsOnDate(MyDate.getMyDateInstance(trainLiveStatus.getMinDate())))
+                        calendars.add(trainLiveStatus.getMinDate());
+                    MyDate startDate = MyDate.getMyDateInstance(trainLiveStatus.getMinDate());
+                    MyDate endDate = MyDate.getMyDateInstance(today);
+                    MyDate tempDate = new MyDate(startDate);
+                    while (!tempDate.equals(endDate)) {
+                        if (trainLiveStatus.getTrain().runsOnDate(tempDate)) {
+                            System.out.println("Train runs on " + tempDate);
+                            calendars.add(MyDate.getCalendarInstance(tempDate));
+                        }
+                        tempDate.increment(1);
+                    }
+                    if (trainLiveStatus.getTrain().runsOnDate(endDate))
+                        calendars.add(MyDate.getCalendarInstance(endDate));
+                    Calendar[] calendarArray = new Calendar[calendars.size()];
+                    for (int i = 0; i < calendarArray.length; ++i) {
+                        calendarArray[i] = calendars.get(i);
+                    }
+                    dialog.setSelectableDays(calendarArray);
+                    dialog.show(getSupportFragmentManager(), "Select Date");
+                }
+
             }
         });
 

@@ -123,6 +123,17 @@
                 android:textColor="@color/mdtp_red" />
         </LinearLayout>
 
+        <ImageView
+
+            android:id="@+id/live_status_item_crosed_img"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_weight="0.08"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_tick" />
+
+
     </LinearLayout>
 
 </LinearLayout>

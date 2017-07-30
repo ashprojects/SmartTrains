@@ -41,9 +41,7 @@ public class Station implements Serializable {
             if (this.code == null || other.code == null) {
                 return false;
             }
-            if (!this.code.equals(other.code)) {
-                return false;
-            }
+
             if (this.name == null || other.name == null) {
                 return false;
             }

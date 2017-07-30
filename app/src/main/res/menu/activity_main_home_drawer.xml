@@ -12,6 +12,10 @@
             android:icon="@drawable/ic_split"
             android:title="Split Journey" />
         <item
+            android:id="@+id/nav_runningStatus"
+            android:icon="@drawable/ic_train_running"
+            android:title="Live Train Running Status" />
+        <item
             android:id="@+id/nav_trByNo"
             android:icon="@drawable/ic_dialpad_black_24dp"
             android:title="Trains by Name/No" />

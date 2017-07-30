@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import SmartTrainTools.TrainLiveStatus;
+import Utilities.SmartAnimator;
 import jpro.smarttrains.R;
 import jpro.smarttrains.adapters.LiveStatusFillListAdapter;
 
@@ -26,6 +28,16 @@ public class ShowTrainLiveStatus extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
+    private void initAnimations() {
+        SmartAnimator.addActivityTransition(getWindow(), SmartAnimator.Type.EXPLODE, 200);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_train_live_status);
@@ -35,6 +47,11 @@ public class ShowTrainLiveStatus extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView = (ListView) findViewById(R.id.listView_Live_Train_Status);
         liveStatusItems = trainLiveStatus.getLiveStatusItems();
+        if (liveStatusItems.size() < 1) {
+            onBackPressed();
+            finish();
+            return;
+        }
         lastDesc = (TextView) findViewById(R.id.live_status_desc);
         fab_refresh = (FloatingActionButton) findViewById(R.id.live_status_refresh_status);
         msgTextView = (TextView) findViewById(R.id.live_status_item_msg);
@@ -83,6 +100,7 @@ public class ShowTrainLiveStatus extends AppCompatActivity {
                 listView.smoothScrollToPosition(liveStatusFillListAdapter.getPosition(lv));
             }
         });
+        initAnimations();
     }
 
 
