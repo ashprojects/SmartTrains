@@ -42,6 +42,7 @@ public class TrainsInfo extends AppCompatActivity {
         from=(TextView)findViewById(R.id.from);
         routeBtn=(Button)findViewById(R.id.trRouteBtn);
         to=(TextView)findViewById(R.id.to);
+        runningStatus = (Button) findViewById(R.id.trRunStatusBtn);
         seatBtn=(Button)findViewById(R.id.trSeatAvaiBtn);
         T=(Train)getIntent().getSerializableExtra("train");
         try {
@@ -92,6 +93,19 @@ public class TrainsInfo extends AppCompatActivity {
             }
         });
 
+        runningStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getApplicationContext(), LiveTrainStatusHome.class);
+                in.putExtra("train", T);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    startActivity(in, ActivityOptions.makeSceneTransitionAnimation(TrainsInfo.this).toBundle());
+                else
+                    startActivity(in);
+            }
+        });
+
         seatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,6 +122,6 @@ public class TrainsInfo extends AppCompatActivity {
     }
     LinearLayout ll;
     TextView from,to;
-    Button routeBtn,seatBtn;
+    Button routeBtn, seatBtn, runningStatus;
     Train T;
 }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -42,7 +41,7 @@ public class MainHome extends AppCompatActivity
         setSupportActionBar(toolbar);
         initVariables();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +52,7 @@ public class MainHome extends AppCompatActivity
 
                 startActivity(Intent.createChooser(intent, ""));
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -237,6 +236,7 @@ public class MainHome extends AppCompatActivity
         sTrainBetweenStns = (ImageButton) findViewById(R.id.trains_bwstns_btn);
         pnrStatusImageButton = (ImageButton) findViewById(R.id.pnr_status_launch_btn);
         verDesc = (TextView) findViewById(R.id.verDesc);
+        sRunningBtn = (ImageButton) findViewById(R.id.nav_runningStatus);
     }
 
     @Override
@@ -300,6 +300,10 @@ public class MainHome extends AppCompatActivity
                 break;
             case R.id.nav_pnrStatus:
                 in = new Intent(MainHome.this, PnrStatusHomeActivity.class);
+                break;
+            case R.id.nav_runningStatus:
+                in = new Intent(MainHome.this, LiveTrainStatusHome.class);
+                break;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             startActivity(in, ActivityOptions.makeSceneTransitionAnimation(MainHome.this).toBundle());
@@ -309,6 +313,7 @@ public class MainHome extends AppCompatActivity
     }
 
     ImageButton sAvaiBtn, splitBtn, sTrbyNameBtn, sSimpleAvail, sTrainBetweenStns, sOfflineRoutes, pnrStatusImageButton, runningStatusBtn;
+    ImageButton sRunningBtn;
     String tipOfTheDay="";
     LinearLayout tipSpan;
     TextView rqdesc;

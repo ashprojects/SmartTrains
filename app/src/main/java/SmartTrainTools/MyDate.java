@@ -20,6 +20,27 @@ public class MyDate implements Serializable{
 
     public int d,m,y;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MyDate myDate = (MyDate) o;
+
+        if (d != myDate.d) return false;
+        if (m != myDate.m) return false;
+        return y == myDate.y;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = d;
+        result = 31 * result + m;
+        result = 31 * result + y;
+        return result;
+    }
+
     public int getD() {
         return d;
     }

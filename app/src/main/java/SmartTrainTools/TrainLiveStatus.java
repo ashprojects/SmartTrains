@@ -35,11 +35,20 @@ public class TrainLiveStatus implements Serializable {
         RouteListItem lastListItem = T.getRoute().get(T.getRoute().size() - 1);
         MyDate d = MyDate.getMyDateInstance(Calendar.getInstance());
         int dt = lastListItem.getDay();
-        while (dt > 1) {
+        System.out.println("_DT FACTOR: " + dt);
+        boolean flag = false;
+        while (dt > 0) {
+            if (this.train.runsOnDate(d))
+                flag = true;
+
             d.decrement();
             dt--;
         }
-        minDate = MyDate.getCalendarInstance(d);
+        if (flag)
+            minDate = MyDate.getCalendarInstance(d);
+        else
+            minDate = null;
+
     }
 
     public static String textBetweenBrackets(String x) {
@@ -103,7 +112,9 @@ public class TrainLiveStatus implements Serializable {
                     LiveStatusItem item = new LiveStatusItem();
                     item.setStn(new Station(Config.rc.getStationCode(stnname), stnname));
                     item.setHasArrived(!a[4].contains("ETD"));
+                    System.out.println("_FN: " + a[1]);
                     if (a[1].contains("Source")) {
+
                         item.setSource(true);
                         adept = a[4].split(",")[0];
                         sdept = a[2].split(",")[0];
@@ -116,18 +127,15 @@ public class TrainLiveStatus implements Serializable {
                         item.setActDept(new Time(adept.split(":")[0], adept.split(":")[1]));
                         try {
                             item.setDeptDelay(Integer.parseInt(TrainLiveStatus.textBetweenBrackets(a[3])));
-                        } catch (NumberFormatException Nex) {
+                        } catch (Exception Nex) {
 
                             item.setDeptDelay(SmartTools.timeDifferenceInMinutes(item.getSchDept(), item.getActDept()));
 
                         }
 
-                        try {
-                            item.setDeptDelay(Integer.parseInt(TrainLiveStatus.textBetweenBrackets(a[4])));
-                        } catch (NumberFormatException Nex) {
-                            item.setDeptDelay(Integer.MIN_VALUE);
-                        }
+
                     } else if (a[2].contains("Destina")) {
+                        item.setHasArrived(!a[3].contains("ETA"));
                         item.setDestination(true);
                         sarr = a[1].split(",")[0];
                         aarr = a[3].split(",")[0];
@@ -140,7 +148,7 @@ public class TrainLiveStatus implements Serializable {
                         try {
                             item.setArrDelay(Integer.parseInt(TrainLiveStatus.textBetweenBrackets(a[3])));
                         } catch (NumberFormatException Nex) {
-                            item.setArrDelay(SmartTools.timeDifferenceInMinutes(item.getSchArr(), item.getActArr()));
+                            item.setArrDelay(-SmartTools.timeDifferenceInMinutes(item.getSchArr(), item.getActArr()));
                         }
 
                     } else {

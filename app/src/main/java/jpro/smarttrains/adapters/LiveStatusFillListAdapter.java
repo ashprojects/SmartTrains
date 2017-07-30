@@ -51,6 +51,7 @@ public class LiveStatusFillListAdapter extends ArrayAdapter<TrainLiveStatus.Live
             holder.imageSpot = (ImageView) convertView.findViewById(R.id.live_status_item_spot_img);
             holder.itemHeader = (TextView) convertView.findViewById(R.id.live_status_list_item_header);
             holder.delayTime = (TextView) convertView.findViewById(R.id.delayStatusInMins);
+            holder.imageCrossed = (ImageView) convertView.findViewById(R.id.live_status_item_crosed_img);
             holder.layout = (LinearLayout) convertView.findViewById(R.id.list_item_live_status_wrapperlayout);
             convertView.setTag(holder);
         } else {
@@ -77,7 +78,8 @@ public class LiveStatusFillListAdapter extends ArrayAdapter<TrainLiveStatus.Live
             holder.delayTime.setTextColor(Color.RED);
         } else if (liveStatusItem.getArrDelay() > 0) {
             holder.delayTime.setTextColor(Color.parseColor("#458A19"));
-            holder.delayTime.setText("Running eary by " + liveStatusItem.getArrDelay() + " mins");
+            holder.delayTime.setText("Before time: " + liveStatusItem.getArrDelay() + " mins");
+
         } else {
             holder.delayTime.setTextColor(Color.parseColor("#458A19"));
             holder.delayTime.setText("Right on time");
@@ -107,6 +109,11 @@ public class LiveStatusFillListAdapter extends ArrayAdapter<TrainLiveStatus.Live
         if (liveStatusItem.getDeptDelay() == 0)
             holder.actDept.setTextColor(Color.BLACK);
 
+        if (liveStatusItem.getArrDelay() > 0)
+            holder.actArr.setTextColor(Color.parseColor("#458A19"));
+
+        if (liveStatusItem.getDeptDelay() > 0)
+            holder.actDept.setTextColor(Color.parseColor("#458A19"));
 
         /*if(!liveStatusItem.isHasArrived()){
             //String diff= "" +SmartTools.timeDifferenceInMinutes(liveStatusItem.getSchArr(),liveStatusItem.getActArr());
@@ -118,12 +125,17 @@ public class LiveStatusFillListAdapter extends ArrayAdapter<TrainLiveStatus.Live
         } else if (liveStatusItem.getDeptDelay()>0){
             holder.delayTime.setTextColor(Color.GREEN);
         }*/
+        holder.imageSpot.setVisibility(View.GONE);
+        holder.imageCrossed.setVisibility(View.GONE);
+
         if (liveStatusItem.isHasArrived() && !liveStatusItem.isDestination()) {
-            holder.itemHeader.setText("CROSSED");
+            holder.imageCrossed.setVisibility(View.VISIBLE);
+            holder.itemHeader.setText("DEPARTED");
             holder.itemHeader.setBackgroundColor(Color.parseColor("#458A19"));
             holder.layout.setBackgroundColor(Color.parseColor("#F7FFF2"));
             holder.delayTime.setBackgroundColor(Color.parseColor("#F7FFF2"));
         } else {
+            holder.imageCrossed.setVisibility(View.GONE);
             holder.imageSpot.setVisibility(View.GONE);
             holder.itemHeader.setText("NO UPDATE");
             holder.itemHeader.setBackgroundColor(Color.DKGRAY);
@@ -142,16 +154,32 @@ public class LiveStatusFillListAdapter extends ArrayAdapter<TrainLiveStatus.Live
                 holder.delayTime.setBackgroundColor(Color.parseColor("#EAFEF7"));
             }
         }
+
+        if (liveStatusItem.isDestination() && liveStatusItem.isHasArrived()) {
+            holder.imageSpot.setVisibility(View.VISIBLE);
+            holder.imageSpot.setBackgroundColor(Color.parseColor("#EAFEF7"));
+            holder.itemHeader.setText("ARRIVED DESTINATION");
+            holder.itemHeader.setTextColor(Color.WHITE);
+            holder.itemHeader.setBackgroundColor(Color.parseColor("#395E22"));
+        }
+
         System.out.println("%%% FOR: " + liveStatusItem.getStn() + " - " + lastStation + " = " + liveStatusItem.getStn().equals(lastStation));
         if (liveStatusItem.isDestination()) {
             holder.actDept.setText("Destination\n\n");
             holder.schDept.setText("Destination");
             //holder.delayTime.setText(""+liveStatusItem.getArrDelay());
-            holder.delayTime.setTextColor(liveStatusItem.getArrDelay() < 0 ? Color.RED : Color.GREEN);
+            holder.delayTime.setTextColor(liveStatusItem.getArrDelay() < 0 ? Color.RED : Color.BLACK);
+            if (liveStatusItem.isHasArrived()) {
+                holder.imageCrossed.setVisibility(View.VISIBLE);
+            } else {
+
+            }
         }
+
+
         if (liveStatusItem.isSource()) {
             holder.actArr.setText("Source\n\n");
-            holder.schArr.setText("Source");
+            holder.schArr.setText("-");
         }
 
 
@@ -162,6 +190,6 @@ public class LiveStatusFillListAdapter extends ArrayAdapter<TrainLiveStatus.Live
     static class HolderClass {
         TextView stnName, schArr, schDept, actArr, actDept, delayTime, itemHeader;
         LinearLayout layout;
-        ImageView imageSpot;
+        ImageView imageSpot, imageCrossed;
     }
 }
