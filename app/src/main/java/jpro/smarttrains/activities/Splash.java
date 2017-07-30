@@ -80,6 +80,7 @@ public class Splash extends AppCompatActivity {
                     status=true;
                     changelog=jRootObj.get("AppChangeLog").toString();
                     Config.update_Link = link;
+                    Config.play_store_Link = jRootObj.get("PlayStoreLink").toString();
                     Config.changelog = changelog;
                     Config.verDesc = "Version: " + currVersion + " (v" + jRootObj.get("AppVersion").toString() + ", Click here)";
                 } else {
@@ -103,11 +104,11 @@ public class Splash extends AppCompatActivity {
                                 System.out.println("----------------------- switch --------------------");
                                 switch(id){
                                     case DialogInterface.BUTTON_POSITIVE:
-                                        /*Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setData(Uri.parse(link));
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(Config.play_store_Link));
                                         startActivity(i);
-                                        */
-                                        UpdateNow(link);
+
+                                        //UpdateNow(link);
                                         break;
                                     case DialogInterface.BUTTON_NEGATIVE:
                                         Intent in = new Intent(Splash.this, MainHome.class);

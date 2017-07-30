@@ -22,6 +22,7 @@ public class Config extends Application {
     public static String rq_desc="Hi!";
     public static String changelog="";
     public static String update_Link="";
+    public static String play_store_Link = "";
     public static String tip_of_the_day="Be careful getting on and off the train - there may be a gap between the train and platform or steps.";
     public static String qCacheUrl="http://smartize.esy.es/SmartTrains/ServResp.php";
     public static String reportUrl = "http://smartize.esy.es/SmartTrains/report.php";

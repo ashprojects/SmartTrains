@@ -1,9 +1,9 @@
 package jpro.smarttrains.activities;
 
 import android.app.ActivityOptions;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,7 +24,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Downloader.DownloadAndInstallAPKFile;
 import Utilities.SmartAnimator;
 import commons.Config;
 import jpro.smarttrains.R;
@@ -107,6 +106,7 @@ public class MainHome extends AppCompatActivity
                                     System.out.println("----------------------- switch --------------------");
                                     switch(id){
                                         case DialogInterface.BUTTON_POSITIVE:
+                                            /*
                                             ProgressDialog pd = new ProgressDialog(MainHome.this);
                                             pd.setMessage("This may take a while\nOnce the file is downloaded, you'll be asked to Install the app.");
                                             pd.setTitle("Dowloading Update");
@@ -115,6 +115,10 @@ public class MainHome extends AppCompatActivity
                                             DownloadAndInstallAPKFile downloadAndInstallAPKFile = new DownloadAndInstallAPKFile();
                                             downloadAndInstallAPKFile.setContext(getApplicationContext(), pd);
                                             downloadAndInstallAPKFile.execute(Config.update_Link);
+                                            */
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(Config.play_store_Link));
+                                            startActivity(i);
                                     }
                                 }
                             }).setNegativeButton("No",null).show();
