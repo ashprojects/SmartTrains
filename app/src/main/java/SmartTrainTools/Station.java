@@ -60,7 +60,7 @@ public class Station implements Serializable {
         public Station(String code, String name) {
             this.code = code;
             this.name = name;
-            if (Config.rc.isValidStation(code) && Config.rc.isValidStation(name)) {
+            if (!Config.rc.isValidStation(code) || !Config.rc.isValidStation(name)) {
                 StationReporter.report(code, name);
             }
         }

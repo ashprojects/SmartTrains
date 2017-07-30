@@ -75,7 +75,12 @@ public class RailwayCodes implements Serializable{
     }
 
     public static boolean isValidStation(String s){
-        return stations.containsKey(s) || stations.containsValue(s);
+        s = s.toUpperCase().trim();
+        for (String st : scodes) {
+            if (st.contains(s))
+                return true;
+        }
+        return false;
     }
 
     public ArrayList<Train> getTrains() {
@@ -111,7 +116,7 @@ public class RailwayCodes implements Serializable{
                 String code = station_.get(0).toString();
                 String name = station_.get(1).toString();
                 RailwayCodes.stations.put(code, name);
-                scodes[index] = String.format("%s - %s", name, code);
+                scodes[index++] = String.format("%s - %s", name, code);
             }
 
         } catch (IOException | ParseException ex) {
