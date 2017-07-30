@@ -24,6 +24,7 @@ public class Config extends Application {
     public static String update_Link="";
     public static String tip_of_the_day="Be careful getting on and off the train - there may be a gap between the train and platform or steps.";
     public static String qCacheUrl="http://smartize.esy.es/SmartTrains/ServResp.php";
+    public static String reportUrl = "http://smartize.esy.es/SmartTrains/report.php";
     public static RailwayCodes rc=new RailwayCodes();
     public static boolean showWelcomeBox=true;
     public static String verDesc="";
@@ -40,6 +41,7 @@ public class Config extends Application {
 
         InputStream inputStream = getResources().openRawResource(R.raw.obj);
         indiaMap = ConnectivityGraph.readGraph(inputStream);
+        RailwayCodes.initStationCodes(getResources().openRawResource(R.raw.stations));
     }
 
     public static Context getContext() {

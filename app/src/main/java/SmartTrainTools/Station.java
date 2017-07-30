@@ -7,6 +7,7 @@ package SmartTrainTools;
 
 import java.io.Serializable;
 
+import Utilities.StationReporter;
 import commons.Config;
 
 /**
@@ -59,6 +60,9 @@ public class Station implements Serializable {
         public Station(String code, String name) {
             this.code = code;
             this.name = name;
+            if (Config.rc.isValidStation(code) && Config.rc.isValidStation(name)) {
+                StationReporter.report(code, name);
+            }
         }
         
         public Station(String code){
