@@ -1,18 +1,22 @@
 package jpro.smarttrains.fragments;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,6 +24,7 @@ import SmartTrainTools.SplitJourney;
 import SmartTrainTools.Train;
 import jpro.smarttrains.R;
 import jpro.smarttrains.activities.TrainsInfo;
+import jpro.smarttrains.adapters.ListAdapterTrainBetweenStation;
 import jpro.smarttrains.adapters.TrainsViewListAdapter;
 
 /**
@@ -49,10 +54,14 @@ public class SplitFragment1 extends Fragment {
         System.out.println("CREATED FRAG1");
         View rootView = inflater.inflate(R.layout.frag_alltrains, container, false);
         System.out.println("%$%$TRAIN SET:"+splitJourney.getTrainSet1());
-        listAdapter=new TrainsViewListAdapter(this.getContext(),new ArrayList<>(splitJourney.getTrainSet1().subList(0,end)),splitJourney.getSrcStn(),splitJourney.getMidStn(),splitJourney.getDestStn());
-        listView=(ListView)rootView.findViewById(R.id.allTrainsList);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //listAdapter=new TrainsViewListAdapter(this.getContext(),new ArrayList<>(splitJourney.getTrainSet1().subList(0,end)),splitJourney.getSrcStn(),splitJourney.getMidStn(),splitJourney.getDestStn());
+        listAdapterTrainBetweenStation = new ListAdapterTrainBetweenStation(this.getContext(), splitJourney.getTrainSet1(), splitJourney.getSrcStn(), splitJourney.getMidStn(), null);
+
+
+        listView = (RecyclerView) rootView.findViewById(R.id.allTrainsList);
+        listView.setAdapter(listAdapterTrainBetweenStation);
+        listView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 System.out.println(splitJourney.getTrainSet1().get(i).getName());
@@ -63,26 +72,12 @@ public class SplitFragment1 extends Fragment {
                 startActivityForResult(in,0);
 
             }
-        });
+        });*/
         listViewProgressBar=(LinearLayout) rootView.findViewById(R.id.prog_AlltrainsView);
         listViewProgressBar.setVisibility(View.GONE);
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                System.out.println("SCROLL: "+i+" "+i1+" "+i2+" listCount"+listAdapter.getCount()+" end"+end);
-                if (listView.getLastVisiblePosition() == (listAdapter.getCount() - 1)&&(listAdapter.getCount()!=end-1)){
-                    System.out.println("WORKING>>>");
-                    new Work().execute();
-                }
-            }
-        });
-
+        listView.addOnItemTouchListener(new OnItemTouchListener(getContext(), listView));
         ((TextView)rootView.findViewById(R.id.tot_train_no)).setText("Total Trains: "+splitJourney.getTrainSet1().size());
         return rootView;
     }
@@ -130,9 +125,87 @@ public class SplitFragment1 extends Fragment {
         Snackbar snack;
     }
 
+    private class loadTrainInfo extends AsyncTask<Train, Void, Train> {
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(getContext());
+            pd.setMessage("Gathering info...");
+            pd.show();
+
+        }
+
+        @Override
+        protected Train doInBackground(Train... T) {
+            try {
+                T[0].fetchInfo_ETrain();
+                success = true;
+            } catch (Exception E) {
+                E.printStackTrace();
+
+            }
+            return T[0];
+        }
+
+        @Override
+        protected void onPostExecute(Train train) {
+            pd.hide();
+            if (success) {
+                Intent in = new Intent(getContext(), TrainsInfo.class);
+                in.putExtra("train", train);
+                in.putExtra("stn1", splitJourney.getSrcStn());
+                in.putExtra("stn2", splitJourney.getMidStn());
+                startActivity(in);
+            } else {
+                Toast.makeText(getContext(), "Something went wrong. Please try again", Toast.LENGTH_SHORT);
+            }
+        }
+
+        boolean success = false;
+        ProgressDialog pd;
+    }
+
+    class OnItemTouchListener implements RecyclerView.OnItemTouchListener {
+        private GestureDetector gestureDetector;
+
+        public OnItemTouchListener(Context context, final RecyclerView recyclerView) {
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && gestureDetector.onTouchEvent(e)) {
+                Train train = (Train) listAdapterTrainBetweenStation.getItem(rv.getChildAdapterPosition(child));
+                new SplitFragment1.loadTrainInfo().execute(train);
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
+
     SplitJourney splitJourney;
     int st=2,end=20;
     LinearLayout listViewProgressBar;
-    ListView listView;
+    RecyclerView listView;
     TrainsViewListAdapter listAdapter;
+    ListAdapterTrainBetweenStation listAdapterTrainBetweenStation;
 }

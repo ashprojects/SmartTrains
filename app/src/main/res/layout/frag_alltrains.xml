@@ -1,12 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/frag_AllTrains"
     android:paddingLeft="7dp"
     android:paddingRight="7dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    >
+    android:paddingTop="@dimen/activity_vertical_margin">
 <LinearLayout
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -31,7 +29,7 @@
             />
     </LinearLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_weight="0.93"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"

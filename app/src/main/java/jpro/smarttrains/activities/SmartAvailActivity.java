@@ -230,7 +230,7 @@ public class SmartAvailActivity extends AppCompatActivity {
 
                 //ob=new ServiceObj(src,dest,date,classSel.getSelectedItem().toString());
                 //makeToast(ob.getAll());
-                if(SmartUtils.validTime()){
+                if (SmartUtils.validRailwayServerTime()) {
                     try {
 
                         process = new ConnectNow(SmartAvailActivity.this);
@@ -242,7 +242,7 @@ public class SmartAvailActivity extends AppCompatActivity {
 
                     }
                 } else {
-                    Snackbar.make(findViewById(R.id.smartAvailActivity),"Sorry, App is not functional within this time range!",Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.smartAvailActivity), "Sorry, Railway Servers are down, Try after few minutes", Snackbar.LENGTH_LONG).show();
                 }
 
 

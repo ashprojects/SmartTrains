@@ -203,6 +203,7 @@ public class LiveTrainStatusHome extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            status = true;
             pd = new ProgressDialog(LiveTrainStatusHome.this);
             pd.setMessage("Please Wait...");
             pd.show();
@@ -214,10 +215,11 @@ public class LiveTrainStatusHome extends AppCompatActivity {
                 if (trainLiveStatus.fetchNow(date[0])) {
                     //System.out.println(trainLiveStatus);
                 } else {
-                    // FAIL
+                    //status=false;
                 }
             } catch (IOException E) {
-
+                status = false;
+                E.printStackTrace();
             }
 
             return null;
@@ -228,11 +230,18 @@ public class LiveTrainStatusHome extends AppCompatActivity {
             pd.dismiss();
             System.out.println(trainLiveStatus);
             Intent in = new Intent(LiveTrainStatusHome.this, ShowTrainLiveStatus.class);
-            in.putExtra("data", trainLiveStatus);
-            startActivity(in);
+            if (status) {
+                in.putExtra("data", trainLiveStatus);
+                startActivity(in);
+            } else {
+                Toast.makeText(LiveTrainStatusHome.this, "Connection Failure. Please try again", Toast.LENGTH_LONG).show();
+
+            }
+
         }
 
         ProgressDialog pd;
+        boolean status;
     }
 
     private class GetTrainInfo extends AsyncTask<Void, Void, Void> {

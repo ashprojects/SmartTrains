@@ -34,11 +34,18 @@ public class Path implements Serializable {
     }
 
     public void removeAllNonJunctions() {
+        int i = 0;
         for (ListIterator<Station> iterator = stations.listIterator(); iterator.hasNext(); ) {
+            if (i == 0) {
+                i++;
+                iterator.next();
+                continue;
+            }
             Station station = iterator.next();
             if (!station.isJunction()) {
                 iterator.remove();
             }
+            i++;
         }
     }
 }

@@ -35,14 +35,14 @@ public class SplitStations extends AppCompatActivity {
         list=(ListView)findViewById(R.id.sp_list);
         mainPath=(Path)getIntent().getSerializableExtra("path");
         progressBar=(ProgressBar)findViewById(R.id.split_progressBar);
-        Snackbar.make(findViewById(R.id.activity_split_stations),"Shortest route found! Please wait",Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.activity_split_stations), "Working... Please wait", Snackbar.LENGTH_LONG).show();
         listAdapter=new SplitStationsListAdapter(this,splitJourneys);
         list.setAdapter(listAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent in=new Intent(getApplicationContext(),SplitJourneyTabbed.class);
-                System.out.println(" SPLITT: "+splitJourneys.get(i));
+                //System.out.println(" SPLITT: "+splitJourneys.get(i));
                 in.putExtra("j",splitJourneys.get(i));
                 in.putExtra("direct",direct);
                 startActivity(in);
@@ -59,7 +59,7 @@ public class SplitStations extends AppCompatActivity {
     private class findStationsAsync extends AsyncTask<Void,Void,Void>{
         @Override
         protected void onPreExecute() {
-            System.out.println("src:"+src+" dest "+dest);
+            //System.out.println("src:"+src+" dest "+dest);
             splitJourneys=new ArrayList<>();
             progressBar.setVisibility(View.VISIBLE);
         }
@@ -67,7 +67,7 @@ public class SplitStations extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             progressBar.setVisibility(View.GONE);
-            System.out.println("FOUND:: "+splitJourneys);
+            //System.out.println("FOUND:: "+splitJourneys);
             listAdapter.update(splitJourneys);
             if(failed){
                 Snackbar snackbar = Snackbar
@@ -80,6 +80,13 @@ public class SplitStations extends AppCompatActivity {
                         });
                 //snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                // snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+            }
+            if (splitJourneys.size() == 0) {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.activity_split_stations), "TOO MANY DIRECT TRAINS. CAN'T FIND A BETTER MATCH! :(", Snackbar.LENGTH_INDEFINITE);
+                //snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                // snackbar.setActionTextColor(Color.YELLOW);
                 snackbar.show();
             }
             //super.onPostExecute(aVoid);
@@ -96,23 +103,25 @@ public class SplitStations extends AppCompatActivity {
             try{
                 fromSrctrains= SmartTools.findTrains(src.getCode(),dest.getCode(),sdate);
                 sizeStart=fromSrctrains.size();
-                System.out.println("SETTING SIZESTART AS: "+sizeStart);
+                //System.out.println("SETTING SIZESTART AS: "+sizeStart);
             } catch (Exception Ex){
                 direct=false;
+                Ex.printStackTrace();
             }
             int count=0;
 
             ArrayList<Station> stations=mainPath.getStations();
             System.out.println("Stations: "+stations);
             for(int i=1;i<stations.size();++i){
+
                 if(count==3)
                     break;
                 try{
-
-
                     if(i==stations.size()-1)
                         break;
                     ArrayList<Train> trainsDest= SmartTools.findTrains(stations.get(i).getCode(),dest.getCode(),sdate);
+                    //System.out.println("sizeStart: "+sizeStart+" FROM CURR: "+stations.get(i).getCode()+" to DEST, "+trainsDest+"\nSIZE:"+trainsDest.size());
+
                     int size=trainsDest.size();
                     if (size == 0)
                         continue;
@@ -124,7 +133,7 @@ public class SplitStations extends AppCompatActivity {
 
                         count++;
                         x.setPathLen(mainPath.getDistance());
-                        System.out.println("ADDEDD: "+x);
+                        //System.out.println("ADDEDD: "+x);
                         splitJourneys.add(x);
                         sizeStart=size;
                     }

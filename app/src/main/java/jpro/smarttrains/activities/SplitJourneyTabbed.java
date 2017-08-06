@@ -13,11 +13,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import SmartTrainTools.SplitJourney;
@@ -38,10 +36,6 @@ public class SplitJourneyTabbed extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -99,12 +93,12 @@ public class SplitJourneyTabbed extends AppCompatActivity {
             pd.setTitle("Please wait...");
 
             pd.setMessage("Fetching Info");
-            pd.show();
+            //pd.show();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            pd.hide();
+            //pd.hide();
 
 
             System.out.println(trainsSet1);
@@ -129,10 +123,10 @@ public class SplitJourneyTabbed extends AppCompatActivity {
             for(Train T:trainsSet1){
                 try {
                     i++;
-                    T.fetchInfo_ETrain();
+                    //T.fetchInfo_ETrain();
                     if(i==GLOBAL_NUMBER_COUNT_1)
                         break;
-                } catch (IOException e) {
+                } catch (Exception e) {
                     T.setName("(NETWORK FAILURE)");
                     T.setRunsOn(new int[]{0,0,0,0,0,0,0});
 
@@ -144,11 +138,11 @@ public class SplitJourneyTabbed extends AppCompatActivity {
             i=0;
             for(Train T:trainsSet2){
                 try {
-                    T.fetchInfo_ETrain();
+                    //T.fetchInfo_ETrain();
                     i++;
                     if(i==GLOBAL_NUMBER_COUNT_2)
                         break;
-                } catch (IOException e) {
+                } catch (Exception e) {
                     T.setName("(NETWORK FAILURE)");
                     T.setRunsOn(new int[]{0,0,0,0,0,0,0});
                     e.printStackTrace();
@@ -160,12 +154,6 @@ public class SplitJourneyTabbed extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        onBackPressed();
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
