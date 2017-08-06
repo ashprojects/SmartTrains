@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  * Created by root on 19/3/17.
  */
@@ -22,11 +24,17 @@ public class SmartUtils {
         return x.get(Calendar.DAY_OF_WEEK);
     }
 
-    public static boolean validTime(){
-
-        if(Calendar.HOUR_OF_DAY>=11 && Calendar.HOUR_OF_DAY<13){
+    public static boolean validRailwayServerTime() {
+        Calendar currCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+        int currHour = currCal.get(Calendar.HOUR_OF_DAY);
+        int currMin = currCal.get(Calendar.MINUTE);
+        if (currHour == 10)
+            return false;
             //return false;
-        }
+        if (currHour == 11 && (currMin < 30))
+            return false;
+        if (currHour == 23)
+            return false;
         return true;
 
     }

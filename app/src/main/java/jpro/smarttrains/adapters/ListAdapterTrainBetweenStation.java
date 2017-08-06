@@ -127,6 +127,8 @@ public class ListAdapterTrainBetweenStation extends RecyclerView.Adapter<ListAda
         if (date != null) {
             if (!trains.get(i).runsOnDate(date)) {
                 holder.layoutHeader.setBackgroundColor(Color.parseColor("#a9a9a9"));
+            } else {
+                holder.layoutHeader.setBackgroundColor(Color.parseColor("#2b14d6"));
             }
         }
     }
